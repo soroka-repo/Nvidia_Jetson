@@ -1,42 +1,16 @@
-<!DOCTYPE HTML>
-<html>
-<body LINK=red VLINK=green>
-<style>
-    a { text-decoration: none; }
-</style>
-</ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREJetsonNanoOrinSupersetupconfiguration"><font color="blue"><h3 align='left'>  Jetson Nano Orin Super setup/configuration</h3></font></a><ol>
-<font color="black"><h3 align='center'>VERSION: PS2026425:1500</font></h3>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPRequiredhardware"> Required hardware</a></li>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPCopytheOStoaSDCard"> Copy the OS to a SD Card</a></li>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPincreasethespeedpowerandmakethisorin"SUPER""> increase the speed/power and make this orin "SUPER"</a></li>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPIncreasethepagingswapspacetoallowmorethenthereal8gofmemtobeused"> Increase the paging swap space to allow more then the real 8g of mem to be used</a></li>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPverifyjtopisworking"> verify jtop is working</a></li>
-<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
-
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPUseFlatpaktoinstallthefollowingApps"> Use Flatpak to install the following Apps</a></li>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPUseCUDAtoverifytheGPU"> Use CUDA to verify the GPU</a></li>
-<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
-
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPinstallllama"> install llama</a></li>
-<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
-
-<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
-
-<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
-
 ###################################
-</h4></pre><h2 align='left' id="PROCEDUREJetsonNanoOrinSupersetupconfiguration">PROCEDURE: Jetson Nano Orin Super setup/configuration</h2><pre><h4>
+###PROCEDURE: Jetson Nano Orin Super setup/configuration
 #
 # Peter Soroka   
-</h4></pre><font size="2"><h1 align='center'>VERSION: PS2026425:1500</h1></font><pre><h4>
+###VERSION: PS2026425:1500
 
  
 ###################################
-</h4></pre><h3 align='left' id="STEPRequiredhardware">STEP: Required hardware</h3><pre><h4>
+###STEP: Required hardware
 ###################################
 
  __1.) Nvidia Jetsin Orin Nano Devloper Kit $250
-__3.) SanDisk Ultra MicroSD card &gt= 64G $25
+ __3.) SanDisk Ultra MicroSD card >= 64G $25
  __4.) M.2 2280 NVME SSD 1TB Storage PCIE Gen3 is fine (since that is the speed of the Nano)about $100
  __5.) Monitor with a DisplayPort, displayport is like an HDMI with one edge of the connector
        squared off, it has a higher bandwidth. You will need a DisplayPort to DisplayPort cable
@@ -46,7 +20,7 @@ __3.) SanDisk Ultra MicroSD card &gt= 64G $25
 
 
 ###################################
-</h4></pre><h3 align='left' id="STEPCopytheOStoaSDCard">STEP: Copy the OS to a SD Card</h3><pre><h4>
+###STEP: Copy the OS to a SD Card
 ###################################
  __1) Use a SanDisk Ultra MicroSD 64gig Class 10/U1/A1 or faster (Extreme) Note: the
       MicroSD card is just for the first boot we will be converting to a M.2 NVME SSD
@@ -55,7 +29,7 @@ __3.) SanDisk Ultra MicroSD card &gt= 64G $25
 
 
 ###################################
-</h4></pre><h3 align='left' id="STEPMigratefromMicroSDtoM2NVMESSDboot"> STEP: Migrate from MicroSD to M.2 NVME SSD boot</h3><pre><h4>
+### STEP: Migrate from MicroSD to M.2 NVME SSD boot
 ###################################
 
 # open a terminal, from the "3 by 3 dots" in the lower left of the screen, use the search "term" to open
@@ -86,7 +60,7 @@ __3.) SanDisk Ultra MicroSD card &gt= 64G $25
 
 
 ###################################
-</h4></pre><h3 align='left' id="STEPincreasethespeedpowerandmakethisorin"SUPER"">STEP: increase the speed/power and make this orin "SUPER"</h3><pre><h4>
+###STEP: increase the speed/power and make this orin "SUPER"
 ##################################
 
 # this assumes we have atleast jetpack 6.2.1 loaded
@@ -98,7 +72,7 @@ __3.) SanDisk Ultra MicroSD card &gt= 64G $25
  sudo reboot
 
 ###################################
-</h4></pre><h3 align='left' id="STEPIncreasethepagingswapspacetoallowmorethenthereal8gofmemtobeused">STEP: Increase the paging swap space to allow more then the real 8g of mem to be used</h3><pre><h4>
+###STEP: Increase the paging swap space to allow more then the real 8g of mem to be used
 ###################################
 # This will allow for more then the real 8g of mem to be used lets add 24g of swap space
 
@@ -125,7 +99,7 @@ __3.) SanDisk Ultra MicroSD card &gt= 64G $25
  swapon --show
 
 ###################################
-</h4></pre><h3 align='left' id="STEPverifyjtopisworking">STEP: verify jtop is working</h3><pre><h4>
+###STEP: verify jtop is working
 ###################################
 
  jtop ### if nothing then lets install it
@@ -159,18 +133,17 @@ __3.) SanDisk Ultra MicroSD card &gt= 64G $25
 # goto the following file "jetson_variables.py usually found at the following
  sudo gedit /usr/local/lib/python3.10/dist-packages/jtop/core/jetson_variables.py
 # add in the correct firmware and jetpack level
-<h4 align='left' id="EXAMPLE">EXAMPLE:
-</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
-NVIDIA_JETPACK = {</span>
+###EXAMPLE:
+NVIDIA_JETPACK = {
     # -------- JP6 --------
     "36.4.7": "6.2.1",
     "36.4.2": "6.2",
 ...
-</p><h4>
+###EXAMPLE_END:
 
 
 ###################################
-</h4></pre><h3 align='left' id="STEPUseFlatpaktoinstallthefollowingApps">STEP: Use Flatpak to install the following Apps</h3><pre><h4>
+###STEP: Use Flatpak to install the following Apps
 ###################################
 #
  Flatpak is the latest method to get the very latest level of an App onto your system and
@@ -197,7 +170,7 @@ NVIDIA_JETPACK = {</span>
 # flatpack management
 
 # Search for new Apps
-<a href="https://flathub.org"><font color="black">Search Flathub<font color="blue"> https://flathub.org<font color="black"></a>
+ ###LINK: "Search Flathub" "https://flathub.org"
 
 # List installed flatpaks
  flatpak list
@@ -213,7 +186,7 @@ NVIDIA_JETPACK = {</span>
 
 
 ###################################
-</h4></pre><h3 align='left' id="STEPUseCUDAtoverifytheGPU">STEP: Use CUDA to verify the GPU</h3><pre><h4>
+###STEP: Use CUDA to verify the GPU
 ###################################
 
 # Check that the compiler/toolkit is installed
@@ -224,11 +197,10 @@ NVIDIA_JETPACK = {</span>
 # update your path in your .bashrc file
  gedit ~/.bashrc # Note ~ is a shortcut for the path to your home directory if you are already in your home
 # dir you do not need the ~ add the following to the bottom of the .bashrc file
-<h4 align='left' id="EXAMPLE">EXAMPLE:
-</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
-export PATH=/usr/local/cuda/bin:$PATH</span>
+###EXAMPLE:
+export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
-</p><h4>
+###EXAMPLE_END:
 # resource the .bashrc to update the paths
  source ~/.bashrc
 # grab your cuda level from the nvcc -V command (6.2.1 has CUDA 12.6 so there is no cuda_sample-12-6 so use 12-5)
@@ -267,7 +239,7 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 #
 #
 ###################################
-</h4></pre><h3 align='left' id="STEPinstallllama">STEP: install llama</h3><pre><h4>
+###STEP: install llama
 ###################################
 #
 # Install depends
@@ -284,10 +256,9 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 # add the path to the huggingface-cli to your .bashrc
  gedit ~/.bashrc
 # add the folloing to the end of your .bashrc file
-<h4 align='left' id="EXAMPLE">EXAMPLE:
-</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
-export PATH=~$PATH:~/.local/bin</span>
-</p><h4>
+###EXAMPLE:
+export PATH=~$PATH:~/.local/bin
+###EXAMPLE_END:
  source .bashrc
 
 #create a token on hugging face
@@ -303,9 +274,8 @@ export PATH=~$PATH:~/.local/bin</span>
 # run
  ./build/bin/llama-server -m path/to/llama-3.2.gguf --n-gpu-layers 40
 
-<h4 align='left' id="EXAMPLE">EXAMPLE:
-</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
-Recommended Models for Orin Nano Super</span>
+###EXAMPLE:
+Recommended Models for Orin Nano Super
 (8GB)
 Model 	Size	Performance Note
 Llama 3.2 1B/3B
@@ -321,9 +291,8 @@ Gemma 2 2B
 ### Speech to Text to speech
 ###################################
 
-<h4 align='left' id="EXAMPLE">EXAMPLE:
-</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
-Setting up an LLM dialogue system with speech on a Jetson Orin Nano Super involves combining three key components: Speech-to-Text (STT) to hear you, a Local LLM to think, and Text-to-Speech (TTS) to talk back. Given the Orin Nano's 8GB memory, the most efficient approach is using containerized, on-device models. </span>
+###EXAMPLE:
+Setting up an LLM dialogue system with speech on a Jetson Orin Nano Super involves combining three key components: Speech-to-Text (STT) to hear you, a Local LLM to think, and Text-to-Speech (TTS) to talk back. Given the Orin Nano's 8GB memory, the most efficient approach is using containerized, on-device models. 
 
 
 Prerequisites
@@ -379,7 +348,7 @@ Tips for Success
     Performance: If using MLC-LLM rather than llama.cpp, you may achieve better tokens per second (TPS) on Llama-3-8B models.
     Memory Management: The 8GB limit is tight; close unused applications (like the desktop GUI) to free up memory for the model. 
 
-</p><h4>
+###EXAMPLE_END:
 
 
 
@@ -389,4 +358,3 @@ Tips for Success
 ###############################################################################
 ########                    End-Of-File                                ########
 ###############################################################################
-</header></pre></body></html>

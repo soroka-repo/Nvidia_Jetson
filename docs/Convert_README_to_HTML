@@ -1,0 +1,207 @@
+#!/bin/ksh
+
+ VERSION=20260327_1221;
+
+ IN_FILE=$1;
+ OUT_FILE=$1.html;
+ OUT_INDEX_FILE=$1.index;
+ OUT_INDEX_HTML=$1.html;
+ MEDIA_DIR=./media;
+
+ VERSION_HEAD="<h3 align='center'>";
+ VERSION_COLOR="<font color=\"black\">";
+ VERSION_TAIL="</font></h3>";
+
+ PROCEDURE_HEAD="</ol><a href=\"$OUT_FILE#";
+ PROCEDURE_COLOR="\"><font color=\"blue\"><h3 align='left'> ";
+ PROCEDURE_TAIL="</h3></font></a><ol>";
+ 
+ STEP_HEAD="<li><a href=\"$OUT_FILE#";
+ STEP_COLOR="\">"
+ STEP_TAIL="</a></li>";
+
+ NOTE_HEAD="<li><a href=\"$OUT_FILE#";
+ NOTE_COLOR="\"><font color=\"black\">";
+ NOTE_TAIL="</font></a></li>";
+
+ EXAMPLE_HEAD="<a href=\"$OUT_FILE#";
+ EXAMPLE_COLOR="\"><font color=\"black\">&emsp; Example: "
+ EXAMPLE_TAIL="<br></font></a>";
+
+
+ grep -e "^###VERSION\:" -e "^###PROCEDURE\:" -e "^###STEP\:" -e "^###NOTE\:" -e "^###EXAMPLE\:" $IN_FILE|sed 's/###//g'|tee $OUT_INDEX_FILE;
+
+ echo -e "<!DOCTYPE HTML>\n<html>\n<body LINK="red" VLINK="green">"|tee $OUT_INDEX_HTML;
+ echo -e "<style>\n    a { text-decoration: none; }\n</style>"|tee -a $OUT_INDEX_HTML;
+
+ while read LINE 
+ do
+    if [[ ( $(echo $LINE|grep "VERSION\:") != "" ) ]]
+    then
+      echo "$VERSION_COLOR$VERSION_HEAD$LINE$VERSION_TAIL"|tee -a $OUT_INDEX_HTML;
+    fi;
+    
+    if [[ ( $(echo $LINE|grep "PROCEDURE\:") != "" ) ]]
+    then
+      LINE_COMPACT=`echo $LINE|tr -d ':()-., /'!`;
+      LINE_OUT=`echo $LINE|sed s/PROCEDURE://g`; 
+      echo "${PROCEDURE_HEAD}${LINE_COMPACT}${PROCEDURE_COLOR}${LINE_OUT}${PROCEDURE_TAIL}"|tee -a $OUT_INDEX_HTML;
+    fi;
+
+    if [[ ( $(echo $LINE|grep "STEP\:") != "" ) ]]
+    then
+      LINE_COMPACT=`echo $LINE|tr -d ':()-., /'!`;
+      LINE_OUT=`echo $LINE|sed s/STEP://g`;
+      echo "$STEP_HEAD$LINE_COMPACT$STEP_COLOR$LINE_OUT$STEP_TAIL"|tee -a $OUT_INDEX_HTML;
+    fi;
+
+    if [[ ( $(echo $LINE|grep "NOTE\:") != "" ) ]]
+    then
+      LINE_COMPACT=`echo $LINE|tr -d ':()-., /'!`;
+      LINE_OUT=`echo $LINE|sed s/NOTE://g`;
+      echo "$NOTE_HEAD$LINE_COMPACT$NOTE_COLOR$LINE_OUT$NOTE_TAIL"|tee -a $OUT_INDEX_HTML;
+    fi;
+
+    if [[ ( $(echo $LINE|grep "EXAMPLE\:") != "" ) ]]
+    then
+      LINE_COMPACT=`echo $LINE|tr -d ':()-., /'!`;
+      LINE_OUT=`echo $LINE|sed s/EXAMPLE://g`;
+      echo -e "$EXAMPLE_HEAD$LINE_COMPACT$EXAMPLE_COLOR$LINE_OUT$EXAMPLE_TAIL\n"|tee -a $OUT_INDEX_HTML;
+    fi;
+
+   if [[ ( $(echo $LINE|grep "LINK\:") != "" ) ]]
+    then
+          LINE_COMPACT=`echo $LINE|tr -d ':()-., /'!`;
+        LINE_OUT=`echo $LINE|sed s/LINK://g`;
+      echo -e "$LINK_HEAD$LINE_COMPACT$LINK_COLOR$LINE_OUT$LINK_TAIL\n"|tee -a $OUT_INDEX_HTML;
+    fi;
+
+done <"$OUT_INDEX_FILE";
+
+ rm $OUT_INDEX_FILE;
+
+
+##########################################3
+
+
+ VERSION_HEAD="</h4></pre><font size=\"2\"><h1 align='center'>";
+ VERSION_TAIL="</h1></font><pre><h4>";
+ 
+ PROCEDURE_HEAD="</h4></pre><h2 align='left' id=\"";
+ PROCEDURE_MID="\">";
+ PROCEDURE_TAIL="</h2><pre><h4>";
+ 
+ STEP_HEAD="</h4></pre><h3 align='left' id=\"";
+ STEP_MID="\">";
+ STEP_TAIL="</h3><pre><h4>";
+
+ NOTE_HEAD="</h4></pre><h3 align='left' id=\"";
+ NOTE_MID="\">";
+ NOTE_TAIL="</h3><pre><h4>";
+
+ LINK_HEAD="<a href=\"";
+ LINK_MID="\"><font color=\"black\">";
+ LINK_COLOR="<font color=\"blue\">";
+ LINK_TAIL="<font color=\"black\"></a>";
+
+ MEDIA_HEAD="<h4 align='center' id=\"";
+ MEDIA_MID="\">";
+ MEDIA_TAIL="</h4><pre><p style=\"border:4px; border-style:solid; border-color:black; padding: 2em;\"><span style=\"white-space: nowrap;\">\n<img src=\"./media/";
+ ###MEDIA_END="\" alt=\"pi\" style=\"width:600px;height:600px;\">";
+ MEDIA_W="\" alt=\"pi\" style=\"width:";
+ MEDIA_H="px;height:";
+ MEDIA_END="px;\">";
+
+
+ EXAMPLE_HEAD="<h4 align='left' id=\"";
+ EXAMPLE_MID="\">";
+ EXAMPLE_TAIL="</h4><pre><p style=\"border:3px; border-style:solid; border-color:green; padding: 0em;\"><span style=\"white-space: nowrap;\">";
+### EXAMPLE_END_TAIL="</p></pre>";
+ EXAMPLE_END_TAIL="</p><h4>";
+ EXAMPLE_FOUND=0;
+
+### change the backslashes to html "&#92"
+ sed 's/\\/\&#92/g' $IN_FILE > ./tmp_backslash;
+
+### Use the sed file: "xcat_env_noupdate" to prevent the env var subs
+### sed -f ./xcat_env_noupdate -i ./tmp_backslash;
+
+
+ IN_FILE=./tmp_backslash;
+ while IFS= read -r LINE
+ do
+    if [[ ( $(echo $LINE|grep -e "<" -e ">") != "" ) ]]
+    then
+      NEW_LINEA=$(echo $LINE|sed 's/</\&lt/g');
+      NEW_LINE=$(echo $NEW_LINEA|sed 's/>/\&gt/g');
+      echo "$NEW_LINE"|tee -a $OUT_INDEX_HTML;
+    elif [[ ( $(echo $LINE|grep "VERSION\:") != "" ) ]]
+    then
+      NEW_LINE=$(echo $LINE|sed 's/###//g');
+      echo "$VERSION_HEAD$NEW_LINE$VERSION_TAIL"|tee -a $OUT_INDEX_HTML;
+    elif [[ ( $(echo $LINE|grep "PROCEDURE\:") != "" ) ]]
+    then
+      NEW_LINE=$(echo $LINE|sed 's/###//g');
+      NEW_LINE_COMPACT=`echo $NEW_LINE|tr -d ':()-., /'!`;
+      echo "$PROCEDURE_HEAD$NEW_LINE_COMPACT$PROCEDURE_MID$NEW_LINE$PROCEDURE_TAIL"|tee -a $OUT_INDEX_HTML;
+    elif [[ ( $(echo $LINE|grep "STEP\:") != "" ) ]]
+    then
+      NEW_LINE=$(echo $LINE|sed 's/###//g');
+      NEW_LINE_COMPACT=`echo $NEW_LINE|tr -d ':()-., /'!`;
+      echo "$STEP_HEAD$NEW_LINE_COMPACT$STEP_MID$NEW_LINE$STEP_TAIL"|tee -a $OUT_INDEX_HTML;
+    elif [[ ( $(echo $LINE|grep "NOTE\:") != "" ) ]]
+    then
+      NEW_LINE=$(echo $LINE|sed 's/###//g');
+      NEW_LINE_COMPACT=`echo $NEW_LINE|tr -d ':()-., /'!`;
+      echo "$NOTE_HEAD$NEW_LINE_COMPACT$NOTE_MID$NEW_LINE$NOTE_TAIL"|tee -a $OUT_INDEX_HTML;
+
+    elif [[ ( $(echo $LINE|grep "LINK\:") != "" ) ]]
+    then
+      NEW_LINE=$(echo $LINE|sed 's/###LINK://g');
+ LINK_DESCRIPTION=$(echo $NEW_LINE|cut -d\" -f2);     
+ LINK_REF=$(echo $NEW_LINE|cut -d\" -f4);      
+ echo -e "\n\n\n>>>>>>$LINK_DESCRIPTION<<<<<>>>>>$LINK_REF<<<<<<<<\n\n\n";
+ echo "$LINK_HEAD$LINK_REF$LINK_MID$LINK_DESCRIPTION$LINK_COLOR $LINK_REF$LINK_TAIL"|tee -a $OUT_INDEX_HTML;
+
+
+
+    elif [[ ( $(echo $LINE|grep "MEDIA\:") != "" ) ]]
+    then
+      NEW_LINE=$(echo $LINE|sed 's/###//g');
+      MEDIA_DESCRIPTION=$(echo $NEW_LINE|cut -d\" -f2);
+      MEDIA_WIDTH=$(echo $NEW_LINE|cut -d\" -f4);
+      MEDIA_HEIGHT=$(echo $NEW_LINE|cut -d\" -f6);
+      NEW_LINE_COMPACT=`echo $NEW_LINE|tr -d ':()-., /'!`;
+ echo -e "\n\n\n>>>>>>$MEDIA_DESCRIPTION<<<<<>>>>>$MEDIA_WIDTH x $MEDIA_HEIGHT<<<<<<<<\n\n\n";
+      echo -e "$MEDIA_HEAD$NEW_LINE_COMPACT$MEDIA_MID$MEDIA_DESCRIPTION\n$MEDIA_TAIL$(echo $MEDIA_DESCRIPTION|cut -d: -f2|awk '{print $1}')$MEDIA_W$MEDIA_WIDTH$MEDIA_H$MEDIA_HEIGHT$MEDIA_END"|tee -a $OUT_INDEX_HTML;
+
+
+    elif [[ ( $(echo $LINE|grep "EXAMPLE\:") != "" ) ]]
+    then
+      NEW_LINE=$(echo $LINE|sed 's/###//g');
+      NEW_LINE_COMPACT=`echo $NEW_LINE|tr -d ':()-., /'!`;
+      echo -e "$EXAMPLE_HEAD$NEW_LINE_COMPACT$EXAMPLE_MID$NEW_LINE\n$EXAMPLE_TAIL"|tee -a $OUT_INDEX_HTML;
+      EXAMPLE_FOUND=1;
+    elif [[ ( $(echo $LINE|grep "EXAMPLE_END\:") != "" ) ]]
+    then
+      echo "$EXAMPLE_END_TAIL"|tee -a $OUT_INDEX_HTML;
+    elif [[ $EXAMPLE_FOUND == 1 ]]
+    then
+      EXAMPLE_FOUND=0;
+      echo "$LINE</span>">>$OUT_INDEX_HTML;
+    else
+      echo "$LINE">>$OUT_INDEX_HTML;
+    fi;
+
+ done <"$IN_FILE";
+
+ echo "</header></pre></body></html>" |tee -a $OUT_INDEX_HTML;
+
+ rm ./tmp_backslash;
+# mv $OUT_INDEX_HTML ./OUTPUT_var.html
+# envsubst < ./OUTPUT_var.html > $OUT_INDEX_HTML;
+# rm ./OUTPUT_var.html;
+ sed 's/DOLLAR_SIGN/\$/g' -i $OUT_INDEX_HTML;
+
+########### end ############
+
