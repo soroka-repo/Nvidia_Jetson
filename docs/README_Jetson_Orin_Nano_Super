@@ -2,11 +2,23 @@
 ###PROCEDURE: Jetson Nano Orin Super setup/configuration
 #
 # Peter Soroka   
-###VERSION: PS2026425:1500
+###VERSION: PS20260504:2030
 
+
+  The object of this project is to run LLM directly from the Jetson Orin Nano Super (Local on the Edge) 
+ access LLMs that you have stored locally on the Orin Super off the network without any fees. We will first 
+ explore text based LLMs then move up to LLMs that can us Generative AI for artwork 2D and 3D that can be used
+ in the Maker world of 3d-Printer, CNC work, Laser engraving...
+ 
+ 	Orginal Jetson Nano		Jetson Orin Nano Super
+
+ AI	472 GFLOPS			30-60 TFLOPS
+ GPU 	128 core			1024 CUDA cores @ 1Ghz
+ CPU	Quad Core ARM 1.43Ghz		6 core ARM 1.7Ghz 
+ MEM	4B				8GB @ 102Ghz
  
 ###################################
-###STEP: Required hardware
+###STEP: Required hardware, (Step one)
 ###################################
 
  __1.) Nvidia Jetsin Orin Nano Devloper Kit $250
@@ -22,6 +34,7 @@
 ###################################
 ###STEP: Copy the OS to a SD Card
 ###################################
+
  __1) Use a SanDisk Ultra MicroSD 64gig Class 10/U1/A1 or faster (Extreme) Note: the
       MicroSD card is just for the first boot we will be converting to a M.2 NVME SSD
       boot for normal operation
@@ -236,43 +249,151 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
     transpose
 
 
-#
-#
+
 ###################################
-###STEP: install llama
+###STEP: compile llama
 ###################################
 #
 # Install depends
- sudo apt update && sudo apt install -y git build-essential cmake libcurl4-openssl-dev
+ sudo apt update && sudo apt install -y git build-essential cmake libcurl4-openssl-dev apt-utils
 # change to local github dir
  cd ~/github
 # git clone and compile
  git clone https://github.com/ggml-org/llama.cpp && cd llama.cpp
  cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="87"
  cmake --build build --config Release --parallel 8
+# Create the Path for lama to your .bashrc file
+ gedit ~/.bashrc
+# add the following to the end of your .bashrc file
+###EXAMPLE:
+export PATH=~$PATH:~/github/llama.cpp/build/bin
+###EXAMPLE_END:
+ source .bashrc
 
-# Download Command: Use the Hugging Face CLI to download a specific file 
+###################################
+###STEP: Install the Hugging Face CLI to download a LLM 
+###################################
  pip install -U "huggingface_hub[cli]"
 # add the path to the huggingface-cli to your .bashrc
  gedit ~/.bashrc
-# add the folloing to the end of your .bashrc file
+# add the following to the end of your .bashrc file
 ###EXAMPLE:
 export PATH=~$PATH:~/.local/bin
 ###EXAMPLE_END:
  source .bashrc
 
-#create a token on hugging face
- https://huggingface.co/settings/tokens
-# enter the token
- hf auth login
-# download a LLM
- hf download Zhengyi/LLaMA-Mesh
+###################################
+###STEP: Use huggingface (hf) to download a LLM and run it with llama-server
+###################################
+ mkdir -p ~/LLM
+ cd ~/LLM
+ hf download bartowski Llama-3.2-3B-Instruct-Q4_K_M.gguf --local-dir . 
+ hf download bartowski/Qwen_Qwen3-4B-GGUF Qwen_Qwen3-4B-Q4_K_M.gguf --local-dir . 
+ hf download bartowski/Llama-3.2-3B-Instruct-GGUF Llama-3.2-3B-Instruct-Q4_K_M.gguf --local-dir .
+
+### Clear (Free up) Memory cache
+ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+
+### Run 
+ llama-se`rver -m ~/HuggingFace/Llama-3.2-3B-Instruct-Q4_K_M.gguf -c 2048 --n-gpu-layers 99
+
+# I could only get the above LLM to run by adding the argument "-c 2048" this limits the amount of
+# tokens the LLM can use to 2048. It turns out that Release 36.4.2 has got some kind of memory problem
+# such that the LLM will only work if it's loaded into contigious memory. So to correct this we need to
+# follow the steps to upgrade to Release 36.5 
+
+###################################
+###STEP: Upgrade to 36.5 to fix memory problems that llama-server is having
+###################################
+
+# Open the NVIDIA L4T APT source file to point to the new 36.5 repository
+# Change all instances of r36.4 (or earlier) to r36.5 
+ sudo vi /etc/apt/sources.list.d/nvidia-l4t-apt-source.list
+
+# Update Package Lists
+ sudo apt update
+
+# Run a full distribution upgrade to update JetPack/L4T packages:
+ sudo apt dist-upgrade
+
+# Fix Broken Dependencies and 
+# ensure all packages are properly configured:
+ sudo apt install --fix-broken -o Dpkg::Options::="--force-overwrite"
+
+# Reboot the Device
+ sudo reboot
+
+# Verification After the reboot, verify that the upgrade was successful by 
+# checking the new Jetson Linux version:
+ cat /etc/nv_tegra_release
+# and
+ jtop
+
+
+
+###################################
+###STEP: rerun lama-server with Release 36.5
+###################################
+
+## -c 2048 argument is no longer needed
+
+ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/Llama-3.2-3B-Instruct-Q4_K_M.gguf --n-gpu-layers 99 ### quick text based answers
+
+ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/Qwen_Qwen3-4B-Q4_K_M.gguf --n-gpu-layers 99 ### text based answers, click on the 
+                                        # "Resoning button" this model argues with itself about its returning answer
+
+
+ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/Qwen2.5-7B-Instruct-Q4_K_M.gguf --n-gpu-layers 99 ### quick text based answers
+
+ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/Qwen_Qwen3-4B-Q6_K.gguf --n-gpu-layers 99 
+
+ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf --n-gpu-layers 99
+
+
+###################################
+###STEP: Generate Text to Image
+###################################
+
+>>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+>>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+>>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+>>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+>>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+
+
+# Install Jetson-Containers
+ cd ~/github
+ git clone https://github.com/dusty-nv/jetson-containers
+ cd jetson-containers
+ bash install.sh
+
+# Run Jetson-Containers
+ cd ~/github/jetson-containers
+ jetson-containers run $(autotag stable-diffusion-webui)  ### first time run will take longer as the models are downloaded
+# ERROR it failed as follows
+#ERROR: Could not find a version that satisfies the requirement numpy==1.26.2 (from versions: none)
+#ERROR: No matching distribution found for numpy==1.26.2
+
+# So lets install numpy 1.26.2
+ python3 -m pip install --upgrade pip
+ python3 -m pip install numpy==1.26.2
+
+# and rerun jetson-containers
+ jetson-containers run $(autotag stable-diffusion-webui) 
+
+ http://127.0.0.1:7860
 
 
 
 
-# run
- ./build/bin/llama-server -m path/to/llama-3.2.gguf --n-gpu-layers 40
+###############################################################################################################3
+    The remainder of this file are just untested Notes
+
 
 ###EXAMPLE:
 Recommended Models for Orin Nano Super
@@ -341,7 +462,7 @@ The script will start by initializing the models, then listen for microphone inp
 
 
 Alternative: Using NVIDIA Riva
-For a more advanced, production-oriented approach, you can install the NVIDIA Riva SDK. Riva provides high-performance ASR (Automatic Speech Recognition) and TTS pipelines tailored for Jetson, although installation can be complex and consumes significant memory. 
+For a more advanced, production-oriented approach, you can install the NVIDIA Riva SDK. Riva provides high-performance ASR (Automatic Speech Recognition) and TTS pipel:wqines tailored for Jetson, although installation can be complex and consumes significant memory. 
 Tips for Success
 
     Microphone Input: Use arecord -l to identify your microphone and update the DEVICE_NAME (e.g., "plughw:2,0") in your configuration script.
