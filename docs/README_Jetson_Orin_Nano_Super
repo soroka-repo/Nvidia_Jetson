@@ -2,12 +2,12 @@
 ###PROCEDURE: Jetson Nano Orin Super setup/configuration
 #
 # Peter Soroka   
-###VERSION: PS20260504:2030
+###VERSION: PS20260529:2222
 
 
   The object of this project is to run LLM directly from the Jetson Orin Nano Super (Local on the Edge) 
  access LLMs that you have stored locally on the Orin Super off the network without any fees. We will first 
- explore text based LLMs then move up to LLMs that can us Generative AI for artwork 2D and 3D that can be used
+ explore text based LLMs then move up to LLMs that can usw Generative AI for artwork 2D and 3D that can be used
  in the Maker world of 3d-Printer, CNC work, Laser engraving...
  
  	Orginal Jetson Nano		Jetson Orin Nano Super
@@ -15,7 +15,7 @@
  AI	472 GFLOPS			30-60 TFLOPS
  GPU 	128 core			1024 CUDA cores @ 1Ghz
  CPU	Quad Core ARM 1.43Ghz		6 core ARM 1.7Ghz 
- MEM	4B				8GB @ 102Ghz
+ MEM	4GB				8GB @ 102Ghz
  
 ###################################
 ###STEP: Required hardware, (Step one)
@@ -183,7 +183,7 @@ NVIDIA_JETPACK = {
 # flatpack management
 
 # Search for new Apps
- ###LINK: "Search Flathub" "https://flathub.org"
+###LINK: "Search Flathub" "https://flathub.org"
 
 # List installed flatpaks
  flatpak list
@@ -354,6 +354,31 @@ export PATH=~$PATH:~/.local/bin
  sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
  llama-server -m ~/LLM/NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf --n-gpu-layers 99
 
+ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/gemma-4-E4B-it-Q4_K_M.gguf --n-gpu-layers 99
+
+
+
+###################################
+###STEP: trying the following to setup Genrative AI for text to graphic
+###################################
+
+https://github.com/Teachings/AIServerSetup/tree/main
+
+
+
+
+
+###################################
+###STEP: Install ollama 
+###################################
+# This is the command to install ollma native to you machine when using it with a LLM you will be using a cli interface
+
+ curl -fsSL https://ollama.com/install.sh | sh
+ ollama ### at the command line to run
+ ollama pull ### 
+###LINK: "Search for all LLM on ollama" "https://ollama.com/search"
+
 
 ###################################
 ###STEP: Generate Text to Image
@@ -382,6 +407,11 @@ export PATH=~$PATH:~/.local/bin
 # So lets install numpy 1.26.2
  python3 -m pip install --upgrade pip
  python3 -m pip install numpy==1.26.2
+
+# build it
+ ./jetson-containers build stable-diffusion-webui
+
+jetson-containers run daivdl487/stable-diffusion-webui:r36.4.3
 
 # and rerun jetson-containers
  jetson-containers run $(autotag stable-diffusion-webui) 

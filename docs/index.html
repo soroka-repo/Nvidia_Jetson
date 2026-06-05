@@ -5,7 +5,7 @@
     a { text-decoration: none; }
 </style>
 </ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREJetsonNanoOrinSupersetupconfiguration"><font color="blue"><h3 align='left'>  Jetson Nano Orin Super setup/configuration</h3></font></a><ol>
-<font color="black"><h3 align='center'>VERSION: PS20260504:2030</font></h3>
+<font color="black"><h3 align='center'>VERSION: PS20260529:2222</font></h3>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPRequiredhardwareStepone"> Required hardware, (Step one)</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPCopytheOStoaSDCard"> Copy the OS to a SD Card</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPincreasethespeedpowerandmakethisorin"SUPER""> increase the speed/power and make this orin "SUPER"</a></li>
@@ -26,6 +26,8 @@
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPUsehuggingfacehftodownloadaLLMandrunitwithllamaserver"> Use huggingface (hf) to download a LLM and run it with llama-server</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPUpgradeto365tofixmemoryproblemsthatllamaserverishaving"> Upgrade to 36.5 to fix memory problems that llama-server is having</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPrerunlamaserverwithRelease365"> rerun lama-server with Release 36.5</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPtryingthefollowingtosetupGenrativeAIfortexttographic"> trying the following to setup Genrative AI for text to graphic</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallollama"> Install ollama</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPGenerateTexttoImage"> Generate Text to Image</a></li>
 <a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
 
@@ -35,12 +37,12 @@
 </h4></pre><h2 align='left' id="PROCEDUREJetsonNanoOrinSupersetupconfiguration">PROCEDURE: Jetson Nano Orin Super setup/configuration</h2><pre><h4>
 #
 # Peter Soroka   
-</h4></pre><font size="2"><h1 align='center'>VERSION: PS20260504:2030</h1></font><pre><h4>
+</h4></pre><font size="2"><h1 align='center'>VERSION: PS20260529:2222</h1></font><pre><h4>
 
 
   The object of this project is to run LLM directly from the Jetson Orin Nano Super (Local on the Edge) 
  access LLMs that you have stored locally on the Orin Super off the network without any fees. We will first 
- explore text based LLMs then move up to LLMs that can us Generative AI for artwork 2D and 3D that can be used
+ explore text based LLMs then move up to LLMs that can usw Generative AI for artwork 2D and 3D that can be used
  in the Maker world of 3d-Printer, CNC work, Laser engraving...
  
  	Orginal Jetson Nano		Jetson Orin Nano Super
@@ -48,7 +50,7 @@
  AI	472 GFLOPS			30-60 TFLOPS
  GPU 	128 core			1024 CUDA cores @ 1Ghz
  CPU	Quad Core ARM 1.43Ghz		6 core ARM 1.7Ghz 
- MEM	4B				8GB @ 102Ghz
+ MEM	4GB				8GB @ 102Ghz
  
 ###################################
 </h4></pre><h3 align='left' id="STEPRequiredhardwareStepone">STEP: Required hardware, (Step one)</h3><pre><h4>
@@ -391,6 +393,31 @@ sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
 sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
  llama-server -m ~/LLM/NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf --n-gpu-layers 99
 
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/gemma-4-E4B-it-Q4_K_M.gguf --n-gpu-layers 99
+
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPtryingthefollowingtosetupGenrativeAIfortexttographic">STEP: trying the following to setup Genrative AI for text to graphic</h3><pre><h4>
+###################################
+
+https://github.com/Teachings/AIServerSetup/tree/main
+
+
+
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPInstallollama">STEP: Install ollama</h3><pre><h4>
+###################################
+# This is the command to install ollma native to you machine when using it with a LLM you will be using a cli interface
+
+ curl -fsSL https://ollama.com/install.sh | sh
+ ollama ### at the command line to run
+ ollama pull ### 
+<a href="https://ollama.com/search"><font color="black">Search for all LLM on ollama<font color="blue"> https://ollama.com/search<font color="black"></a>
+
 
 ###################################
 </h4></pre><h3 align='left' id="STEPGenerateTexttoImage">STEP: Generate Text to Image</h3><pre><h4>
@@ -419,6 +446,11 @@ sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
 # So lets install numpy 1.26.2
  python3 -m pip install --upgrade pip
  python3 -m pip install numpy==1.26.2
+
+# build it
+ ./jetson-containers build stable-diffusion-webui
+
+jetson-containers run daivdl487/stable-diffusion-webui:r36.4.3
 
 # and rerun jetson-containers
  jetson-containers run $(autotag stable-diffusion-webui) 
