@@ -5,7 +5,7 @@
     a { text-decoration: none; }
 </style>
 </ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREJetsonNanoOrinSupersetupconfiguration"><font color="blue"><h3 align='left'>  Jetson Nano Orin Super setup/configuration</h3></font></a><ol>
-<font color="black"><h3 align='center'>VERSION: PS20260529:2222</font></h3>
+<font color="black"><h3 align='center'>VERSION: PS20260605:1740</font></h3>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPRequiredhardwareStepone"> Required hardware, (Step one)</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPCopytheOStoaSDCard"> Copy the OS to a SD Card</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPincreasethespeedpowerandmakethisorin"SUPER""> increase the speed/power and make this orin "SUPER"</a></li>
@@ -26,6 +26,7 @@
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPUsehuggingfacehftodownloadaLLMandrunitwithllamaserver"> Use huggingface (hf) to download a LLM and run it with llama-server</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPUpgradeto365tofixmemoryproblemsthatllamaserverishaving"> Upgrade to 36.5 to fix memory problems that llama-server is having</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPrerunlamaserverwithRelease365"> rerun lama-server with Release 36.5</a></li>
+</ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREUpgradetojetpack72r392"><font color="blue"><h3 align='left'>  Upgrade to jetpack 7.2 r39.2</h3></font></a><ol>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPtryingthefollowingtosetupGenrativeAIfortexttographic"> trying the following to setup Genrative AI for text to graphic</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallollama"> Install ollama</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPGenerateTexttoImage"> Generate Text to Image</a></li>
@@ -37,7 +38,7 @@
 </h4></pre><h2 align='left' id="PROCEDUREJetsonNanoOrinSupersetupconfiguration">PROCEDURE: Jetson Nano Orin Super setup/configuration</h2><pre><h4>
 #
 # Peter Soroka   
-</h4></pre><font size="2"><h1 align='center'>VERSION: PS20260529:2222</h1></font><pre><h4>
+</h4></pre><font size="2"><h1 align='center'>VERSION: PS20260605:1740</h1></font><pre><h4>
 
 
   The object of this project is to run LLM directly from the Jetson Orin Nano Super (Local on the Edge) 
@@ -80,7 +81,7 @@ __3.) SanDisk Ultra MicroSD card &gt= 64G $25
 </h4></pre><h3 align='left' id="STEPMigratefromMicroSDtoM2NVMESSDboot"> STEP: Migrate from MicroSD to M.2 NVME SSD boot</h3><pre><h4>
 ###################################
 
-# open a terminal, from the "3 by 3 dots" in the lower left of the screen, use the search "term" to open
+# open a terminal, &ltCtrl&gt&ltAtl&gtt
  cd # to make sure you are in your home dir
  mkdir -p github # create the dir github in your home dir
  cd github # change to the dir
@@ -395,6 +396,41 @@ sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
 
 sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
  llama-server -m ~/LLM/gemma-4-E4B-it-Q4_K_M.gguf --n-gpu-layers 99
+
+
+
+###################################
+</h4></pre><h2 align='left' id="PROCEDUREUpgradetojetpack72r392">PROCEDURE: Upgrade to jetpack 7.2 r39.2</h2><pre><h4>
+###################################
+
+<a href="https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/quick_start.html"><font color="black">New 7.2 Nvidia Orin Nano User Guide<font color="blue"> https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/quick_start.html<font color="black"></a>
+
+ Jetpack 7.2 r39,2:
+ - Make sure your Orin is up to the latest 6.2.2 firmware
+ - we will create a USB stick to perform the OS update you have to use a Windont or Apple PC and that Balena Etcher ISO writer
+ - boot with the USB and target the M.2 NVME as the install device
+</h4></pre><h3 align='left' id="NOTEthiswillcompletlyoverwritetheNVMEsosaveanythingyoumaywant">NOTE: this will completly overwrite the NVME so save anything you may want</h3><pre><h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
