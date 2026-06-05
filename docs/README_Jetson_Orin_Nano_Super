@@ -2,7 +2,7 @@
 ###PROCEDURE: Jetson Nano Orin Super setup/configuration
 #
 # Peter Soroka   
-###VERSION: PS20260529:2222
+###VERSION: PS20260605:1740
 
 
   The object of this project is to run LLM directly from the Jetson Orin Nano Super (Local on the Edge) 
@@ -45,7 +45,7 @@
 ### STEP: Migrate from MicroSD to M.2 NVME SSD boot
 ###################################
 
-# open a terminal, from the "3 by 3 dots" in the lower left of the screen, use the search "term" to open
+# open a terminal, <Ctrl><Atl>t
  cd # to make sure you are in your home dir
  mkdir -p github # create the dir github in your home dir
  cd github # change to the dir
@@ -356,6 +356,41 @@ export PATH=~$PATH:~/.local/bin
 
  sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
  llama-server -m ~/LLM/gemma-4-E4B-it-Q4_K_M.gguf --n-gpu-layers 99
+
+
+
+###################################
+###PROCEDURE: Upgrade to jetpack 7.2 r39.2
+###################################
+
+###LINK: "New 7.2 Nvidia Orin Nano User Guide" "https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/quick_start.html"
+
+ Jetpack 7.2 r39,2:
+ - Make sure your Orin is up to the latest 6.2.2 firmware
+ - we will create a USB stick to perform the OS update you have to use a Windont or Apple PC and that Balena Etcher ISO writer
+ - boot with the USB and target the M.2 NVME as the install device
+   NOTE: this will completly overwrite the NVME so save anything you may want   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
