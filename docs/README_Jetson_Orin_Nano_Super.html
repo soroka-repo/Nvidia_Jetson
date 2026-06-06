@@ -1,0 +1,589 @@
+<!DOCTYPE HTML>
+<html>
+<body LINK=red VLINK=green>
+<style>
+    a { text-decoration: none; }
+</style>
+</ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREJetsonNanoOrinSupersetupconfiguration"><font color="blue"><h3 align='left'>  Jetson Nano Orin Super setup/configuration</h3></font></a><ol>
+<font color="black"><h3 align='center'>VERSION: PS20260605:1740</font></h3>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPRequiredhardwareStepone"> Required hardware, (Step one)</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPCopytheOStoaSDCard"> Copy the OS to a SD Card</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPincreasethespeedpowerandmakethisorin"SUPER""> increase the speed/power and make this orin "SUPER"</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPIncreasethepagingswapspacetoallowmorethenthereal8gofmemtobeused"> Increase the paging swap space to allow more then the real 8g of mem to be used</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPverifyjtopisworking"> verify jtop is working</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
+
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPUseFlatpaktoinstallthefollowingApps"> Use Flatpak to install the following Apps</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPUseCUDAtoverifytheGPU"> Use CUDA to verify the GPU</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
+
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPcompilellama"> compile llama</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
+
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstalltheHuggingFaceCLItodownloadaLLM"> Install the Hugging Face CLI to download a LLM</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
+
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPUsehuggingfacehftodownloadaLLMandrunitwithllamaserver"> Use huggingface (hf) to download a LLM and run it with llama-server</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPUpgradeto365tofixmemoryproblemsthatllamaserverishaving"> Upgrade to 36.5 to fix memory problems that llama-server is having</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPrerunlamaserverwithRelease365"> rerun lama-server with Release 36.5</a></li>
+</ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREUpgradetojetpack72r392"><font color="blue"><h3 align='left'>  Upgrade to jetpack 7.2 r39.2</h3></font></a><ol>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPtryingthefollowingtosetupGenrativeAIfortexttographic"> trying the following to setup Genrative AI for text to graphic</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallollama"> Install ollama</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPGenerateTexttoImage"> Generate Text to Image</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
+
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
+
+###################################
+</h4></pre><h2 align='left' id="PROCEDUREJetsonNanoOrinSupersetupconfiguration">PROCEDURE: Jetson Nano Orin Super setup/configuration</h2><pre><h4>
+#
+# Peter Soroka   
+</h4></pre><font size="2"><h1 align='center'>VERSION: PS20260605:1740</h1></font><pre><h4>
+
+
+  The object of this project is to run LLM directly from the Jetson Orin Nano Super (Local on the Edge) 
+ access LLMs that you have stored locally on the Orin Super off the network without any fees. We will first 
+ explore text based LLMs then move up to LLMs that can usw Generative AI for artwork 2D and 3D that can be used
+ in the Maker world of 3d-Printer, CNC work, Laser engraving...
+ 
+ 	Orginal Jetson Nano		Jetson Orin Nano Super
+
+ AI	472 GFLOPS			30-60 TFLOPS
+ GPU 	128 core			1024 CUDA cores @ 1Ghz
+ CPU	Quad Core ARM 1.43Ghz		6 core ARM 1.7Ghz 
+ MEM	4GB				8GB @ 102Ghz
+ 
+###################################
+</h4></pre><h3 align='left' id="STEPRequiredhardwareStepone">STEP: Required hardware, (Step one)</h3><pre><h4>
+###################################
+
+ __1.) Nvidia Jetsin Orin Nano Devloper Kit $250
+__3.) SanDisk Ultra MicroSD card &gt= 64G $25
+ __4.) M.2 2280 NVME SSD 1TB Storage PCIE Gen3 is fine (since that is the speed of the Nano)about $100
+ __5.) Monitor with a DisplayPort, displayport is like an HDMI with one edge of the connector
+       squared off, it has a higher bandwidth. You will need a DisplayPort to DisplayPort cable
+       the monitor or an HDMI to DisplayPort converter if your monitor only supports HDMI
+ __6.) a USB keyboard and Mouse
+ __7.) Network connection wired is perfered but wireless will also work
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPCopytheOStoaSDCard">STEP: Copy the OS to a SD Card</h3><pre><h4>
+###################################
+
+ __1) Use a SanDisk Ultra MicroSD 64gig Class 10/U1/A1 or faster (Extreme) Note: the
+      MicroSD card is just for the first boot we will be converting to a M.2 NVME SSD
+      boot for normal operation
+      copy
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPMigratefromMicroSDtoM2NVMESSDboot"> STEP: Migrate from MicroSD to M.2 NVME SSD boot</h3><pre><h4>
+###################################
+
+# open a terminal, &ltCtrl&gt&ltAtl&gtt
+ cd # to make sure you are in your home dir
+ mkdir -p github # create the dir github in your home dir
+ cd github # change to the dir
+ git clone https://github.com/jetsonhacks/migrate-jetson-ssd # to download the code from github
+ cd migrate-jetson-ssd # change to the dir 
+# run the following scripts in order:
+ sudo bash make_partitions.sh
+ sudo bash copy_partitions.sh
+ sudo bash configure_ssd_boot.sh
+# shutdown and remove the microSSD and reboot  with just the M.2 NVME SSD installed
+# once booted from the M.2 NVME SSD continue from a terminal again
+# apt install gparted to increase the size of the partitions on the M.2 NVME SSD
+ sudo apt update
+ sudo apt install gparted
+ gparted # using gparted increase the size of the Apps partition do not use all the disk space we will save some
+# for futures updates to other partitions (250G for now will be good)
+# use the following to examine the disk space
+ df -h
+ lsblk 
+# verify your M.2 NVME SSD is operating correctly
+ lspci
+# you should see that the "Non-Volatile memory controller" is on the "0004:01:00.0" bus so enter the following:
+ lspci -s 0004:01:00.0
+# verify the "LnkSta:" line both "Speed 8GT/s (ok) Width x4 (ok)" should report (ok) 
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPincreasethespeedpowerandmakethisorin"SUPER"">STEP: increase the speed/power and make this orin "SUPER"</h3><pre><h4>
+##################################
+
+# this assumes we have atleast jetpack 6.2.1 loaded
+# select "green Nividia Icon" at the uper right of the screen
+# select "Power Mode", select "MAXN SUPER"
+# to display the selection
+ nvpmodel -q
+# reboot
+ sudo reboot
+
+###################################
+</h4></pre><h3 align='left' id="STEPIncreasethepagingswapspacetoallowmorethenthereal8gofmemtobeused">STEP: Increase the paging swap space to allow more then the real 8g of mem to be used</h3><pre><h4>
+###################################
+# This will allow for more then the real 8g of mem to be used lets add 24g of swap space
+
+# View what we have now
+ free -h
+ swapon --show
+# Disable the ZRAM (if it is active)
+ sudo systemctl disable nvzramconfig
+# create the swapfile
+ sudo fallocate -l 24G /swapfile
+# set premisssions
+ sudo chmod 600 /swapfile
+# setup swap area
+ sudo mkswap /swapfile
+# Enable the swap
+ sudo swapon /swapfile
+# Make it survive a reboot
+ cat /etc/fstab # this is what you are starting with
+ sudo cp /etc/fstab /etc/fstab.bak # backing it up in case you make a mistake
+ sudo echo '/swapfile none swap sw 0 0'|sudo tee -a /etc/fstab # add a line
+ cat /etc/fstab # this should be what you started with plus the line added above
+# view what we have now
+ free -h
+ swapon --show
+
+###################################
+</h4></pre><h3 align='left' id="STEPverifyjtopisworking">STEP: verify jtop is working</h3><pre><h4>
+###################################
+
+ jtop ### if nothing then lets install it
+ 
+# update all the installed packages
+ sudo apt update
+ sudo apt upgrade 
+# install pip (python-install-packager)
+ sudo apt install python-pip
+# install jetson-stats (jtop)
+ sudo pip3 install -U jetson-stats
+# reboot
+ sudo reboot 
+ 
+# try jtop again
+ jtop
+# tab over to the "6CTRL"
+ set the profiles to "[cool]"
+ set the Jetson clocks on boot to "e enable"
+ set the NVP modes to "[MAXN SUPER]"
+# you can also try to use the following to set them
+ sudo nvpmodel -m 2
+ sudo jetson_clocks
+# to show
+ sudo jetson_clocks --show
+# reboot to maybe get the clocks started
+ sudo reboot
+ jtop # check the clocks are working
+
+# fix the message in jtop so the jetpack level is valid (if needed)
+# goto the following file "jetson_variables.py usually found at the following
+ sudo gedit /usr/local/lib/python3.10/dist-packages/jtop/core/jetson_variables.py
+# add in the correct firmware and jetpack level
+<h4 align='left' id="EXAMPLE">EXAMPLE:
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+NVIDIA_JETPACK = {</span>
+    # -------- JP6 --------
+    "36.4.7": "6.2.1",
+    "36.4.2": "6.2",
+...
+</p><h4>
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPUseFlatpaktoinstallthefollowingApps">STEP: Use Flatpak to install the following Apps</h3><pre><h4>
+###################################
+#
+ Flatpak is the latest method to get the very latest level of an App onto your system and
+ handles the pre-reqs. Go to Flathub.org to get the list of available Apps. If you App is 
+ listed but will not install it is most likely that the old level of Ubuntu that the 6.2
+ level Jetpak uses or the ARM CPU is not suportted by the FlatPack and another method of
+ install will be required.
+
+# Setup for flatpak
+ sudo apt update
+ sudo apt install -y flatpak
+ sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repflathub.flatpakrepo
+
+### MAKER
+ sudo flatpak install -y flathub org.gimp.GIMP                 ### GNU Image Manipulation
+
+### PHOTO / GRAPHIC
+ sudo flatpak install -y flathub org.inkscape.Inkscape         ### Vector Graphics Editor
+
+### System 
+ sudo flatpak install -y flathub org.mozilla.firefox           ### web browser
+ sudo flatpak install -y flathub org.wireshark.Wireshark       ### Network traffic analyzer
+
+# flatpack management
+
+# Search for new Apps
+<a href="https://flathub.org"><font color="black">Search Flathub<font color="blue"> https://flathub.org<font color="black"></a>
+
+# List installed flatpaks
+ flatpak list
+
+# List all available applications
+ flatpak remote-ls flathub --app
+
+# Update flatpaks
+ sudo flatpak update
+
+# Just update one
+ sudo flatpak update org.freecad.FreeCAD
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPUseCUDAtoverifytheGPU">STEP: Use CUDA to verify the GPU</h3><pre><h4>
+###################################
+
+# Check that the compiler/toolkit is installed
+ nvcc -V
+# if not install it
+ sudo apt update
+ sudo apt install nvidia-jetpack
+# update your path in your .bashrc file
+ gedit ~/.bashrc # Note ~ is a shortcut for the path to your home directory if you are already in your home
+# dir you do not need the ~ add the following to the bottom of the .bashrc file
+<h4 align='left' id="EXAMPLE">EXAMPLE:
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+export PATH=/usr/local/cuda/bin:$PATH</span>
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+</p><h4>
+# resource the .bashrc to update the paths
+ source ~/.bashrc
+# grab your cuda level from the nvcc -V command (6.2.1 has CUDA 12.6 so there is no cuda_sample-12-6 so use 12-5)
+ nvcc -V
+ cd ~/github
+ git clone --branch v12.5 https://github.com/NVIDIA/cuda-samples.git # Note: using relese 12.5 since there is no 12.6 release
+ cd cuda-samples/1_Utilities/deviceQuery # cd to a sample
+ make # compile it
+ ./deviceQuery # run it
+
+# The following samples have been tired and will work for the Orin Nano super:
+
+ 0_Introduction/
+    clock
+    simpleTexture3D
+    vectorAdd
+
+ 1_Utilities/
+    deviceQuery
+    deviceQueryDrv
+    bandwidthTest 
+ 
+ 3_CUDA_Features/
+    simpleCudaGraphs
+
+ 5_Domain_Specific/
+    BlackScholes   
+    marchingCubes
+    nbody
+    p2pBandwidthLatencyTest
+ 
+ 6_Performance/
+    transpose
+
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPcompilellama">STEP: compile llama</h3><pre><h4>
+###################################
+#
+# Install depends
+ sudo apt update && sudo apt install -y git build-essential cmake libcurl4-openssl-dev apt-utils
+# change to local github dir
+ cd ~/github
+# git clone and compile
+ git clone https://github.com/ggml-org/llama.cpp && cd llama.cpp
+ cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="87"
+ cmake --build build --config Release --parallel 8
+# Create the Path for lama to your .bashrc file
+ gedit ~/.bashrc
+# add the following to the end of your .bashrc file
+<h4 align='left' id="EXAMPLE">EXAMPLE:
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+export PATH=~$PATH:~/github/llama.cpp/build/bin</span>
+</p><h4>
+ source .bashrc
+
+###################################
+</h4></pre><h3 align='left' id="STEPInstalltheHuggingFaceCLItodownloadaLLM">STEP: Install the Hugging Face CLI to download a LLM</h3><pre><h4>
+###################################
+ pip install -U "huggingface_hub[cli]"
+# add the path to the huggingface-cli to your .bashrc
+ gedit ~/.bashrc
+# add the following to the end of your .bashrc file
+<h4 align='left' id="EXAMPLE">EXAMPLE:
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+export PATH=~$PATH:~/.local/bin</span>
+</p><h4>
+ source .bashrc
+
+###################################
+</h4></pre><h3 align='left' id="STEPUsehuggingfacehftodownloadaLLMandrunitwithllamaserver">STEP: Use huggingface (hf) to download a LLM and run it with llama-server</h3><pre><h4>
+###################################
+ mkdir -p ~/LLM
+ cd ~/LLM
+ hf download bartowski Llama-3.2-3B-Instruct-Q4_K_M.gguf --local-dir . 
+ hf download bartowski/Qwen_Qwen3-4B-GGUF Qwen_Qwen3-4B-Q4_K_M.gguf --local-dir . 
+ hf download bartowski/Llama-3.2-3B-Instruct-GGUF Llama-3.2-3B-Instruct-Q4_K_M.gguf --local-dir .
+
+### Clear (Free up) Memory cache
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+
+### Run 
+ llama-se`rver -m ~/HuggingFace/Llama-3.2-3B-Instruct-Q4_K_M.gguf -c 2048 --n-gpu-layers 99
+
+# I could only get the above LLM to run by adding the argument "-c 2048" this limits the amount of
+# tokens the LLM can use to 2048. It turns out that Release 36.4.2 has got some kind of memory problem
+# such that the LLM will only work if it's loaded into contigious memory. So to correct this we need to
+# follow the steps to upgrade to Release 36.5 
+
+###################################
+</h4></pre><h3 align='left' id="STEPUpgradeto365tofixmemoryproblemsthatllamaserverishaving">STEP: Upgrade to 36.5 to fix memory problems that llama-server is having</h3><pre><h4>
+###################################
+
+# Open the NVIDIA L4T APT source file to point to the new 36.5 repository
+# Change all instances of r36.4 (or earlier) to r36.5 
+ sudo vi /etc/apt/sources.list.d/nvidia-l4t-apt-source.list
+
+# Update Package Lists
+ sudo apt update
+
+# Run a full distribution upgrade to update JetPack/L4T packages:
+ sudo apt dist-upgrade
+
+# Fix Broken Dependencies and 
+# ensure all packages are properly configured:
+ sudo apt install --fix-broken -o Dpkg::Options::="--force-overwrite"
+
+# Reboot the Device
+ sudo reboot
+
+# Verification After the reboot, verify that the upgrade was successful by 
+# checking the new Jetson Linux version:
+ cat /etc/nv_tegra_release
+# and
+ jtop
+
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPrerunlamaserverwithRelease365">STEP: rerun lama-server with Release 36.5</h3><pre><h4>
+###################################
+
+## -c 2048 argument is no longer needed
+
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/Llama-3.2-3B-Instruct-Q4_K_M.gguf --n-gpu-layers 99 ### quick text based answers
+
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/Qwen_Qwen3-4B-Q4_K_M.gguf --n-gpu-layers 99 ### text based answers, click on the 
+                                        # "Resoning button" this model argues with itself about its returning answer
+
+
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/Qwen2.5-7B-Instruct-Q4_K_M.gguf --n-gpu-layers 99 ### quick text based answers
+
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/Qwen_Qwen3-4B-Q6_K.gguf --n-gpu-layers 99 
+
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf --n-gpu-layers 99
+
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/gemma-4-E4B-it-Q4_K_M.gguf --n-gpu-layers 99
+
+
+
+###################################
+</h4></pre><h2 align='left' id="PROCEDUREUpgradetojetpack72r392">PROCEDURE: Upgrade to jetpack 7.2 r39.2</h2><pre><h4>
+###################################
+
+<a href="https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/quick_start.html"><font color="black">New 7.2 Nvidia Orin Nano User Guide<font color="blue"> https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/quick_start.html<font color="black"></a>
+
+ Jetpack 7.2 r39,2:
+ - Make sure your Orin is up to the latest 6.2.2 firmware
+ - we will create a USB stick to perform the OS update you have to use a Windont or Apple PC and that Balena Etcher ISO writer
+ - boot with the USB and target the M.2 NVME as the install device
+</h4></pre><h3 align='left' id="NOTEthiswillcompletlyoverwritetheNVMEsosaveanythingyoumaywant">NOTE: this will completly overwrite the NVME so save anything you may want</h3><pre><h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPtryingthefollowingtosetupGenrativeAIfortexttographic">STEP: trying the following to setup Genrative AI for text to graphic</h3><pre><h4>
+###################################
+
+https://github.com/Teachings/AIServerSetup/tree/main
+
+
+
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPInstallollama">STEP: Install ollama</h3><pre><h4>
+###################################
+# This is the command to install ollma native to you machine when using it with a LLM you will be using a cli interface
+
+ curl -fsSL https://ollama.com/install.sh | sh
+ ollama ### at the command line to run
+ ollama pull ### 
+<a href="https://ollama.com/search"><font color="black">Search for all LLM on ollama<font color="blue"> https://ollama.com/search<font color="black"></a>
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPGenerateTexttoImage">STEP: Generate Text to Image</h3><pre><h4>
+###################################
+
+&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+
+
+# Install Jetson-Containers
+ cd ~/github
+ git clone https://github.com/dusty-nv/jetson-containers
+ cd jetson-containers
+ bash install.sh
+
+# Run Jetson-Containers
+ cd ~/github/jetson-containers
+ jetson-containers run $(autotag stable-diffusion-webui)  ### first time run will take longer as the models are downloaded
+# ERROR it failed as follows
+#ERROR: Could not find a version that satisfies the requirement numpy==1.26.2 (from versions: none)
+#ERROR: No matching distribution found for numpy==1.26.2
+
+# So lets install numpy 1.26.2
+ python3 -m pip install --upgrade pip
+ python3 -m pip install numpy==1.26.2
+
+# build it
+ ./jetson-containers build stable-diffusion-webui
+
+jetson-containers run daivdl487/stable-diffusion-webui:r36.4.3
+
+# and rerun jetson-containers
+ jetson-containers run $(autotag stable-diffusion-webui) 
+
+ http://127.0.0.1:7860
+
+
+
+
+###############################################################################################################3
+    The remainder of this file are just untested Notes
+
+
+<h4 align='left' id="EXAMPLE">EXAMPLE:
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+Recommended Models for Orin Nano Super</span>
+(8GB)
+Model 	Size	Performance Note
+Llama 3.2 1B/3B
+	Small/Medium	Best for real-time responsiveness.
+Qwen 2.5 3B/7B
+	Med/Large	7B requires high quantization (Q4_K_M) and swap.
+Gemma 2 2B
+	Small	Very efficient for edge use cases.
+###EXAMPLE_PATH:
+
+
+###################################
+### Speech to Text to speech
+###################################
+
+<h4 align='left' id="EXAMPLE">EXAMPLE:
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+Setting up an LLM dialogue system with speech on a Jetson Orin Nano Super involves combining three key components: Speech-to-Text (STT) to hear you, a Local LLM to think, and Text-to-Speech (TTS) to talk back. Given the Orin Nano's 8GB memory, the most efficient approach is using containerized, on-device models. </span>
+
+
+Prerequisites
+
+    Jetson Orin Nano Super (8GB) with JetPack 5.1.2 or later.
+    USB Microphone and Speaker (or a USB headset).
+    Swap Space: Set up at least 8GB of swap to handle loading models. 
+
+Step 1: Install Key Technologies
+You will need to install AI tools for handling voice and language. The recommended stack for local, low-latency interaction on Orin Nano is Whisper (STT), llama.cpp (LLM), and Piper (TTS). 
+
+    Clone the Assistant Repository:
+    bash
+
+    git clone --branch modified https://github.com/ZGMFX20AR/orin_nano_assistant.git
+    cd orin_nano_assistant
+    chmod +x install_dependencies.sh
+    ./install_dependencies.sh
+
+    Set up the Python Environment:
+    bash
+
+    python3 -m venv assistant-env
+    source assistant-env/bin/activate
+    pip install -r requirements.txt
+
+    Build Piper (TTS) and llama.cpp (LLM):
+    Follow the specific build instructions provided in the Cytron tutorial for compiling these engines specifically for the ARM64 architecture of the Orin Nano. 
+
+
+
+Step 2: Configure Speech & Language Models
+
+    Speech-to-Text (STT): Use OpenAI's Whisper (specifically the tiny or base model for speed).
+    LLM Selection: Use optimized small models like Llama-3.2-3B, Gemma-2-2B or Phi-3-mini.
+    Text-to-Speech (TTS): Use Piper TTS, which is fast and lightweight for edge devices. 
+
+Configure the assistant.py script to connect these components, updating file paths to your models. 
+Step 3: Run the Voice Chat Agent 
+Once installed and configured, you can launch the voice-controlled chatbot.
+
+    Activate your virtual environment: source assistant-env/bin/activate
+    Run the application: python3 assistant.py
+
+The script will start by initializing the models, then listen for microphone input to send to the LLM and output audio via your speakers. 
+
+
+Alternative: Using NVIDIA Riva
+For a more advanced, production-oriented approach, you can install the NVIDIA Riva SDK. Riva provides high-performance ASR (Automatic Speech Recognition) and TTS pipel:wqines tailored for Jetson, although installation can be complex and consumes significant memory. 
+Tips for Success
+
+    Microphone Input: Use arecord -l to identify your microphone and update the DEVICE_NAME (e.g., "plughw:2,0") in your configuration script.
+    Performance: If using MLC-LLM rather than llama.cpp, you may achieve better tokens per second (TPS) on Llama-3-8B models.
+    Memory Management: The 8GB limit is tight; close unused applications (like the desktop GUI) to free up memory for the model. 
+
+</p><h4>
+
+
+
+
+
+
+###############################################################################
+########                    End-Of-File                                ########
+###############################################################################
+</header></pre></body></html>
