@@ -5,7 +5,7 @@
     a { text-decoration: none; }
 </style>
 </ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREJetsonNanoOrinSupersetupconfiguration"><font color="blue"><h3 align='left'>  Jetson Nano Orin Super setup/configuration</h3></font></a><ol>
-<font color="black"><h3 align='center'>VERSION: PS20260605:1740</font></h3>
+<font color="black"><h3 align='center'>VERSION: PS20260605:0130</font></h3>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPRequiredhardwareStepone"> Required hardware, (Step one)</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPCopytheOStoaSDCard"> Copy the OS to a SD Card</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPincreasethespeedpowerandmakethisorin"SUPER""> increase the speed/power and make this orin "SUPER"</a></li>
@@ -27,6 +27,23 @@
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPUpgradeto365tofixmemoryproblemsthatllamaserverishaving"> Upgrade to 36.5 to fix memory problems that llama-server is having</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPrerunlamaserverwithRelease365"> rerun lama-server with Release 36.5</a></li>
 </ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREUpgradetojetpack72r392"><font color="blue"><h3 align='left'>  Upgrade to jetpack 7.2 r39.2</h3></font></a><ol>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPCreatetheUSBandbootfromit"> Create the USB and boot from it</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallsomeadditionalapts"> Install some additional apts</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPUseCUDAtoverifytheGPU"> Use CUDA to verify the GPU</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
+
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPRestore25Wmode"> Restore 25W mode</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPverifyjtopisworking"> verify jtop is working</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
+
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPIncreasethepagingswapspacetoallowmorethenthereal8gofmemtobeused"> Increase the paging swap space to allow more then the real 8g of mem to be used</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPcompilellama"> compile llama</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
+
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstalltheHuggingFaceCLItodownloadaLLM"> Install the Hugging Face CLI to download a LLM</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
+
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPrerunlamaserverwithRelease392Jetpack72"> rerun lama-server with Release 39.2 Jetpack 7.2</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPtryingthefollowingtosetupGenrativeAIfortexttographic"> trying the following to setup Genrative AI for text to graphic</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallollama"> Install ollama</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPGenerateTexttoImage"> Generate Text to Image</a></li>
@@ -38,7 +55,7 @@
 </h4></pre><h2 align='left' id="PROCEDUREJetsonNanoOrinSupersetupconfiguration">PROCEDURE: Jetson Nano Orin Super setup/configuration</h2><pre><h4>
 #
 # Peter Soroka   
-</h4></pre><font size="2"><h1 align='center'>VERSION: PS20260605:1740</h1></font><pre><h4>
+</h4></pre><font size="2"><h1 align='center'>VERSION: PS20260605:0130</h1></font><pre><h4>
 
 
   The object of this project is to run LLM directly from the Jetson Orin Nano Super (Local on the Edge) 
@@ -405,11 +422,194 @@ sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
 
 <a href="https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/quick_start.html"><font color="black">New 7.2 Nvidia Orin Nano User Guide<font color="blue"> https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/quick_start.html<font color="black"></a>
 
+
+###################################
+</h4></pre><h3 align='left' id="STEPCreatetheUSBandbootfromit">STEP: Create the USB and boot from it</h3><pre><h4>
+###################################
  Jetpack 7.2 r39,2:
  - Make sure your Orin is up to the latest 6.2.2 firmware
  - we will create a USB stick to perform the OS update you have to use a Windont or Apple PC and that Balena Etcher ISO writer
  - boot with the USB and target the M.2 NVME as the install device
 </h4></pre><h3 align='left' id="NOTEthiswillcompletlyoverwritetheNVMEsosaveanythingyoumaywant">NOTE: this will completly overwrite the NVME so save anything you may want</h3><pre><h4>
+</h4></pre><h3 align='left' id="NOTEyouwillhavetopressytoupdatethefirmware">NOTE: you will have to press y to update the firmware</h3><pre><h4>
+
+###################################
+</h4></pre><h3 align='left' id="STEPInstallsomeadditionalapts">STEP: Install some additional apts</h3><pre><h4>
+###################################
+ sudo apt update && sudo apt install -y python3-pip gparted git build-essential cmake libcurl4-openssl-dev apt-utils
+ sudo apt install gedit gedit-plugin-text-size gedit-plugins-common gedit-plugin-character-map gedit-source-code-browser-plugin
+
+###################################
+</h4></pre><h3 align='left' id="STEPUseCUDAtoverifytheGPU">STEP: Use CUDA to verify the GPU</h3><pre><h4>
+###################################
+# Check that the compiler/toolkit is installed
+ nvcc -V
+# if not install it
+ sudo apt update
+ sudo apt install nvidia-jetpack
+# update your path in your .bashrc file
+ gedit ~/.bashrc # Note ~ is a shortcut for the path to your home directory if you are already in your home
+# dir you do not need the ~ add the following to the bottom of the .bashrc file
+<h4 align='left' id="EXAMPLE">EXAMPLE:
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+export PATH=/usr/local/cuda/bin:$PATH</span>
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+</p><h4>
+# resource the .bashrc to update the paths
+ source ~/.bashrc
+# grab your cuda level from the nvcc -V command (Jetpack 7.2 has CUDA 13.2)
+ nvcc -V
+ cd ~/github
+ git clone --branch v13.2 https://github.com/NVIDIA/cuda-samples.git
+ cd cuda-samples
+ mkdir build && cd build
+ cmake ..
+ make -j$(nproc)
+
+ cd buils/Samples/1_Utilities/deviceQuery # cd to a sample
+ ./deviceQuery # run it
+
+# The following samples have been tired and will work for the Orin Nano super:
+
+ 0_Introduction/
+    clock
+    vectorAdd
+
+ 1_Utilities/
+    deviceQuery
+    deviceQueryDrv
+
+ 3_CUDA_Features/
+    simpleCudaGraphs
+
+ 5_Domain_Specific/
+    BlackScholes
+    p2pBandwidthLatencyTest
+
+ 6_Performance/
+    transpose
+
+###################################
+</h4></pre><h3 align='left' id="STEPRestore25Wmode">STEP: Restore 25W mode</h3><pre><h4>
+###################################
+# if you are missing the 25w mode do the following
+ sudo unlink /etc/nvpmodel.conf
+ sudo cp -p /etc/nvpmodel/nvpmodel_p3767_0003.conf /etc/nvpmodel/nvpmodel_p3767_0003.conf.orig
+ sudo cp -p /etc/nvpmodel/nvpmodel_p3767_0003_super.conf /etc/nvpmodel/nvpmodel_p3767_0003.conf
+ sudo systemctl restart nvpower
+ sudo reboot
+ sudo nvpmodel -m 2 # to set it and you will be asked to reboot again
+
+###################################
+</h4></pre><h3 align='left' id="STEPverifyjtopisworking">STEP: verify jtop is working</h3><pre><h4>
+###################################
+
+ jtop ### if nothing then lets install it
+
+# install jetson-stats (jtop)
+ sudo pip3 install -U jetson-stats --break-system-packages
+
+# restart then reboot
+ sudo systemctl restart jtop.service
+ sudo reboot
+
+# try jtop again
+ jtop
+# enter 6 for "6CTRL"
+ set the profiles to "[cool]"
+ set the Jetson clocks on boot to "e enable"
+ set the NVP modes to "[MAXN SUPER]"
+# you can also try to use the following to set them
+ sudo nvpmodel -m 2
+ sudo jetson_clocks
+# to show
+ sudo jetson_clocks --show
+# reboot to maybe get the clocks started
+ sudo reboot
+ jtop # check the clocks are working
+
+# fix the message in jtop so the jetpack level is valid (if needed)
+# goto the following file "jetson_variables.py usually found at the following
+ sudo vi /usr/local/lib/python3.12/dist-packages/jtop/core/jetson_variables.py
+# add in the correct firmware and jetpack level
+<h4 align='left' id="EXAMPLE">EXAMPLE:
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+NVIDIA_JETPACK = {</span>
+    # -------- JP7 --------
+    "39.2.0": "7.2",
+    # -------- JP6 --------
+    "36.4.7": "6.2.1",
+    "36.4.2": "6.2",
+...
+</p><h4>
+
+# restart and retry
+ sudo systemctl restart jtop.service
+ jtop # to retry
+ 
+</h4></pre><h3 align='left' id="NOTEjtopcurrentlyhasabugandwillcrashonmenu2GPUsojustavoidthatmenu">NOTE: jtop currently has a bug and will crash on menu 2GPU so just avoid that menu</h3><pre><h4>
+   use the following NVIDIA command to monitor 
+   sudo tegrastats
+
+###################################
+</h4></pre><h3 align='left' id="STEPIncreasethepagingswapspacetoallowmorethenthereal8gofmemtobeused">STEP: Increase the paging swap space to allow more then the real 8g of mem to be used</h3><pre><h4>
+###################################
+# This will allow for more then the real 8g of mem to be used lets add 32g of swap space
+# View what we have now
+ free -h
+ swapon --show
+# Disable the ZRAM (if it is active)
+ sudo systemctl disable nvzramconfig
+# create the swapfile
+ sudo fallocate -l 32G /swapfile
+# set premisssions
+ sudo chmod 600 /swapfile
+# setup swap area
+ sudo mkswap /swapfile
+# Enable the swap
+ sudo swapon /swapfile
+# Make it survive a reboot
+ cat /etc/fstab # this is what you are starting with
+ sudo cp /etc/fstab /etc/fstab.bak # backing it up in case you make a mistake
+ sudo echo '/swapfile none swap sw 0 0'|sudo tee -a /etc/fstab # add a line
+ cat /etc/fstab # this should be what you started with plus the line added above
+# view what we have now
+ free -h
+ swapon --show
+
+###################################
+</h4></pre><h3 align='left' id="STEPcompilellama">STEP: compile llama</h3><pre><h4>
+###################################
+#
+# Install depends
+ sudo apt update && sudo apt install -y git build-essential cmake libcurl4-openssl-dev apt-utils
+# change to local github dir
+ cd ~/github
+# git clone and compile
+ git clone https://github.com/ggml-org/llama.cpp && cd llama.cpp
+ cmake -B build -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES="87"
+ cmake --build build --config Release --parallel 8
+# Create the Path for lama to your .bashrc file
+ gedit ~/.bashrc
+# add the following to the end of your .bashrc file
+<h4 align='left' id="EXAMPLE">EXAMPLE:
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+export PATH=~$PATH:~/github/llama.cpp/build/bin</span>
+</p><h4>
+ source .bashrc
+
+###################################
+</h4></pre><h3 align='left' id="STEPInstalltheHuggingFaceCLItodownloadaLLM">STEP: Install the Hugging Face CLI to download a LLM</h3><pre><h4>
+###################################
+ pip3 install -U "huggingface_hub[cli]" --break-system-packages
+# add the path to the huggingface-cli to your .bashrc
+ gedit ~/.bashrc
+# add the following to the end of your .bashrc file
+<h4 align='left' id="EXAMPLE">EXAMPLE:
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+export PATH=~$PATH:~/.local/bin</span>
+</p><h4>
+ source .bashrc
 
 
 
@@ -417,11 +617,29 @@ sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
 
 
 
+###################################
+</h4></pre><h3 align='left' id="STEPrerunlamaserverwithRelease392Jetpack72">STEP: rerun lama-server with Release 39.2 Jetpack 7.2</h3><pre><h4>
+###################################
+
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/Llama-3.2-3B-Instruct-Q4_K_M.gguf --n-gpu-layers 99 ### quick text based answers
+
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/Qwen_Qwen3-4B-Q4_K_M.gguf --n-gpu-layers 99 ### text based answers, click on the 
+                                        # "Resoning button" this model argues with itself about its returning answer
 
 
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/Qwen2.5-7B-Instruct-Q4_K_M.gguf --n-gpu-layers 99 ### quick text based answers
 
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/Qwen_Qwen3-4B-Q6_K.gguf --n-gpu-layers 99
 
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf --n-gpu-layers 99 ### working on Jetpack 7.2
 
+sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
+ llama-server -m ~/LLM/gemma-4-E4B-it-Q4_K_M.gguf --n-gpu-layers 99 ### working on Jetpack 7.2
 
 
 
