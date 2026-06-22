@@ -5,7 +5,7 @@
     a { text-decoration: none; }
 </style>
 </ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREJetsonNanoOrinSupersetupconfiguration"><font color="blue"><h3 align='left'>  Jetson Nano Orin Super setup/configuration</h3></font></a><ol>
-<font color="black"><h3 align='center'>VERSION: PS20260605:0130</font></h3>
+<font color="black"><h3 align='center'>VERSION: PS2026062221341</font></h3>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPRequiredhardwareStepone"> Required hardware, (Step one)</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPCopytheOStoaSDCard"> Copy the OS to a SD Card</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPincreasethespeedpowerandmakethisorin"SUPER""> increase the speed/power and make this orin "SUPER"</a></li>
@@ -14,6 +14,9 @@
 <a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
 
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPUseFlatpaktoinstallthefollowingApps"> Use Flatpak to install the following Apps</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallPIAppsfortheRaspberryPIbutwillworkonJetsonOrintoo"> Install PI-Apps for the Raspberry PI, but will work on Jetson Orin too</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPIfFreeCADisinstalledthenaddGraphviz"> If FreeCAD is installed, then add Graphviz</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPusesnaptoinstallthefollowing"> use snap to install the following</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPUseCUDAtoverifytheGPU"> Use CUDA to verify the GPU</a></li>
 <a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
 
@@ -29,6 +32,8 @@
 </ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREUpgradetojetpack72r392"><font color="blue"><h3 align='left'>  Upgrade to jetpack 7.2 r39.2</h3></font></a><ol>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPCreatetheUSBandbootfromit"> Create the USB and boot from it</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallsomeadditionalapts"> Install some additional apts</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPUseFlatpaktoinstallthefollowingApps"> Use Flatpak to install the following Apps</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPcompileMeshlabusedusedforstl3Dmeshmanipulation"> compile Meshlab, used used for *.stl 3D mesh manipulation</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPUseCUDAtoverifytheGPU"> Use CUDA to verify the GPU</a></li>
 <a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
 
@@ -44,9 +49,18 @@
 <a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
 
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPrerunlamaserverwithRelease392Jetpack72"> rerun lama-server with Release 39.2 Jetpack 7.2</a></li>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPtryingthefollowingtosetupGenrativeAIfortexttographic"> trying the following to setup Genrative AI for text to graphic</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPDockerinstallandconfiguration"> Docker install and configuration</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
+
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLEaddingthelineplusacomathefileshouldlooklikethe"><font color="black">&emsp; Example:  adding the line plus a coma the file should look like the<br></font></a>
+
+</ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREComfyUIinstallandsetupforTexttoImage"><font color="blue"><h3 align='left'>  ComfyUI install and setup for Text-to-Image</h3></font></a><ol>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEP1InstallingMinicondaandSettingUpaPythonEnvironment"> 1. Installing Miniconda and Setting Up a Python Environment</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEP2nvcccheckthatit'sinstalled"> 2. nvcc check that it's installed</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEP3CloningtheComfyUIProjectRepository"> 3. Cloning the ComfyUI Project Repository</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEP5RunningComfyUI"> 5: Running ComfyUI</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallJetsonContainers"> Install Jetson-Containers</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallollama"> Install ollama</a></li>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPGenerateTexttoImage"> Generate Text to Image</a></li>
 <a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
 
 <a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
@@ -55,7 +69,7 @@
 </h4></pre><h2 align='left' id="PROCEDUREJetsonNanoOrinSupersetupconfiguration">PROCEDURE: Jetson Nano Orin Super setup/configuration</h2><pre><h4>
 #
 # Peter Soroka   
-</h4></pre><font size="2"><h1 align='center'>VERSION: PS20260605:0130</h1></font><pre><h4>
+</h4></pre><font size="2"><h1 align='center'>VERSION: PS2026062221341</h1></font><pre><h4>
 
 
   The object of this project is to run LLM directly from the Jetson Orin Nano Super (Local on the Edge) 
@@ -212,7 +226,6 @@ NVIDIA_JETPACK = {</span>
 ###################################
 </h4></pre><h3 align='left' id="STEPUseFlatpaktoinstallthefollowingApps">STEP: Use Flatpak to install the following Apps</h3><pre><h4>
 ###################################
-#
  Flatpak is the latest method to get the very latest level of an App onto your system and
  handles the pre-reqs. Go to Flathub.org to get the list of available Apps. If you App is 
  listed but will not install it is most likely that the old level of Ubuntu that the 6.2
@@ -222,10 +235,11 @@ NVIDIA_JETPACK = {</span>
 # Setup for flatpak
  sudo apt update
  sudo apt install -y flatpak
- sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repflathub.flatpakrepo
+ sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 ### MAKER
  sudo flatpak install -y flathub org.gimp.GIMP                 ### GNU Image Manipulation
+ sudo flatpak install -y flathub com.orcaslicer.OrcaSlicer     ### ORCA Slicer
 
 ### PHOTO / GRAPHIC
  sudo flatpak install -y flathub org.inkscape.Inkscape         ### Vector Graphics Editor
@@ -249,13 +263,45 @@ NVIDIA_JETPACK = {</span>
  sudo flatpak update
 
 # Just update one
- sudo flatpak update org.freecad.FreeCAD
+ sudo flatpak update org.gimp.GIMP
 
+###################################
+</h4></pre><h3 align='left' id="STEPInstallPIAppsfortheRaspberryPIbutwillworkonJetsonOrintoo">STEP: Install PI-Apps for the Raspberry PI, but will work on Jetson Orin too</h3><pre><h4>
+###################################
+# download and install
+ wget -qO- https://raw.githubusercontent.com/Botspot/pi-apps/master/install | bash
+
+# Run
+ enter pi-app in the terminal or click the icon on the desktop
+
+# Usage: Install the following
+ FreeCad # CAD 
+ btop++ # system usage
+ BalenaEtcher # SD card Imager
+ 
+######################################################################
+</h4></pre><h3 align='left' id="STEPIfFreeCADisinstalledthenaddGraphviz">STEP: If FreeCAD is installed, then add Graphviz</h3><pre><h4>
+######################################################################
+# make sure Graphviz is installed for the Tools, Dependancy Graph to work 
+ sudo apt update
+ sudo apt install graphviz ### to install
+ which dot ### graphviz = dot, so this will verify the install
+### in FreeCAD you must set the path for the tool to work
+-&gt Tools, -&gt Edit Parameters, -&gt BaseApp, -&gt Preferences, -&gt Paths
+###Note: if Paths is missing right click on Preferences and add it as a subgroup  
+ Then Right click mouse on the right Panel and select "New String Item"
+ Enter the name: Graphviz    ### note must be a capitial "G"
+ Enter the text: /usr/bin    ### which is the path returned from the above "which dot" command
+ "Save"
+
+###################################
+</h4></pre><h3 align='left' id="STEPusesnaptoinstallthefollowing">STEP: use snap to install the following</h3><pre><h4>
+###################################
+ sudo snap install openscad # used by FreeCAD
 
 ###################################
 </h4></pre><h3 align='left' id="STEPUseCUDAtoverifytheGPU">STEP: Use CUDA to verify the GPU</h3><pre><h4>
 ###################################
-
 # Check that the compiler/toolkit is installed
  nvcc -V
 # if not install it
@@ -280,7 +326,6 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
  ./deviceQuery # run it
 
 # The following samples have been tired and will work for the Orin Nano super:
-
  0_Introduction/
     clock
     simpleTexture3D
@@ -303,12 +348,9 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
  6_Performance/
     transpose
 
-
-
 ###################################
 </h4></pre><h3 align='left' id="STEPcompilellama">STEP: compile llama</h3><pre><h4>
 ###################################
-#
 # Install depends
  sudo apt update && sudo apt install -y git build-essential cmake libcurl4-openssl-dev apt-utils
 # change to local github dir
@@ -322,7 +364,7 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 # add the following to the end of your .bashrc file
 <h4 align='left' id="EXAMPLE">EXAMPLE:
 </h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
-export PATH=~$PATH:~/github/llama.cpp/build/bin</span>
+export PATH=$PATH:~/github/llama.cpp/build/bin</span>
 </p><h4>
  source .bashrc
 
@@ -335,7 +377,7 @@ export PATH=~$PATH:~/github/llama.cpp/build/bin</span>
 # add the following to the end of your .bashrc file
 <h4 align='left' id="EXAMPLE">EXAMPLE:
 </h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
-export PATH=~$PATH:~/.local/bin</span>
+export PATH=$PATH:~/.local/bin</span>
 </p><h4>
  source .bashrc
 
@@ -386,8 +428,6 @@ sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
 # and
  jtop
 
-
-
 ###################################
 </h4></pre><h3 align='left' id="STEPrerunlamaserverwithRelease365">STEP: rerun lama-server with Release 36.5</h3><pre><h4>
 ###################################
@@ -415,7 +455,8 @@ sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
  llama-server -m ~/LLM/gemma-4-E4B-it-Q4_K_M.gguf --n-gpu-layers 99
 
 
-
+# note: llama-server will available on the jetson at http://127.0.0.1:8080
+ 
 ###################################
 </h4></pre><h2 align='left' id="PROCEDUREUpgradetojetpack72r392">PROCEDURE: Upgrade to jetpack 7.2 r39.2</h2><pre><h4>
 ###################################
@@ -437,7 +478,94 @@ sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
 </h4></pre><h3 align='left' id="STEPInstallsomeadditionalapts">STEP: Install some additional apts</h3><pre><h4>
 ###################################
  sudo apt update && sudo apt install -y python3-pip gparted git build-essential cmake libcurl4-openssl-dev apt-utils
- sudo apt install gedit gedit-plugin-text-size gedit-plugins-common gedit-plugin-character-map gedit-source-code-browser-plugin
+ sudo apt install ksh gedit gedit-plugin-text-size gedit-plugins-common gedit-plugin-character-map gedit-source-code-browser-plugin
+
+###################################
+</h4></pre><h3 align='left' id="STEPUseFlatpaktoinstallthefollowingApps">STEP: Use Flatpak to install the following Apps</h3><pre><h4>
+###################################
+#
+ Flatpak is the latest method to get the very latest level of an App onto your system and
+ handles the pre-reqs. Go to Flathub.org to get the list of available Apps. If you App is
+ listed but will not install it is most likely that the old level of Ubuntu that the 6.2
+ level Jetpak uses or the ARM CPU is not suportted by the FlatPack and another method of
+ install will be required.
+
+# Setup for flatpak
+ sudo apt update
+ sudo apt install -y flatpak
+ sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+### MAKER
+ sudo flatpak install -y flathub org.gimp.GIMP                 ### GNU Image Manipulation
+ sudo flatpak install -y flathub com.orcaslicer.OrcaSlicer     ### ORCA Slicer
+
+### PHOTO / GRAPHIC
+ sudo flatpak install -y flathub org.inkscape.Inkscape         ### Vector Graphics Editor
+
+### System 
+ sudo flatpak install -y flathub org.mozilla.firefox           ### web browser
+ sudo flatpak install -y flathub org.wireshark.Wireshark       ### Network traffic analyzer
+
+# flatpack management
+
+# Search for new Apps
+<a href="https://flathub.org"><font color="black">Search Flathub<font color="blue"> https://flathub.org<font color="black"></a>
+
+# List installed flatpaks
+ flatpak list
+
+# List all available applications
+ flatpak remote-ls flathub --app
+
+# Update flatpaks
+ sudo flatpak update
+
+# Just update one
+ sudo flatpak update org.gimp.GIMP
+
+###################################
+</h4></pre><h3 align='left' id="STEPcompileMeshlabusedusedforstl3Dmeshmanipulation">STEP: compile Meshlab, used used for *.stl 3D mesh manipulation</h3><pre><h4>
+###################################
+# pre-reqs
+ sudo apt update
+ sudo apt upgrade
+ sudo apt install build-essential cmake git libglew-dev qtbase5-dev qt5-qmake qttools5-dev qtscript5-dev libqt5opengl5-dev libmpfr-dev libboost-dev libboost-system-dev libboost-thread-dev libgmp-dev libmuparser-dev -y
+
+# clone meshlab
+ cd ~/github
+ git clone --recursive https://github.com/cnr-isti-vclab/meshlab
+ cd meshlab
+
+# compile meshlab
+ mkdir build
+ cd build
+ cmake -DALLOW_E57=OFF -DALLOW_3MF=OFF -DALLOW_EMBREE=OFF ..
+ make -j$(nproc)
+ sudo make install
+
+# create a desktop icon
+ # 1. Copy the official MeshLab icon to your system
+ sudo cp ~/github/meshlab/resources/icons/meshlab.png /usr/share/pixmaps/meshlab.png
+
+ # 2. Create the desktop entry file
+cat &lt&lt 'EOF' &gt ~/.local/share/applications/meshlab.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=MeshLab
+Comment=Advanced 3D Mesh Processing System
+Exec=/usr/local/bin/meshlab
+Icon=/usr/share/pixmaps/meshlab.png
+Terminal=false
+Categories=Graphics;3DGraphics;Science;
+StartupNotify=true
+EOF
+
+ # 3. Make the shortcut executable
+ chmod +x ~/.local/share/applications/meshlab.desktop
+ 
+# running meshlab
+# you can type meshlab at a terminal or click on the desktop icon under the Ubuntu circle icon(lower left)
 
 ###################################
 </h4></pre><h3 align='left' id="STEPUseCUDAtoverifytheGPU">STEP: Use CUDA to verify the GPU</h3><pre><h4>
@@ -509,6 +637,10 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 # install jetson-stats (jtop)
  sudo pip3 install -U jetson-stats --break-system-packages
 
+# if jtop fails when oressing "2GPU" reinstall the new patched version
+ sudo pip3 uninstall jetson-stats
+ sudo pip3 install --break-system-packages git+https://github.com/rbonghi/jetson_stats.git
+
 # restart then reboot
  sudo systemctl restart jtop.service
  sudo reboot
@@ -547,10 +679,6 @@ NVIDIA_JETPACK = {</span>
  sudo systemctl restart jtop.service
  jtop # to retry
  
-</h4></pre><h3 align='left' id="NOTEjtopcurrentlyhasabugandwillcrashonmenu2GPUsojustavoidthatmenu">NOTE: jtop currently has a bug and will crash on menu 2GPU so just avoid that menu</h3><pre><h4>
-   use the following NVIDIA command to monitor 
-   sudo tegrastats
-
 ###################################
 </h4></pre><h3 align='left' id="STEPIncreasethepagingswapspacetoallowmorethenthereal8gofmemtobeused">STEP: Increase the paging swap space to allow more then the real 8g of mem to be used</h3><pre><h4>
 ###################################
@@ -580,7 +708,6 @@ NVIDIA_JETPACK = {</span>
 ###################################
 </h4></pre><h3 align='left' id="STEPcompilellama">STEP: compile llama</h3><pre><h4>
 ###################################
-#
 # Install depends
  sudo apt update && sudo apt install -y git build-essential cmake libcurl4-openssl-dev apt-utils
 # change to local github dir
@@ -594,7 +721,7 @@ NVIDIA_JETPACK = {</span>
 # add the following to the end of your .bashrc file
 <h4 align='left' id="EXAMPLE">EXAMPLE:
 </h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
-export PATH=~$PATH:~/github/llama.cpp/build/bin</span>
+export PATH=$PATH:~/github/llama.cpp/build/bin</span>
 </p><h4>
  source .bashrc
 
@@ -607,15 +734,9 @@ export PATH=~$PATH:~/github/llama.cpp/build/bin</span>
 # add the following to the end of your .bashrc file
 <h4 align='left' id="EXAMPLE">EXAMPLE:
 </h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
-export PATH=~$PATH:~/.local/bin</span>
+export PATH=$PATH:~/.local/bin</span>
 </p><h4>
  source .bashrc
-
-
-
-
-
-
 
 ###################################
 </h4></pre><h3 align='left' id="STEPrerunlamaserverwithRelease392Jetpack72">STEP: rerun lama-server with Release 39.2 Jetpack 7.2</h3><pre><h4>
@@ -642,8 +763,149 @@ sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
  llama-server -m ~/LLM/gemma-4-E4B-it-Q4_K_M.gguf --n-gpu-layers 99 ### working on Jetpack 7.2
 
 
+# note: llama-server will be available on the jetson at http://127.0.0.1:8080
+ 
+# note: suggest using Chromium since you will be able to select the conversation and use &ltctrl&gtp to print or save to a .pdf file
+#      Chromium works much better hen Firefox in capturing the full conversation
+
+# add the --host 0.0.0.0 and --port 8080 if you want to be able to connect to llama-server from other computers on the local network
+# http://192.168.0.&ltip of the Jetson&gt:8080
+
+ llama-server -m ~/LLM/gemma-4-E4B-it-Q4_K_M.gguf --host 0.0.0.0 --port 8080 --n-gpu-layers 99
+
+###################################
+</h4></pre><h3 align='left' id="STEPDockerinstallandconfiguration">STEP: Docker install and configuration</h3><pre><h4>
+###################################
+# Install
+ sudo apt update
+ sudo apt install -y nvidia-container curl
+ curl https://get.docker.com | sh
+ sudo nvidia-ctk runtime configure --runtime=docker
+ sudo systemctl daemon-reload
+ sudo systemctl restart docker
+
+# Configure
+ sudo apt install -y jq
+ sudo jq '. + {"default-runtime": "nvidia"}' /etc/docker/daemon.json | &#92
+    sudo tee /etc/docker/daemon.json.tmp
+ sudo mv /etc/docker/daemon.json.tmp /etc/docker/daemon.json
+ sudo systemctl restart docker
+
+# add your userid
+ sudo usermod -aG docker $USER
+ newgrp docker
+
+# setup your DNS
+ sudo vi /etc/systemd/resolved.conf
+   # then change the DNS= line to the following
+<h4 align='left' id="EXAMPLE">EXAMPLE:
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+DNS=1.1.1.1 1.0.0.1 8.8.8.8</span>
+</p><h4>
+ sudo systemctl restart systemd-resolved # restart the DNS
+
+# (OPTIONAL) if you use a VPN you may need to limit the concurrent downloads that Docker can do
+ sudo vi /etc/docker/daemon.json
+   # then add the following: "max-concurrent-downloads": 3
+<h4 align='left' id="EXAMPLEaddingthelineplusacomathefileshouldlooklikethe">EXAMPLE: adding the line plus a coma the file should look like the
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+{</span>
+  "runtimes": {
+    "nvidia": {
+      "args": [],
+      "path": "nvidia-container-runtime"
+    }
+  },
+  "default-runtime": "nvidia",
+  "max-concurrent-downloads": 3
+}
+</p><h4>
+ dockerd --validate --config-file=/etc/docker/daemon.json # to check the syntax of the json
+ sudo systemctl restart docker
+
+# Test Docker
+docker run --rm -it &#92
+    -v "$PWD":/workspace &#92
+    -w /workspace &#92
+    nvcr.io/nvidia/pytorch:25.08-py3
+
+# when docker run the following within the container
+python3 &lt&lt'EOF'
+import torch
+print("PyTorch version:", torch.__version__)
+print("CUDA available:", torch.cuda.is_available())
+if torch.cuda.is_available():
+    print("GPU name:", torch.cuda.get_device_name(0))
+EOF
+
+# some docker commands
+ docker stats # display the running containers
+docker stop &ltcontainer_name_or_id&gt # stop a container enter either it's name or ID
+
+###################################
+</h4></pre><h2 align='left' id="PROCEDUREComfyUIinstallandsetupforTexttoImage">PROCEDURE: ComfyUI install and setup for Text-to-Image</h2><pre><h4>
+###################################
+# following instructions from the following links
+ https://github.com/Teachings/AIServerSetup/tree/main
+<a href="https://github.com/Teachings/AIServerSetup/blob/main/05-Jetson%20Orin%20Nano%20Developer%20Kit/01-ComfyUISetup.md"><font color="black">ComfyUI Install<font color="blue"> https://github.com/Teachings/AIServerSetup/blob/main/05-Jetson%20Orin%20Nano%20Developer%20Kit/01-ComfyUISetup.md<font color="black"></a>
+
+###################################
+</h4></pre><h3 align='left' id="STEP1InstallingMinicondaandSettingUpaPythonEnvironment">STEP: 1. Installing Miniconda and Setting Up a Python Environment</h3><pre><h4>
+###################################
+# First, we need to install Miniconda on your Jetson Nano. This will allow us to create an isolated Python environment for managing dependencies. Let's set up our project environment.
+ 
+ cd ~/github
+ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh
+ chmod +x Miniconda3-latest-Linux-aarch64.sh
+ ./Miniconda3-latest-Linux-aarch64.sh
+
+ conda update conda
+
+###################################
+</h4></pre><h3 align='left' id="STEP2nvcccheckthatit'sinstalled">STEP: 2. nvcc check that it's installed</h3><pre><h4>
+###################################
+# Next, confirm that CUDA is installed correctly by checking the nvcc version.
+ nvcc --version
+
+###################################
+</h4></pre><h3 align='left' id="STEP3CloningtheComfyUIProjectRepository">STEP: 3. Cloning the ComfyUI Project Repository</h3><pre><h4>
+###################################
+# Now, we clone the necessary source code for the project from GitHub. This will include the files for running uncensored models from civtai.com.
+ cd ~/github
+ git clone https://github.com/comfyanonymous/ComfyUI.git
+ cd ComfyUI
+
+###################################
+###STEP 4. Installing the ComfyUI Project Dependencies
+###################################
+# Next, install the required dependencies for the project by running the requirements.txt file.
+ cd ~/github/ComfyUI
+ pip install -r requirements.txt
+
+###################################
+</h4></pre><h3 align='left' id="STEP5RunningComfyUI">STEP: 5: Running ComfyUI</h3><pre><h4>
+###################################
+# Finally, we can run ComfyUI to check if everything is set up properly. Start the app with the following command:
+ cd ~/github
+ ./Miniconda3-latest-Linux-aarch64.sh
+ conda update conda
+ cd ~/github/ComfyUI
+ python main.py --listen 0.0.0.0
 
 
+
+
+
+
+
+
+
+
+&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
 
 
 
@@ -653,13 +915,50 @@ sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
 
 
 ###################################
-</h4></pre><h3 align='left' id="STEPtryingthefollowingtosetupGenrativeAIfortexttographic">STEP: trying the following to setup Genrative AI for text to graphic</h3><pre><h4>
+</h4></pre><h3 align='left' id="STEPInstallJetsonContainers">STEP: Install Jetson-Containers</h3><pre><h4>
 ###################################
+ cd ~/github
+ git clone https://github.com/dusty-nv/jetson-containers
+ cd jetson-containers
+ bash install.sh
+ sudo bash install.sh --pypi
 
-https://github.com/Teachings/AIServerSetup/tree/main
+# Run Jetson-Containers
+ cd ~/github/jetson-containers
 
+ jetson-containers run $(autotag stable-diffusion-webui)  ### first time run will take longer as the models are downloaded
 
+# ERROR it failed as follows
+#ERROR: Could not find a version that satisfies the requirement numpy==1.26.2 (from versions: none)
+#ERROR: No matching distribution found for numpy==1.26.2
 
+# So lets install numpy 1.26.2
+ python3 -m pip install --upgrade pip
+ python3 -m pip install numpy==1.26.2
+
+# build it
+ ./jetson-containers build stable-diffusion-webui
+
+jetson-containers run daivdl487/stable-diffusion-webui:r36.4.3
+
+# and rerun jetson-containers
+ jetson-containers run $(autotag stable-diffusion-webui)
+
+ http://127.0.0.1:7860
+
+# Cumfyui
+ cd ~/github/jetson-containers
+ ./run.sh $(./autotag comfyui)
+
+# Delete any old CDI cache files:
+ sudo rm -f /var/run/cdi/*
+ sudo rm -f /etc/cdi/*
+# Regenerate the CDI specification:
+ sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+# Restart the Docker daemon to pick up the updated non-graphical device tree:
+ sudo systemctl restart docker
+# Use code with caution.Re-run your build:
+ jetson-containers build comfyui
 
 
 ###################################
@@ -672,16 +971,6 @@ https://github.com/Teachings/AIServerSetup/tree/main
  ollama pull ### 
 <a href="https://ollama.com/search"><font color="black">Search for all LLM on ollama<font color="blue"> https://ollama.com/search<font color="black"></a>
 
-
-###################################
-</h4></pre><h3 align='left' id="STEPGenerateTexttoImage">STEP: Generate Text to Image</h3><pre><h4>
-###################################
-
-&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
-&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
-&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
-&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
-&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
 
 
 # Install Jetson-Containers
@@ -729,7 +1018,7 @@ Qwen 2.5 3B/7B
 	Med/Large	7B requires high quantization (Q4_K_M) and swap.
 Gemma 2 2B
 	Small	Very efficient for edge use cases.
-###EXAMPLE_PATH:
+</p><h4>
 
 
 ###################################
