@@ -2,7 +2,7 @@
 ###PROCEDURE: Jetson Nano Orin Super setup/configuration
 #
 # Peter Soroka   
-###VERSION: PS2026062221341
+###VERSION: PS202607040245
 
 
   The object of this project is to run LLM directly from the Jetson Orin Nano Super (Local on the Edge) 
@@ -10,25 +10,32 @@
  explore text based LLMs then move up to LLMs that can usw Generative AI for artwork 2D and 3D that can be used
  in the Maker world of 3d-Printer, CNC work, Laser engraving...
  
- 	Orginal Jetson Nano		Jetson Orin Nano Super
+ 	Orginal Jetson Nano 4gb		Jetson Orin Nano Super 8gb
 
  AI	472 GFLOPS			30-60 TFLOPS
  GPU 	128 core			1024 CUDA cores @ 1Ghz
  CPU	Quad Core ARM 1.43Ghz		6 core ARM 1.7Ghz 
  MEM	4GB				8GB @ 102Ghz
- 
+
+DO NOT BUY THIS ONE                     BUY THIS ONE 
+
+
+
 ###################################
 ###STEP: Required hardware, (Step one)
 ###################################
 
- __1.) Nvidia Jetsin Orin Nano Devloper Kit $250
- __3.) SanDisk Ultra MicroSD card >= 64G $25
- __4.) M.2 2280 NVME SSD 1TB Storage PCIE Gen3 is fine (since that is the speed of the Nano)about $100
- __5.) Monitor with a DisplayPort, displayport is like an HDMI with one edge of the connector
-       squared off, it has a higher bandwidth. You will need a DisplayPort to DisplayPort cable
-       the monitor or an HDMI to DisplayPort converter if your monitor only supports HDMI
- __6.) a USB keyboard and Mouse
- __7.) Network connection wired is perfered but wireless will also work
+ __1.) Nvidia Jetson Orin Nano Super 8GB Devloper Kit $249
+ __2.) Power Supply with a 5.5mm x 2.5mm jack, 19Volts at 5Amps $30
+ __3.) SanDisk Ultra MicroSD card >= 64G $25 ( it is possible that we will not need the SD card, if the 
+       firmware of your board is new enough to go directly to JetPack 7.2 ) if the firmware is 36.0 or newer
+       we will not need the microSD card and will need a USB drive to go directly to level 7.2 (39.2).  
+ __4.) M.2 2280 NVME SSD 1TB Storage PCIE Gen3 is fine (since that is the speed of the Nano) about $100 and climbing
+ __5.) A monitor with a DisplayPort, displayport is like an HDMI with one edge of the connector
+       squared off, it has a higher bandwidth usually labeled as a 4K display or TV. You will need a DisplayPort
+       to DisplayPort cable to the monitor or an HDMI to DisplayPort converter if your monitor only supports HDMI.
+ __6.) a USB keyboard and Mouse (with Linux it's nice to have a 3 button mouse)
+ __7.) Network connection 1g wired is perfered but wireless will also work
 
 
 ###################################
@@ -38,7 +45,7 @@
  __1) Use a SanDisk Ultra MicroSD 64gig Class 10/U1/A1 or faster (Extreme) Note: the
       MicroSD card is just for the first boot we will be converting to a M.2 NVME SSD
       boot for normal operation
-      copy
+      
 
 
 ###################################
@@ -154,83 +161,6 @@ NVIDIA_JETPACK = {
 ...
 ###EXAMPLE_END:
 
-
-###################################
-###STEP: Use Flatpak to install the following Apps
-###################################
- Flatpak is the latest method to get the very latest level of an App onto your system and
- handles the pre-reqs. Go to Flathub.org to get the list of available Apps. If you App is 
- listed but will not install it is most likely that the old level of Ubuntu that the 6.2
- level Jetpak uses or the ARM CPU is not suportted by the FlatPack and another method of
- install will be required.
-
-# Setup for flatpak
- sudo apt update
- sudo apt install -y flatpak
- sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
-### MAKER
- sudo flatpak install -y flathub org.gimp.GIMP                 ### GNU Image Manipulation
- sudo flatpak install -y flathub com.orcaslicer.OrcaSlicer     ### ORCA Slicer
-
-### PHOTO / GRAPHIC
- sudo flatpak install -y flathub org.inkscape.Inkscape         ### Vector Graphics Editor
-
-### System 
- sudo flatpak install -y flathub org.mozilla.firefox           ### web browser
- sudo flatpak install -y flathub org.wireshark.Wireshark       ### Network traffic analyzer
-
-# flatpack management
-
-# Search for new Apps
-###LINK: "Search Flathub" "https://flathub.org"
-
-# List installed flatpaks
- flatpak list
-
-# List all available applications
- flatpak remote-ls flathub --app
-
-# Update flatpaks
- sudo flatpak update
-
-# Just update one
- sudo flatpak update org.gimp.GIMP
-
-###################################
-###STEP: Install PI-Apps for the Raspberry PI, but will work on Jetson Orin too
-###################################
-# download and install
- wget -qO- https://raw.githubusercontent.com/Botspot/pi-apps/master/install | bash
-
-# Run
- enter pi-app in the terminal or click the icon on the desktop
-
-# Usage: Install the following
- FreeCad # CAD 
- btop++ # system usage
- BalenaEtcher # SD card Imager
- 
-######################################################################
-###STEP: If FreeCAD is installed, then add Graphviz
-######################################################################
-# make sure Graphviz is installed for the Tools, Dependancy Graph to work 
- sudo apt update
- sudo apt install graphviz ### to install
- which dot ### graphviz = dot, so this will verify the install
-### in FreeCAD you must set the path for the tool to work
- -> Tools, -> Edit Parameters, -> BaseApp, -> Preferences, -> Paths
-###Note: if Paths is missing right click on Preferences and add it as a subgroup  
- Then Right click mouse on the right Panel and select "New String Item"
- Enter the name: Graphviz    ### note must be a capitial "G"
- Enter the text: /usr/bin    ### which is the path returned from the above "which dot" command
- "Save"
-
-###################################
-###STEP: use snap to install the following
-###################################
- sudo snap install openscad # used by FreeCAD
-
 ###################################
 ###STEP: Use CUDA to verify the GPU
 ###################################
@@ -315,7 +245,7 @@ export PATH=$PATH:~/.local/bin
 ###################################
  mkdir -p ~/LLM
  cd ~/LLM
- hf download bartowski Llama-3.2-3B-Instruct-Q4_K_M.gguf --local-dir . 
+ hf download bartowski/Llama-3.2-3B-Instruct-Q4_K_M.gguf --local-dir . 
  hf download bartowski/Qwen_Qwen3-4B-GGUF Qwen_Qwen3-4B-Q4_K_M.gguf --local-dir . 
  hf download bartowski/Llama-3.2-3B-Instruct-GGUF Llama-3.2-3B-Instruct-Q4_K_M.gguf --local-dir .
 
@@ -384,7 +314,10 @@ export PATH=$PATH:~/.local/bin
  llama-server -m ~/LLM/gemma-4-E4B-it-Q4_K_M.gguf --n-gpu-layers 99
 
 
-# note: llama-server will available on the jetson at http://127.0.0.1:8080
+# note: llama-server will be available on the jetson at http://127.0.0.1:8080
+
+
+
  
 ###################################
 ###PROCEDURE: Upgrade to jetpack 7.2 r39.2
@@ -392,13 +325,16 @@ export PATH=$PATH:~/.local/bin
 
 ###LINK: "New 7.2 Nvidia Orin Nano User Guide" "https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/quick_start.html"
 
+ NOTE: running through 7.2 instructions of booting from a USB stick will wipe out your Jetpack 6.x install from
+   your NVME drive if you have previouslly installed a Jetpack level 6.x to youe NVME drive.
 
 ###################################
 ###STEP: Create the USB and boot from it
 ###################################
  Jetpack 7.2 r39,2:
  - Make sure your Orin is up to the latest 6.2.2 firmware
- - we will create a USB stick to perform the OS update you have to use a Windont or Apple PC and that Balena Etcher ISO writer
+ - we will create a USB stick ton perform the OS update you have to use a Windont, Apple PC, Rasberry PI or Jetson and
+   the Balena Etcher ISO writer NOTE: on Jetson Balena Etcher can be installed with the PI-Apps installer  
  - boot with the USB and target the M.2 NVME as the install device
    NOTE: this will completly overwrite the NVME so save anything you may want   
    NOTE: you will have to press y to update the firmware
@@ -408,93 +344,6 @@ export PATH=$PATH:~/.local/bin
 ###################################
  sudo apt update && sudo apt install -y python3-pip gparted git build-essential cmake libcurl4-openssl-dev apt-utils
  sudo apt install ksh gedit gedit-plugin-text-size gedit-plugins-common gedit-plugin-character-map gedit-source-code-browser-plugin
-
-###################################
-###STEP: Use Flatpak to install the following Apps
-###################################
-#
- Flatpak is the latest method to get the very latest level of an App onto your system and
- handles the pre-reqs. Go to Flathub.org to get the list of available Apps. If you App is
- listed but will not install it is most likely that the old level of Ubuntu that the 6.2
- level Jetpak uses or the ARM CPU is not suportted by the FlatPack and another method of
- install will be required.
-
-# Setup for flatpak
- sudo apt update
- sudo apt install -y flatpak
- sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
-### MAKER
- sudo flatpak install -y flathub org.gimp.GIMP                 ### GNU Image Manipulation
- sudo flatpak install -y flathub com.orcaslicer.OrcaSlicer     ### ORCA Slicer
-
-### PHOTO / GRAPHIC
- sudo flatpak install -y flathub org.inkscape.Inkscape         ### Vector Graphics Editor
-
-### System 
- sudo flatpak install -y flathub org.mozilla.firefox           ### web browser
- sudo flatpak install -y flathub org.wireshark.Wireshark       ### Network traffic analyzer
-
-# flatpack management
-
-# Search for new Apps
-###LINK: "Search Flathub" "https://flathub.org"
-
-# List installed flatpaks
- flatpak list
-
-# List all available applications
- flatpak remote-ls flathub --app
-
-# Update flatpaks
- sudo flatpak update
-
-# Just update one
- sudo flatpak update org.gimp.GIMP
-
-###################################
-###STEP: compile Meshlab, used used for *.stl 3D mesh manipulation
-###################################
-# pre-reqs
- sudo apt update
- sudo apt upgrade
- sudo apt install build-essential cmake git libglew-dev qtbase5-dev qt5-qmake qttools5-dev qtscript5-dev libqt5opengl5-dev libmpfr-dev libboost-dev libboost-system-dev libboost-thread-dev libgmp-dev libmuparser-dev -y
-
-# clone meshlab
- cd ~/github
- git clone --recursive https://github.com/cnr-isti-vclab/meshlab
- cd meshlab
-
-# compile meshlab
- mkdir build
- cd build
- cmake -DALLOW_E57=OFF -DALLOW_3MF=OFF -DALLOW_EMBREE=OFF ..
- make -j$(nproc)
- sudo make install
-
-# create a desktop icon
- # 1. Copy the official MeshLab icon to your system
- sudo cp ~/github/meshlab/resources/icons/meshlab.png /usr/share/pixmaps/meshlab.png
-
- # 2. Create the desktop entry file
- cat << 'EOF' > ~/.local/share/applications/meshlab.desktop
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=MeshLab
-Comment=Advanced 3D Mesh Processing System
-Exec=/usr/local/bin/meshlab
-Icon=/usr/share/pixmaps/meshlab.png
-Terminal=false
-Categories=Graphics;3DGraphics;Science;
-StartupNotify=true
-EOF
-
- # 3. Make the shortcut executable
- chmod +x ~/.local/share/applications/meshlab.desktop
- 
-# running meshlab
-# you can type meshlab at a terminal or click on the desktop icon under the Ubuntu circle icon(lower left)
 
 ###################################
 ###STEP: Use CUDA to verify the GPU
@@ -588,7 +437,7 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
  sudo reboot
  jtop # check the clocks are working
 
-# fix the message in jtop so the jetpack level is valid (if needed)
+# fix the message in jtop so the jetpack level is valid (if needed, It's now fixed in the latest jtop)
 # goto the following file "jetson_variables.py usually found at the following
  sudo vi /usr/local/lib/python3.12/dist-packages/jtop/core/jetson_variables.py
 # add in the correct firmware and jetpack level
@@ -659,7 +508,7 @@ export PATH=$PATH:~/github/llama.cpp/build/bin
  gedit ~/.bashrc
 # add the following to the end of your .bashrc file
 ###EXAMPLE:
-export PATH=$PATH:~/.local/bin
+ export PATH=$PATH:~/.local/bin
 ###EXAMPLE_END:
  source .bashrc
 
@@ -697,6 +546,38 @@ export PATH=$PATH:~/.local/bin
 # http://192.168.0.<ip of the Jetson>:8080
 
  llama-server -m ~/LLM/gemma-4-E4B-it-Q4_K_M.gguf --host 0.0.0.0 --port 8080 --n-gpu-layers 99
+
+
+###################################
+###STEP: Install ollama 
+###################################
+
+# This is the command to install ollma native to your machine when using it with a LLM you will be using a cli interface
+ curl -fsSL https://ollama.com/install.sh | sh
+
+# to run
+ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches' # to flush the mem
+ ollama run llama3.2:3b --verbose  # Meta llama 3.2 3billion sha256-aeda25e63ebd698fab8638ffb778e68bed908b960d39d0becc650fa981609d25
+
+ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches' # to flush the mem
+ ollama run gemma3:4b --verbose    # Google Gemma 3 4billion
+
+ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches' # to flush the mem
+ ollama run Nemotron-3-Nano:4b --verbose
+
+# testing with the prompt:
+ factor x^4=1 completely and show all roots
+ 
+ /bye # to exit
+
+# ollama stores the models in the following dir
+ /usr/share/ollama/.ollama/models/blobs/sha256-<blob hash>
+# you can then use lama-server to read what LLM ollama has pulled down
+ llama-server -m /usr/share/ollama/.ollama/models/blobs/sha256-aeda25e63ebd698fab8638ffb778e68bed908b960d39d0becc650fa981609d25 
+# Note: that the sha256 hash can be found in the 
+ /usr/share/ollama/.ollama/models/manifests/registry.ollama.ai/library/
+
+###LINK: "Search for all LLM on ollama" "https://ollama.com/search"
 
 ###################################
 ###STEP: Docker install and configuration
@@ -804,18 +685,163 @@ EOF
 # Next, install the required dependencies for the project by running the requirements.txt file.
  cd ~/github/ComfyUI
  pip install -r requirements.txt
+ cd ~/github
+ ./Miniconda3-latest-Linux-aarch64.sh
+ conda update conda
 
 ###################################
 ###STEP: 5: Running ComfyUI
 ###################################
-# Finally, we can run ComfyUI to check if everything is set up properly. Start the app with the following command:
- cd ~/github
- ./Miniconda3-latest-Linux-aarch64.sh
- conda update conda
+# Finally, we can run ComfyUI to check if everything is set up properly. 
+# Start the app with the following command:
  cd ~/github/ComfyUI
  python main.py --listen 0.0.0.0
 
 
+
+
+
+
+###################################
+###PROCEDURE: Install the Maker Apps to the desktop for 3D-printing,CNC and Laser etching
+###################################
+
+###################################
+###STEP: Setup a printer
+###################################
+#
+ sudo apt update && sudo apt install cups cups-client -y
+ sudo systemctl status cups
+ sudo usermod -aG lpadmin $USER
+
+# to setup printer
+ Open Firefox or Chromium and navigate to http://localhost:631. Click Administration -> Add Printer
+
+# or for a Desktop GUI
+sudo apt install system-config-printer
+
+###################################
+###STEP: Use Flatpak to install the following Apps
+###################################
+#
+ Flatpak is the latest method to get the very latest level of an App onto your system and
+ handles the pre-reqs. Go to Flathub.org to get the list of available Apps. If you App is
+ listed but will not install it is most likely that the old level of Ubuntu that the 6.2
+ level Jetpak uses or the ARM CPU is not suportted by the FlatPack and another method of
+ install will be required.
+ NOTE:  These apps are mostly needed for MakerSpace type work and not needed for AI tasks,
+ so only install them if you are a Maker and using this Jetson as your desktop type design computer.
+
+# Setup for flatpak
+ sudo apt update
+ sudo apt install -y flatpak
+ sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+### MAKER
+ sudo flatpak install -y flathub org.gimp.GIMP                 ### GNU Image Manipulation
+ sudo flatpak install -y flathub com.orcaslicer.OrcaSlicer     ### ORCA Slicer
+
+### PHOTO / GRAPHIC
+ sudo flatpak install -y flathub org.inkscape.Inkscape         ### Vector Graphics Editor
+
+### System 
+ sudo flatpak install -y flathub org.mozilla.firefox           ### web browser
+ sudo flatpak install -y flathub org.wireshark.Wireshark       ### Network traffic analyzer
+
+# flatpack management
+
+# Search for new Apps
+###LINK: "Search Flathub" "https://flathub.org"
+
+# List installed flatpaks
+ flatpak list
+
+# List all available applications
+ flatpak remote-ls flathub --app
+
+# Update flatpaks
+ sudo flatpak update
+
+# Just update one
+ sudo flatpak update org.gimp.GIMP
+
+###################################
+###STEP: Install PI-Apps for the Raspberry PI, but will work on Jetson Orin too
+###################################
+# download and install
+ wget -qO- https://raw.githubusercontent.com/Botspot/pi-apps/master/install | bash
+
+# Run
+ enter pi-app in the terminal or click the icon on the desktop
+
+# Usage: Install the following
+ FreeCad # CAD for the Maker Guys
+ btop++ # system usage
+ BalenaEtcher # SD card Imager 
+ 
+######################################################################
+###STEP: If FreeCAD is installed (you are a Maker), then add Graphviz 
+######################################################################
+# make sure Graphviz is installed for the Tools, Dependancy Graph to work 
+ sudo apt update 
+ sudo apt install graphviz ### to install
+ which dot ### graphviz = dot, so this will verify the install
+### in FreeCAD you must set the path for the tool to work
+ -> Tools, -> Edit Parameters, -> BaseApp, -> Preferences, -> Paths
+###Note: if Paths is missing right click on Preferences and add it as a subgroup  
+ Then Right click mouse on the right Panel and select "New String Item"
+ Enter the name: Graphviz    ### note must be a capitial "G"
+ Enter the text: /usr/bin    ### which is the path returned from the above "which dot" command
+ "Save"
+
+###################################
+###STEP: use snap to install the following ( for the Maker world )
+###################################
+ sudo snap install openscad # used by FreeCAD
+
+###################################
+###STEP: compile Meshlab, used for *.stl 3D mesh manipulation ( for the Makers ) 
+###################################
+# pre-reqs
+ sudo apt update
+ sudo apt upgrade
+ sudo apt install build-essential cmake git libglew-dev qtbase5-dev qt5-qmake qttools5-dev qtscript5-dev libqt5opengl5-dev libmpfr-dev libboost-dev libboost-system-dev libboost-thread-dev libgmp-dev libmuparser-dev -y
+
+# clone meshlab
+ cd ~/github
+ git clone --recursive https://github.com/cnr-isti-vclab/meshlab
+ cd meshlab
+
+# compile meshlab
+ mkdir build
+ cd build
+ cmake -DALLOW_E57=OFF -DALLOW_3MF=OFF -DALLOW_EMBREE=OFF ..
+ make -j$(nproc)
+ sudo make install
+
+# create a desktop icon
+ # 1. Copy the official MeshLab icon to your system
+ sudo cp ~/github/meshlab/resources/icons/meshlab.png /usr/share/pixmaps/meshlab.png
+
+ # 2. Create the desktop entry file
+ cat << 'EOF' > ~/.local/share/applications/meshlab.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=MeshLab
+Comment=Advanced 3D Mesh Processing System
+Exec=/usr/local/bin/meshlab
+Icon=/usr/share/pixmaps/meshlab.png
+Terminal=false
+Categories=Graphics;3DGraphics;Science;
+StartupNotify=true
+EOF
+
+ # 3. Make the shortcut executable
+ chmod +x ~/.local/share/applications/meshlab.desktop
+
+# running meshlab
+# you can type meshlab at a terminal or click on the desktop icon under the Ubuntu circle icon(lower left)
 
 
 
@@ -887,7 +913,7 @@ jetson-containers run daivdl487/stable-diffusion-webui:r36.4.3
 ###################################
 ###STEP: Install ollama 
 ###################################
-# This is the command to install ollma native to you machine when using it with a LLM you will be using a cli interface
+# This is the command to install ollma native to your machine when using it with a LLM you will be using a cli interface
 
  curl -fsSL https://ollama.com/install.sh | sh
  ollama ### at the command line to run
@@ -953,7 +979,7 @@ Setting up an LLM dialogue system with speech on a Jetson Orin Nano Super involv
 
 Prerequisites
 
-    Jetson Orin Nano Super (8GB) with JetPack 5.1.2 or later.
+    JetsoESP32_Batn Orin Nano Super (8GB) with JetPack 5.1.2 or later.
     USB Microphone and Speaker (or a USB headset).
     Swap Space: Set up at least 8GB of swap to handle loading models. 
 
@@ -981,7 +1007,7 @@ You will need to install AI tools for handling voice and language. The recommend
 
 
 Step 2: Configure Speech & Language Models
-
+ESP32_Bat
     Speech-to-Text (STT): Use OpenAI's Whisper (specifically the tiny or base model for speed).
     LLM Selection: Use optimized small models like Llama-3.2-3B, Gemma-2-2B or Phi-3-mini.
     Text-to-Speech (TTS): Use Piper TTS, which is fast and lightweight for edge devices. 
@@ -1001,7 +1027,7 @@ For a more advanced, production-oriented approach, you can install the NVIDIA Ri
 Tips for Success
 
     Microphone Input: Use arecord -l to identify your microphone and update the DEVICE_NAME (e.g., "plughw:2,0") in your configuration script.
-    Performance: If using MLC-LLM rather than llama.cpp, you may achieve better tokens per second (TPS) on Llama-3-8B models.
+ESP32_Bat    Performance: If using MLC-LLM rather than llama.cpp, you may achieve better tokens per second (TPS) on Llama-3-8B models.
     Memory Management: The 8GB limit is tight; close unused applications (like the desktop GUI) to free up memory for the model. 
 
 ###EXAMPLE_END:
