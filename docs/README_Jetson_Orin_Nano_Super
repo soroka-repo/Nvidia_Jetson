@@ -2,28 +2,51 @@
 ###PROCEDURE: Jetson Nano Orin Super setup/configuration
 #
 # Peter Soroka   
-###VERSION: PS202607040245
+###VERSION: PS20260710:2130
 
 
-  The object of this project is to run LLM directly from the Jetson Orin Nano Super (Local on the Edge) 
+Beta Project 1. Status = Complete and Successful
+
+  The object of this project is to run LLM directly from the Jetson Orin Nano Super Jetpack 7.2 (Local on the Edge) 
  access LLMs that you have stored locally on the Orin Super off the network without any fees. We will first 
- explore text based LLMs then move up to LLMs that can usw Generative AI for artwork 2D and 3D that can be used
+ explore text based LLMs then move up to ComfyUI so that can use Generative AI for artwork 2D and 3D to be used
  in the Maker world of 3d-Printer, CNC work, Laser engraving...
  
- 	Orginal Jetson Nano 4gb		Jetson Orin Nano Super 8gb
+Beta Project 2. Status = hardware obtained setup in progress
 
- AI	472 GFLOPS			30-60 TFLOPS
- GPU 	128 core			1024 CUDA cores @ 1Ghz
- CPU	Quad Core ARM 1.43Ghz		6 core ARM 1.7Ghz 
- MEM	4GB				8GB @ 102Ghz
+  The Object of this project is to combine 3 computers to start and build an AI Cluster:
+   System 1 = Raspberry PI 5, 16GB ram, 1TB NVME, HiFiBerry Pro DAC with ADX in, HiFiBerry AMP3 60watt.
+              The PI will be used as the primary GUI AI interface using Open WebUI running in a Docker container.
+              Over WebUI the PI will be able to either send different prompts both Orins at the same time -OR- through
+              RPC send a prompt to a LLM that is larger then 8B running on both Orins. 
+              The PI will also provide the AI Cluster's Audio interface both for prompt in and out.
+   Systems 2 and 3 = Identical Jetson Orin Nano Super, 8GB ram, 1TB NVME, Jetpack 7.2. Running with GUI Desktop off
+              to conserve RAM receiving prompts from the PI using WebUI. To operate with ComfyUI with Desktop on and
+              perhaps deskop off with remote call from the PI. Be able to use various Maker tools: FreeCAD, Inkspace, GIMP
+              MeshLab, Orca-Slicer, Blender...
 
-DO NOT BUY THIS ONE                     BUY THIS ONE 
-
+Final Project A. Status = hardware supply chain problems....
+     AI Cluster - with the PI being replaced by a Rockchip computer to upgrade to 2.5GB Ethernet
+                  4 Orin Nano with 2.5GB Ethernet M.2 networ cards
+                  all attached to a 2.5GB switch
+                  2 cameras added for CMM Metrology also new part scanning for 3-D Print and CNC Machining applications
+                  RAG implementation for local knoledge enhancement.
+                  larger 24B LLMs handled with RPC and distributed to all 4 Orins
 
 
 ###################################
-###STEP: Required hardware, (Step one)
+###STEP: Required hardware, (Beta one)
 ###################################
+#
+        Orginal Jetson Nano 4gb         Jetson Orin Nano Super 8gb
+
+ AI     472 GFLOPS                      30-60 TFLOPS
+ GPU    128 core                        1024 CUDA cores @ 1Ghz
+ CPU    Quad Core ARM 1.43Ghz           6 core ARM 1.7Ghz
+ MEM    4GB                             8GB @ 102Ghz
+
+ DO NOT BUY THIS ONE                    BUY THIS ONE 
+
 
  __1.) Nvidia Jetson Orin Nano Super 8GB Devloper Kit $249
  __2.) Power Supply with a 5.5mm x 2.5mm jack, 19Volts at 5Amps $30
@@ -36,6 +59,18 @@ DO NOT BUY THIS ONE                     BUY THIS ONE
        to DisplayPort cable to the monitor or an HDMI to DisplayPort converter if your monitor only supports HDMI.
  __6.) a USB keyboard and Mouse (with Linux it's nice to have a 3 button mouse)
  __7.) Network connection 1g wired is perfered but wireless will also work
+ __8.) 3D-Print a case from Thingiverse, this cas has really good thermal properties
+###LINK: "Jetson Orin Case" "https://www.thingiverse.com/thing:6879616"
+
+
+
+
+###MEDIA: "AI_Cluster-Beta_2.jpg" "1200" "800"
+ 
+  PI = Left Top, Blue=PI 5, Red=HiFiBerry Audio Hat
+  Orin-1 = Left Middle, Green
+  Orin-2 = Left Bottom, Blue
+ 
 
 
 ###################################
@@ -454,6 +489,10 @@ NVIDIA_JETPACK = {
 # restart and retry
  sudo systemctl restart jtop.service
  jtop # to retry
+
+
+###MEDIA: "Jtop.jpg" "1200" "800" 
+
  
 ###################################
 ###STEP: Increase the paging swap space to allow more then the real 8g of mem to be used
@@ -698,12 +737,42 @@ EOF
  python main.py --listen 0.0.0.0
 
 
+###################################
+###STEP: Install ComfyUI-Depth2Mesh by timothywong731 to create image-to-mesh
+###################################
+# This can be considered a "Maker APP" as it's used to change an image in to a mesh 
+# which is commonly used in 3D-Printer and CNC Machining
 
+ cd ~/github/ComfyUI/custom_nodes
+ git clone https://github.com/timothywong731/ComfyUI-Depth2Mesh
 
+ conda activate /home/soroka/miniconda3/envs/comfyui
+ cd ~/github/ComfyUI/custom_nodes/ComfyUI-Depth2Mesh
+ pip install -r requirements.txt
+
+# Run the Workflow
+# Completely restart your ComfyUI server. Once loaded, right-click anywhere on the open canvas and navigate the menu:
+
+    Go to Add Node > Mesh or search directly for Depth2Mesh.
+
+Your functional workflow setup should look like this:
+
+[Load Image] ➔ [Depth Anything V2] ➔ [Depth2Mesh] ➔ [SaveMesh]
+
+# Optimal Settings inside the Depth2Mesh Node for CNC:
+
+#    Max Height / Depth: Set this parameter depending on how deep you want the CNC to plunge (e.g., 4.0 for 4mm max depth).
+#
+#    Mesh Density / Resolution Scale: Set this to 1.0 or 1.5 first. Since the Jetson Orin Nano Super shares its 8GB pool as 
+#        unified RAM/VRAM, pushing the resolution scale too high (like 4.0) will create tens of millions of polygons. 
+#        This can overflow your memory and cause crashes when exporting to FreeCAD. Keep it balanced!
+#
+#    Invert Depth: Ensure white represents the highest points (uncut wood) and black represents the valleys (deepest cuts). 
+#        Toggle this option if your heightmap preview looks inverted.
 
 
 ###################################
-###PROCEDURE: Install the Maker Apps to the desktop for 3D-printing,CNC and Laser etching
+###PROCEDURE: Install the Maker Apps to the desktop for 3D-printing, CNC and Laser etching
 ###################################
 
 ###################################
@@ -739,7 +808,6 @@ sudo apt install system-config-printer
 
 ### MAKER
  sudo flatpak install -y flathub org.gimp.GIMP                 ### GNU Image Manipulation
- sudo flatpak install -y flathub com.orcaslicer.OrcaSlicer     ### ORCA Slicer
 
 ### PHOTO / GRAPHIC
  sudo flatpak install -y flathub org.inkscape.Inkscape         ### Vector Graphics Editor
@@ -800,6 +868,73 @@ sudo apt install system-config-printer
  sudo snap install openscad # used by FreeCAD
 
 ###################################
+###STEP: compile Orca Slicer, used for 3D Printer ( for the Makers ) 
+###################################
+
+# pre-reqs
+ sudo apt update && sudo apt upgrade -y
+
+ sudo apt install -y git build-essential cmake extra-cmake-modules \
+ libwebkit2gtk-4.1-dev libgtk-3-dev libglu1-mesa-dev freeglut3-dev \
+ libglew-dev libboost-all-dev libcurl4-openssl-dev libdbus-1-dev \
+ libexpat1-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+ libsecret-1-dev libssl-dev locales locales-all
+
+# clone orcaslicer github
+ cd ~/github
+ git clone --recursive https://github.com/OrcaSlicer/OrcaSlicer
+ cd OrcaSlicer
+
+# git checkout v2.4.1 # Replace with desired version tag (no tag will get you the dev build)
+ git checkout v2.4.1
+
+# Edit the build script and comment out the exit as shown below this is needed since the Jetson Orin only has 8G of mem and the
+# build script is asking for 10gB, but we have defined swapspace above so the compile will work fine with 8gB
+
+ vi build_linux.sh
+
+###EXAMPLE: comment the following exit in build_linux.sh
+   if [[ ${FREE_MEM_GB} -le ${MIN_MEM_GB} ]] ; then
+        echo -e "\nERROR: Orca Slicer Builder requires at least ${MIN_MEM_GB}G of 'available' mem (system has only ${FREE_MEM_GB}G available)"
+        echo && free --human && echo
+        echo "Invoke with -r to skip RAM and disk checks."
+#        exit 2
+    fi
+###EXAMPLE_END:
+
+# Compile
+ # 1. Update and fetch the slicer's embedded third-party dependencies
+ ./build_linux.sh -u
+
+ # 2. Build those internal dependencies (using 4 cores maximum)
+ ./build_linux.sh -d -j 4
+
+ # 3. Compile the actual Orca Slicer binary layout
+ ./build_linux.sh -s -j 4
+
+
+# Create the desktop entry file
+ # 1. Copy the official OrcaSlicer icon and executable to your system
+ sudo cp -p ~/github/OrcaSlicer/resources/images/OrcaSlicer.png /usr/share/pixmaps/OrcaSlicer.png
+
+ # 2. Create the desktop entry file
+ cat << 'EOF' > ~/.local/share/applications/orcaslicer.desktop
+[Desktop Entry]
+Name=Orca Slicer
+Type=Application
+Exec=~/github/OrcaSlicer/build/src/Release/orca-slicer
+Icon=/usr/share/pixmaps/OrcaSlicer.png
+Terminal=false
+Categories=Graphics;Development;Engineering;
+EOF
+
+ # 3. Make the shortcut executable
+ chmod +x ~/.local/share/applications/orcaslicer.desktop
+
+# running OrcaSlicer
+# you can type orcaslicer at a terminal or click on the desktop icon under the Ubuntu circle icon(lower left)
+
+###################################
 ###STEP: compile Meshlab, used for *.stl 3D mesh manipulation ( for the Makers ) 
 ###################################
 # pre-reqs
@@ -840,7 +975,7 @@ EOF
  # 3. Make the shortcut executable
  chmod +x ~/.local/share/applications/meshlab.desktop
 
-# running meshlab
+# running MeshLab
 # you can type meshlab at a terminal or click on the desktop icon under the Ubuntu circle icon(lower left)
 
 
@@ -851,6 +986,117 @@ EOF
 
 
 >>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+
+###################################
+###STEP: compile Blender, CAD for 3D  ( for the Makers ) 
+###################################
+
+# pre-reqs
+ sudo add-apt-repository universe
+ sudo apt update
+ sudo apt install -y cmake-curses-gui
+ sudo apt install -y git git-lfs cmake build-essential python3 python3-pip subversion stow libx11-dev libxxf86vm-dev libxi-dev libxcursor-dev libxrandr-dev libxinerama-dev libegl1-mesa-dev libgl1-mesa-dev
+
+# install gcc-14 which is needed to compile blender
+ sudo apt install -y gcc-14 g++-14
+# setup both paths for gcc 13 and 14
+ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 10
+ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 20
+
+ sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 10
+ sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 20
+
+ sudo apt install -y libfmt-dev
+
+# Force-create an isolated include subfolder inside your release paths
+mkdir -pv /home/soroka/github/blender-arm64/lib/release/include
+
+# Download the unified translator header directly into that folder
+wget -O /home/soroka/github/blender-arm64/lib/release/include/sse2neon.h https://raw.githubusercontent.com/DLTcollab/sse2neon/master/sse2neon.h
+
+ sudo apt install -y libopenimageio-dev libopencolorio-dev
+ sudo apt install -y openimageio-tools
+ sudo apt install -y libceres-dev libgflags-dev
+
+
+
+# clone blender
+ git clone https://github.com/CoconutMacaroon/blender-arm64.git
+ cd blender-arm64
+
+
+# git checkout v4.5.11 # Replace with desired version tag (no tag will get you the dev build)
+ git checkout v4.5.11
+
+# build
+ bash ./builder.sh
+
+
+
+ 
+# Note: the following warning message is acceptable to proceed
+Warning: this script may break your system. It manually installs files system-wide, which can create conflicts with important components of DGX OS. It also installs and removes packages using apt. Press Enter to continue or Ctrl + C to exit.
+
+# Then you will get:
+NVIDIA OptiX SDK not found.
+Expected ~/NVIDIA-OptiX-SDK-9.0.0-linux64-aarch64/include/optix.h to exist.
+>> https://developer.nvidia.com/designworks/optix/download <<
+
+# You must not go with newer levels at this time stay with so go to the following link:
+###LINK: "NVIDIA-OptiX-SDK-9.0.0-linux64-aarch64" "https://developer.nvidia.com/designworks/optix/downloads/legacy"
+
+# get the 9.0.0 for ARM
+ 
+ mv ~/Downloads/NVIDIA-OptiX-SDK-9.0.0-linux64-aarch64.sh ~/.
+ cd
+ sh NVIDIA-OptiX-SDK-9.0.0-linux64-aarch64.sh
+    reply "y" to create the sub-directory 
+
+# retry the build
+ cd ~/github/blender-arm64
+ bash ./builder.sh
+
+# You may have to comment out the following line in the builder.sh script:
+ #echo "17c8b7e872d8038fbd4e1239aa8483b495f862ad16b1c58644f7ecd8041d20cc vulkansdk.tar.xz" | sha256sum -c
+
+# --- or maybe try the following build ---
+cmake -G 'Unix Makefiles' \
+-DCMAKE_PREFIX_PATH="/usr/local;/home/soroka/github/blender-arm64/lib/release" \
+-DSSE2NEON_INCLUDE_DIR=/home/soroka/github/blender-arm64/lib/release/include \
+-DWITH_MATERIALX=OFF \
+-DWITH_OPENIMAGEDENOISE=OFF \
+-DWITH_MANIFOLD=OFF \
+-DPYTHON_VERSION=3.13 \
+-DPYTHON_BINARY=/home/soroka/miniconda3/envs/comfyui/bin/python \
+-DPYTHON_INCLUDE_DIR=/home/soroka/miniconda3/envs/comfyui/include/python3.13 \
+-DPYTHON_INCLUDE_CONFIG_DIR=/home/soroka/miniconda3/envs/comfyui/include/python3.13 \
+-DPYTHON_LIBPATH=/home/soroka/miniconda3/envs/comfyui/lib \
+-DPYTHON_LIBRARY=/home/soroka/miniconda3/envs/comfyui/lib/libpython3.13.so \
+-DOPTIX_INCLUDE_DIR=/home/soroka/NVIDIA-OptiX-SDK-9.0.0-linux64-aarch64/include \
+-DWITH_CYCLES_CUDA_BINARIES=ON \
+-DWITH_ALEMBIC=OFF \
+-DWITH_MOD_FLUID=ON \
+-DWITH_BLENDER_THUMBNAILER=ON \
+-DWITH_BUILDINFO=OFF \
+-DWITH_BULLET=ON \
+-DWITH_CODEC_FFMPEG=ON \
+-DWITH_CODEC_SNDFILE=ON \
+-DWITH_CYCLES_DEBUG=ON \
+-DWITH_CYCLES_DEVICE_OPTIX=ON \
+-DWITH_CYCLES_OSL=OFF \
+-DWITH_CYCLES_PATH_GUIDING=OFF \
+-DWITH_DRACO=ON \
+-DWITH_FFTW3=ON \
+-DWITH_FREESTYLE=ON \
+../blender
+
+make -j$(nproc)
+
+
+
+# run
+ ./launchBlender
+
 >>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
 >>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
 >>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!

@@ -110,7 +110,7 @@ done <"$OUT_INDEX_FILE";
  ###MEDIA_END="\" alt=\"pi\" style=\"width:600px;height:600px;\">";
  MEDIA_W="\" alt=\"pi\" style=\"width:";
  MEDIA_H="px;height:";
- MEDIA_END="px;\">";
+ MEDIA_END="px;\"></pre>";
 
 
  EXAMPLE_HEAD="<h4 align='left' id=\"";
