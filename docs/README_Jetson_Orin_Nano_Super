@@ -2,7 +2,7 @@
 ###PROCEDURE: Jetson Nano Orin Super setup/configuration
 #
 # Peter Soroka   
-###VERSION: PS20260710:2130
+###VERSION: PS20260716:1625
 
 
 Beta Project 1. Status = Complete and Successful
@@ -15,9 +15,9 @@ Beta Project 1. Status = Complete and Successful
 Beta Project 2. Status = hardware obtained setup in progress
 
   The Object of this project is to combine 3 computers to start and build an AI Cluster:
-   System 1 = Raspberry PI 5, 16GB ram, 1TB NVME, HiFiBerry Pro DAC with ADX in, HiFiBerry AMP3 60watt.
+   System 1 = Raspberry PI 5, 16GB ram, 1TB NVME, HiFiBerry Pro DAC with ADC in, HiFiBerry AMP3 60watt.
               The PI will be used as the primary GUI AI interface using Open WebUI running in a Docker container.
-              Over WebUI the PI will be able to either send different prompts both Orins at the same time -OR- through
+              Over WebUI the PI will be able to either send different prompts to both Orins at the same time -OR- through
               RPC send a prompt to a LLM that is larger then 8B running on both Orins. 
               The PI will also provide the AI Cluster's Audio interface both for prompt in and out.
    Systems 2 and 3 = Identical Jetson Orin Nano Super, 8GB ram, 1TB NVME, Jetpack 7.2. Running with GUI Desktop off
@@ -26,13 +26,17 @@ Beta Project 2. Status = hardware obtained setup in progress
               MeshLab, Orca-Slicer, Blender...
 
 Final Project A. Status = hardware supply chain problems....
-     AI Cluster - with the PI being replaced by a Rockchip computer to upgrade to 2.5GB Ethernet
-                  4 Orin Nano with 2.5GB Ethernet M.2 networ cards
-                  all attached to a 2.5GB switch
-                  2 cameras added for CMM Metrology also new part scanning for 3-D Print and CNC Machining applications
-                  RAG implementation for local knoledge enhancement.
+     AI Cluster - with the PI being replaced by a Orange PI 6 Plus 32GB RAM computer to upgrade to Dual 2.5GB Ethernet
+                  4 Orin Nano with dual 2.5GB Ethernet M.2 network cards
+                  all attached to two 2.5GB switch using FRR to do the bonding BGP in Layer3
+                  2 cameras added for CMM Metrology and new part scanning for 3-D Print and CNC Machining applications
+                  RAG implementation for local knowledge enhancement.
                   larger 24B LLMs handled with RPC and distributed to all 4 Orins
 
+
+###################################
+###PROCEDURE: Project Beta 1 - Orin AI at the Edge
+###################################
 
 ###################################
 ###STEP: Required hardware, (Beta one)
@@ -66,7 +70,8 @@ Final Project A. Status = hardware supply chain problems....
 
 
 ###MEDIA: "AI_Cluster-Beta_2.jpg" "1200" "800"
- 
+
+->>> OPPS this was suppose to be the picture os a single ORIN <<<<- 
   PI = Left Top, Blue=PI 5, Red=HiFiBerry Audio Hat
   Orin-1 = Left Middle, Green
   Orin-2 = Left Bottom, Blue
@@ -129,7 +134,7 @@ Final Project A. Status = hardware supply chain problems....
 ###################################
 ###STEP: Increase the paging swap space to allow more then the real 8g of mem to be used
 ###################################
-# This will allow for more then the real 8g of mem to be used lets add 24g of swap space
+# This will allow for more then the real 8g of mem to be used lets add 32g of swap space
 
 # View what we have now
  free -h
@@ -137,7 +142,7 @@ Final Project A. Status = hardware supply chain problems....
 # Disable the ZRAM (if it is active)
  sudo systemctl disable nvzramconfig
 # create the swapfile
- sudo fallocate -l 24G /swapfile
+ sudo fallocate -l 32G /swapfile
 # set premisssions
  sudo chmod 600 /swapfile
 # setup swap area
@@ -152,6 +157,7 @@ Final Project A. Status = hardware supply chain problems....
 # view what we have now
  free -h
  swapon --show
+
 
 ###################################
 ###STEP: verify jtop is working
@@ -771,6 +777,169 @@ Your functional workflow setup should look like this:
 #        Toggle this option if your heightmap preview looks inverted.
 
 
+
+###################################
+###PROCEDURE: Project Beta 2 - PI-Orin-Orin AI Cluster Network = 1GB Ethernet
+###################################
+
+###MEDIA: "AI_Cluster-Beta_2.jpg" "1200" "800"
+
+  PI = Left Top, Blue=PI 5, Red=HiFiBerry Audio Hat
+  Orin-1 = Left Middle, Green
+  Orin-2 = Left Bottom, Blue
+
+###################################
+###STEP: Base system readiness
+###################################
+
+Min requrements:
+ 1) Raspberry PI 5 16GB RAM is booting off a M.2 1TB NVME running Rasbian Trixe
+      ls_release -C # to check
+# Use the following guide as a reference to setting up the PI (it will be close)
+###LINK: "Raspberry PI 5 config guide" "https://soroka-repo.github.io/pi/README_linuxCNC_OS_Updates.html"
+
+ 2) Both Orin Nano 8G RAM are booting off a M.2 1TB NVME running Jetpack 7.2 [L4T 39.2.0] in MAXN_SUPER and Jetson clocks running
+    Orin OS = 24.04.4 LTS (Noble Numbat)
+      jtop # to check
+      cat /etc/os-release # to check
+
+ 3) All 3 are connected to the same 1GB Ethernet Switch and are getting a static IP address
+
+ 4) The PI as audio IN/OUT capibilites, currently using a HiFiBerry DAC Pro with an ADC input (or some other USB type audio device)
+
+ 5) All 3 have a 32GB swap space setup on NVME storage
+     free -h # to check
+ 
+ 6) All 3 get ssh keys swapped around for seamless cluster communications.
+
+
+###################################
+###STEP: Swap ssh keys Cluster communication
+###################################
+
+
+
+
+
+###################################
+###STEP: Install "Open webUI" on the PI
+###################################
+
+# 1.
+ # update:
+ sudo apt update && sudo apt upgrade -y
+
+ # get docker:
+ sudo mkdir -p /etc/apt/keyrings
+ curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+ # write the file /etc/apt/sources.list.d/docker.sources
+ sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/debian
+Suites: trixie
+Components: stable
+Architectures: arm64
+Signed-By: /etc/apt/keyrings/docker.gpg
+EOF
+
+ # install
+ sudo apt update
+ sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
+ # Add your user to the Docker group:
+ sudo usermod -aG docker $USER
+
+ # Apply the group changes:
+ newgrp docker 
+ 
+ # Verify the installation:
+ docker run hello-world
+
+# 2.
+ # Deploy Open WebUI via Docker:
+ # Since your LLMs are running externally on the Jetson Orins via llama-server RPC, you want to run the 
+ # CPU-only version of Open WebUI on the Pi and tell it to bypass any local bundled engines.Run the following 
+ # command to spin up the Open WebUI container. It creates a persistent data volume so your accounts, chats, 
+ # and prompts are saved if the container restarts.
+
+ docker run -d -p 3000:8080 \
+  -v open-webui:/app/backend/data \
+  --name open-webui \
+  --restart always \
+  openwebui/open-webui:main
+
+# 3.
+ # Access Open WebUI:
+ # Navigate to your Raspberry Pi's IP address on port 3000:
+  http://<your-raspberry-pi-ip>:3000
+
+# 4. start llama server up on an Orin
+ # login into the Orin and run the following: 
+ llama-server \
+  -m /home/soroka/LLM/gemma-4-E4B-it-Q4_K_M.gguf \
+  --host 0.0.0.0 \
+  --port 8080 \
+  -ngl 99
+
+# 5.
+  # In Open WebUI configure a connection to the Orin:
+    # Profile Avatar / Name (bottom left corner)
+    # Admin Panel
+    # Settings (center left)
+    # Connections (leftside dashboard)
+    # Open API - click the + sign
+    # API Base URI =   ( the IP, port and closing with /v1 )
+    http://192.168.0.175:8080/v1
+    # API Key is none I just entered a space
+    # save - and go back to the main dashboard and start your prompt
+
+###################################
+###STEP: RAG using open-webUI
+###################################
+
+#   RAG is used so the LLM has local built in knowledge in my case the LLM will be used to manage
+# my MakerSpace which includes 3D-printers, CNC machines, Old School Machining... software tools
+# which manage/create in the MakerSpace plus lets add in consumable inventory and we will create a 
+# Shop Forman that can manage a project from start to finish. First step we will just create a basic
+# inventory of what we have so the LLM can be one with our shop, then we will include hardware and
+# software manuals of the tools we have so it can give us WorkFlows of which buttons to push. Next 
+# give it some real mechnical knowledge of how are tools handle feeds and speeds. Finially lets
+# give it project history knowledge so we can return to an old project and do it again.
+
+# 1. the basic inventory, create the dir
+ mkdir -p /home/$USER/SHOP_RAG/01_directories
+
+# create the following markup files 
+ vi compute_datacenter.md  
+ vi consumables_inventory.md 
+ vi hardware_inventory.md  
+ vi software_pipeline.md
+
+#  Stop and remove the existing container (your data is safe in the open-webui volume)
+ docker stop open-webui
+ docker rm open-webui
+
+# Start it again, mounting your new SHOP_RAG directory to /app/backend/data/shop_rags
+
+docker run -d -p 3000:8080 \
+ -v open-webui:/app/backend/data \
+ -v /home/$USER/SHOP_RAG:/app/backend/data/shop_rags \
+ --name open-webui \
+ --restart always \ 
+ ghcr.io/open-webui/open-webui:main
+
+
+
+###################################
+### Portainer install
+###################################
+ We need to get Portainer installed on the Raspberry PI to manage Docker Containers, 
+we should be able to spin up and manage Contaioners on the Jetsons from the PI!
+
+
+
+
 ###################################
 ###PROCEDURE: Install the Maker Apps to the desktop for 3D-printing, CNC and Laser etching
 ###################################
@@ -986,7 +1155,8 @@ EOF
 
 
 >>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
-
+>>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+>>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
 ###################################
 ###STEP: compile Blender, CAD for 3D  ( for the Makers ) 
 ###################################
@@ -1101,12 +1271,6 @@ make -j$(nproc)
 >>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
 >>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
 >>>>>>>>>>>>>> THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
-
-
-
-
-
-
 
 
 ###################################
