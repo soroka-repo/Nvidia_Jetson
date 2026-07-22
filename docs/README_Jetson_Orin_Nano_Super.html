@@ -5,7 +5,7 @@
     a { text-decoration: none; }
 </style>
 </ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREJetsonNanoOrinSupersetupconfiguration"><font color="blue"><h3 align='left'>  Jetson Nano Orin Super setup/configuration</h3></font></a><ol>
-<font color="black"><h3 align='center'>VERSION: PS20260716:1625</font></h3>
+<font color="black"><h3 align='center'>VERSION: PS20260721:2011</font></h3>
 </ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREProjectBeta1OrinAIattheEdge"><font color="blue"><h3 align='left'>  Project Beta 1 - Orin AI at the Edge</h3></font></a><ol>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPRequiredhardwareBetaone"> Required hardware, (Beta one)</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPCopytheOStoaSDCard"> Copy the OS to a SD Card</a></li>
@@ -55,13 +55,9 @@
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEP2nvcccheckthatit'sinstalled"> 2. nvcc check that it's installed</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEP3CloningtheComfyUIProjectRepository"> 3. Cloning the ComfyUI Project Repository</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEP5RunningComfyUI"> 5: Running ComfyUI</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallComfyUIManager"> Install ComfyUI Manager</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallComfyUIDepth2Meshbytimothywong731tocreateimagetomesh"> Install ComfyUI-Depth2Mesh by timothywong731 to create image-to-mesh</a></li>
-</ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREProjectBeta2PIOrinOrinAIClusterNetwork=1GBEthernet"><font color="blue"><h3 align='left'>  Project Beta 2 - PI-Orin-Orin AI Cluster Network = 1GB Ethernet</h3></font></a><ol>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPBasesystemreadiness"> Base system readiness</a></li>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPSwapsshkeysClustercommunication"> Swap ssh keys Cluster communication</a></li>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstall"OpenwebUI"onthePI"> Install "Open webUI" on the PI</a></li>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPRAGusingopenwebUI"> RAG using open-webUI</a></li>
-</ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREInstalltheMakerAppstothedesktopfor3DprintingCNCandLaseretching"><font color="blue"><h3 align='left'>  Install the Maker Apps to the desktop for 3D-printing, CNC and Laser etching</h3></font></a><ol>
+</ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREProjectBeta2OrinMakerSpaceDesktop"><font color="blue"><h3 align='left'>  Project Beta 2 - Orin MakerSpace Desktop</h3></font></a><ol>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPSetupaprinter"> Setup a printer</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPUseFlatpaktoinstallthefollowingApps"> Use Flatpak to install the following Apps</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallPIAppsfortheRaspberryPIbutwillworkonJetsonOrintoo"> Install PI-Apps for the Raspberry PI, but will work on Jetson Orin too</a></li>
@@ -71,6 +67,20 @@
 <a href="README_Jetson_Orin_Nano_Super.html#EXAMPLEcommentthefollowingexitinbuild_linuxsh"><font color="black">&emsp; Example:  comment the following exit in build_linux.sh<br></font></a>
 
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPcompileMeshlabusedforstl3DmeshmanipulationfortheMakers"> compile Meshlab, used for *.stl 3D mesh manipulation ( for the Makers )</a></li>
+</ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREProjectBeta3PIOrinOrinAIClusterNetwork=1GBEthernet"><font color="blue"><h3 align='left'>  Project Beta 3 - PI-Orin-Orin AI Cluster Network = 1GB Ethernet</h3></font></a><ol>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPBasesystemreadiness"> Base system readiness</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPSetupstaticIPs"> Setup static IPs</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPSwapsshkeysClustercommunication"> Swap ssh keys Cluster communication</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstalldsh"> Install dsh</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallNFS"> Install NFS</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstall"OpenwebUI"onthePI"> Install "Open webUI" on the PI</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPRAGusingopenwebUI"> RAG using open-webUI</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstalldockercompose"> Install docker compose</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLEeditthefollowingintothe~dockercomposeopenwebuicomposeyamlfile"><font color="black">&emsp; Example:  edit the following into the ~/docker-compose/open-webui/compose.yaml file<br></font></a>
+
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallportainer"> Install portainer</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLEaddthefollowingto~dockercomposeportainercomposeyamlfile"><font color="black">&emsp; Example:  add the following to ~/docker-compose/portainer/compose.yaml file<br></font></a>
+
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPcompileBlenderCADfor3DfortheMakers"> compile Blender, CAD for 3D ( for the Makers )</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallJetsonContainers"> Install Jetson-Containers</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallollama"> Install ollama</a></li>
@@ -82,33 +92,51 @@
 </h4></pre><h2 align='left' id="PROCEDUREJetsonNanoOrinSupersetupconfiguration">PROCEDURE: Jetson Nano Orin Super setup/configuration</h2><pre><h4>
 #
 # Peter Soroka   
-</h4></pre><font size="2"><h1 align='center'>VERSION: PS20260716:1625</h1></font><pre><h4>
+</h4></pre><font size="2"><h1 align='center'>VERSION: PS20260721:2011</h1></font><pre><h4>
 
-
-Beta Project 1. Status = Complete and Successful
+ Forward
+==============================================================================================================
+Beta Project 1 - Orin AI at the Edge.  Status = Complete and Successful
 
   The object of this project is to run LLM directly from the Jetson Orin Nano Super Jetpack 7.2 (Local on the Edge) 
  access LLMs that you have stored locally on the Orin Super off the network without any fees. We will first 
  explore text based LLMs then move up to ComfyUI so that can use Generative AI for artwork 2D and 3D to be used
  in the Maker world of 3d-Printer, CNC work, Laser engraving...
+
  
-Beta Project 2. Status = hardware obtained setup in progress
+==============================================================================================================
+Beta Project 2 - Orin MakerSpace Desktop.  Status = Complete and Successful
+
+  The object of this project is to explot the Jetson Orin Nano as a desktop computer to be used to create and process
+ projects for the Maker worls of 3D Printing, CNC Machining, Laser Etching... We will load and verify that the 
+ following apps work GIMP, Inkscape, FreeCAD, Open-SCAD, Orca-Slicer all were successful and still attempting to compile Blender.  
+
+
+==============================================================================================================
+Beta Project 3. Orin AI Cluster,   Status = hardware obtained setup in progress
 
   The Object of this project is to combine 3 computers to start and build an AI Cluster:
    System 1 = Raspberry PI 5, 16GB ram, 1TB NVME, HiFiBerry Pro DAC with ADC in, HiFiBerry AMP3 60watt.
               The PI will be used as the primary GUI AI interface using Open WebUI running in a Docker container.
+              Docker Containers will be managed with yaml files and Docker-Compose to test a new Container once
+              up and running the Docker-Compose yaml file will be migrated to Portainer for cluster wide management.
               Over WebUI the PI will be able to either send different prompts to both Orins at the same time -OR- through
-              RPC send a prompt to a LLM that is larger then 8B running on both Orins. 
+              RPC send a prompt to a LLM that is larger then 8B running on both Orins. We will also be using Open WebUI
+              to manage RAG so we will be able to encode local knowledge about out Maker tools and apps to be able to
+              Combine that with LLM knowledge.
               The PI will also provide the AI Cluster's Audio interface both for prompt in and out.
-   Systems 2 and 3 = Identical Jetson Orin Nano Super, 8GB ram, 1TB NVME, Jetpack 7.2. Running with GUI Desktop off
-              to conserve RAM receiving prompts from the PI using WebUI. To operate with ComfyUI with Desktop on and
-              perhaps deskop off with remote call from the PI. Be able to use various Maker tools: FreeCAD, Inkspace, GIMP
-              MeshLab, Orca-Slicer, Blender...
+              Systems 2 and 3 = Identical Jetson Orin Nano Super, 8GB ram, 1TB NVME, Jetpack 7.2. Running with GUI Desktop off
+              to conserve RAM receiving prompts from the PI using WebUI. Let's also get Open WebUI on the PI to
+              integrate with the Jetson's to run ComfyUI. We will still perserve turning on our Jetson's desktop to
+              run our Maker Apps.
+              perhaps deskop off with remote call from the PI.
 
-Final Project A. Status = hardware supply chain problems....
+
+==============================================================================================================
+Final Project A. Orin AI Cluster Performance Tunning.   Status = hardware supply chain problems....
      AI Cluster - with the PI being replaced by a Orange PI 6 Plus 32GB RAM computer to upgrade to Dual 2.5GB Ethernet
                   4 Orin Nano with dual 2.5GB Ethernet M.2 network cards
-                  all attached to two 2.5GB switch using FRR to do the bonding BGP in Layer3
+                  all attached to two 2.5GB switches using FRR to do the BGP bonding in Layer3
                   2 cameras added for CMM Metrology and new part scanning for 3-D Print and CNC Machining applications
                   RAG implementation for local knowledge enhancement.
                   larger 24B LLMs handled with RPC and distributed to all 4 Orins
@@ -451,6 +479,11 @@ sudo sh -c 'echo 3 &gt /proc/sys/vm/drop_caches'
 ###################################
 
 <a href="https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/quick_start.html"><font color="black">New 7.2 Nvidia Orin Nano User Guide<font color="blue"> https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/quick_start.html<font color="black"></a>
+ 
+ - If your Jetson Orin Nano is atleast firmware 36.0 or above you are good to go for a USB boot to load Jetpack 7.2.
+ - If lower than 36.0 follow the above jetson link and update the firmware... 
+ - On the USB boot press Y to update the firmware!!!
+
 
 </h4></pre><h3 align='left' id="NOTErunningthrough72instructionsofbootingfromaUSBstickwillwipeoutyourJetpack6xinstallfrom">NOTE: running through 7.2 instructions of booting from a USB stick will wipe out your Jetpack 6.x install from</h3><pre><h4>
    your NVME drive if you have previouslly installed a Jetpack level 6.x to youe NVME drive.
@@ -838,6 +871,24 @@ docker stop &ltcontainer_name_or_id&gt # stop a container enter either it's name
 
 
 ###################################
+</h4></pre><h3 align='left' id="STEPInstallComfyUIManager">STEP: Install ComfyUI Manager</h3><pre><h4>
+###################################
+ cd ~/github/ComfyUI/custom_nodes
+ git clone https://github.com/ltdrdata/ComfyUI-Manager comfyUI-manager
+# Then restart ComfyUI on restart the Manager will be installed, you will see the "Manager" Icon to the left of Run
+
+# Use the Manager to install ComfyUI-ControlNet-Auxiliary
+ click on "Manager" 
+ then "Custom Node Manager"
+ search for "ControlNet" then install it
+ there is a "Restart" button now on the Manager, so restart ComfyUI now
+
+# Use the Manager to install ComfyUI-Depth-Anything-V2 (just like above and restart)
+
+# Use the Manager to download the Model Depth-Anything-V2 (vits/fp16)
+
+
+###################################
 </h4></pre><h3 align='left' id="STEPInstallComfyUIDepth2Meshbytimothywong731tocreateimagetomesh">STEP: Install ComfyUI-Depth2Mesh by timothywong731 to create image-to-mesh</h3><pre><h4>
 ###################################
 # This can be considered a "Maker APP" as it's used to change an image in to a mesh 
@@ -871,174 +922,13 @@ Your functional workflow setup should look like this:
 #        Toggle this option if your heightmap preview looks inverted.
 
 
-
 ###################################
-</h4></pre><h2 align='left' id="PROCEDUREProjectBeta2PIOrinOrinAIClusterNetwork=1GBEthernet">PROCEDURE: Project Beta 2 - PI-Orin-Orin AI Cluster Network = 1GB Ethernet</h2><pre><h4>
+</h4></pre><h2 align='left' id="PROCEDUREProjectBeta2OrinMakerSpaceDesktop">PROCEDURE: Project Beta 2 - Orin MakerSpace Desktop</h2><pre><h4>
 ###################################
+   Let's use the Jetson Orin nano for more then just an AI worker node. The Orin is a powerful
+ SMC computer with enough CPU, Memory, and Graphical power to run the needed Apps for Makers in
+ the world of 3D Printing and CNC Machining...
 
-<h4 align='center' id="MEDIA"AI_ClusterBeta_2jpg""1200""800"">AI_Cluster-Beta_2.jpg
-</h4><pre><p style="border:4px; border-style:solid; border-color:black; padding: 2em;"><span style="white-space: nowrap;">
-<img src="./media/AI_Cluster-Beta_2.jpg" alt="pi" style="width:1200px;height:800px;"></pre>
-
-  PI = Left Top, Blue=PI 5, Red=HiFiBerry Audio Hat
-  Orin-1 = Left Middle, Green
-  Orin-2 = Left Bottom, Blue
-
-###################################
-</h4></pre><h3 align='left' id="STEPBasesystemreadiness">STEP: Base system readiness</h3><pre><h4>
-###################################
-
-Min requrements:
- 1) Raspberry PI 5 16GB RAM is booting off a M.2 1TB NVME running Rasbian Trixe
-      ls_release -C # to check
-# Use the following guide as a reference to setting up the PI (it will be close)
-<a href="https://soroka-repo.github.io/pi/README_linuxCNC_OS_Updates.html"><font color="black">Raspberry PI 5 config guide<font color="blue"> https://soroka-repo.github.io/pi/README_linuxCNC_OS_Updates.html<font color="black"></a>
-
- 2) Both Orin Nano 8G RAM are booting off a M.2 1TB NVME running Jetpack 7.2 [L4T 39.2.0] in MAXN_SUPER and Jetson clocks running
-    Orin OS = 24.04.4 LTS (Noble Numbat)
-      jtop # to check
-      cat /etc/os-release # to check
-
- 3) All 3 are connected to the same 1GB Ethernet Switch and are getting a static IP address
-
- 4) The PI as audio IN/OUT capibilites, currently using a HiFiBerry DAC Pro with an ADC input (or some other USB type audio device)
-
- 5) All 3 have a 32GB swap space setup on NVME storage
-     free -h # to check
- 
- 6) All 3 get ssh keys swapped around for seamless cluster communications.
-
-
-###################################
-</h4></pre><h3 align='left' id="STEPSwapsshkeysClustercommunication">STEP: Swap ssh keys Cluster communication</h3><pre><h4>
-###################################
-
-
-
-
-
-###################################
-</h4></pre><h3 align='left' id="STEPInstall"OpenwebUI"onthePI">STEP: Install "Open webUI" on the PI</h3><pre><h4>
-###################################
-
-# 1.
- # update:
- sudo apt update && sudo apt upgrade -y
-
- # get docker:
- sudo mkdir -p /etc/apt/keyrings
- curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-
- # write the file /etc/apt/sources.list.d/docker.sources
-sudo tee /etc/apt/sources.list.d/docker.sources &lt&ltEOF
-Types: deb
-URIs: https://download.docker.com/linux/debian
-Suites: trixie
-Components: stable
-Architectures: arm64
-Signed-By: /etc/apt/keyrings/docker.gpg
-EOF
-
- # install
- sudo apt update
- sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-
- # Add your user to the Docker group:
- sudo usermod -aG docker $USER
-
- # Apply the group changes:
- newgrp docker 
- 
- # Verify the installation:
- docker run hello-world
-
-# 2.
- # Deploy Open WebUI via Docker:
- # Since your LLMs are running externally on the Jetson Orins via llama-server RPC, you want to run the 
- # CPU-only version of Open WebUI on the Pi and tell it to bypass any local bundled engines.Run the following 
- # command to spin up the Open WebUI container. It creates a persistent data volume so your accounts, chats, 
- # and prompts are saved if the container restarts.
-
- docker run -d -p 3000:8080 &#92
-  -v open-webui:/app/backend/data &#92
-  --name open-webui &#92
-  --restart always &#92
-  openwebui/open-webui:main
-
-# 3.
- # Access Open WebUI:
- # Navigate to your Raspberry Pi's IP address on port 3000:
-http://&ltyour-raspberry-pi-ip&gt:3000
-
-# 4. start llama server up on an Orin
- # login into the Orin and run the following: 
- llama-server &#92
-  -m /home/soroka/LLM/gemma-4-E4B-it-Q4_K_M.gguf &#92
-  --host 0.0.0.0 &#92
-  --port 8080 &#92
-  -ngl 99
-
-# 5.
-  # In Open WebUI configure a connection to the Orin:
-    # Profile Avatar / Name (bottom left corner)
-    # Admin Panel
-    # Settings (center left)
-    # Connections (leftside dashboard)
-    # Open API - click the + sign
-    # API Base URI =   ( the IP, port and closing with /v1 )
-    http://192.168.0.175:8080/v1
-    # API Key is none I just entered a space
-    # save - and go back to the main dashboard and start your prompt
-
-###################################
-</h4></pre><h3 align='left' id="STEPRAGusingopenwebUI">STEP: RAG using open-webUI</h3><pre><h4>
-###################################
-
-#   RAG is used so the LLM has local built in knowledge in my case the LLM will be used to manage
-# my MakerSpace which includes 3D-printers, CNC machines, Old School Machining... software tools
-# which manage/create in the MakerSpace plus lets add in consumable inventory and we will create a 
-# Shop Forman that can manage a project from start to finish. First step we will just create a basic
-# inventory of what we have so the LLM can be one with our shop, then we will include hardware and
-# software manuals of the tools we have so it can give us WorkFlows of which buttons to push. Next 
-# give it some real mechnical knowledge of how are tools handle feeds and speeds. Finially lets
-# give it project history knowledge so we can return to an old project and do it again.
-
-# 1. the basic inventory, create the dir
- mkdir -p /home/$USER/SHOP_RAG/01_directories
-
-# create the following markup files 
- vi compute_datacenter.md  
- vi consumables_inventory.md 
- vi hardware_inventory.md  
- vi software_pipeline.md
-
-#  Stop and remove the existing container (your data is safe in the open-webui volume)
- docker stop open-webui
- docker rm open-webui
-
-# Start it again, mounting your new SHOP_RAG directory to /app/backend/data/shop_rags
-
-docker run -d -p 3000:8080 &#92
- -v open-webui:/app/backend/data &#92
- -v /home/$USER/SHOP_RAG:/app/backend/data/shop_rags &#92
- --name open-webui &#92
- --restart always &#92 
- ghcr.io/open-webui/open-webui:main
-
-
-
-###################################
-### Portainer install
-###################################
- We need to get Portainer installed on the Raspberry PI to manage Docker Containers, 
-we should be able to spin up and manage Contaioners on the Jetsons from the PI!
-
-
-
-
-###################################
-</h4></pre><h2 align='left' id="PROCEDUREInstalltheMakerAppstothedesktopfor3DprintingCNCandLaseretching">PROCEDURE: Install the Maker Apps to the desktop for 3D-printing, CNC and Laser etching</h2><pre><h4>
-###################################
 
 ###################################
 </h4></pre><h3 align='left' id="STEPSetupaprinter">STEP: Setup a printer</h3><pre><h4>
@@ -1077,7 +967,7 @@ sudo apt install system-config-printer
 ### PHOTO / GRAPHIC
  sudo flatpak install -y flathub org.inkscape.Inkscape         ### Vector Graphics Editor
 
-### System 
+### System
  sudo flatpak install -y flathub org.mozilla.firefox           ### web browser
  sudo flatpak install -y flathub org.wireshark.Wireshark       ### Network traffic analyzer
 
@@ -1098,6 +988,7 @@ sudo apt install system-config-printer
 # Just update one
  sudo flatpak update org.gimp.GIMP
 
+
 ###################################
 </h4></pre><h3 align='left' id="STEPInstallPIAppsfortheRaspberryPIbutwillworkonJetsonOrintoo">STEP: Install PI-Apps for the Raspberry PI, but will work on Jetson Orin too</h3><pre><h4>
 ###################################
@@ -1110,18 +1001,18 @@ sudo apt install system-config-printer
 # Usage: Install the following
  FreeCad # CAD for the Maker Guys
  btop++ # system usage
- BalenaEtcher # SD card Imager 
- 
+ BalenaEtcher # SD card Imager
+
 ######################################################################
 </h4></pre><h3 align='left' id="STEPIfFreeCADisinstalledyouareaMakerthenaddGraphviz">STEP: If FreeCAD is installed (you are a Maker), then add Graphviz</h3><pre><h4>
 ######################################################################
-# make sure Graphviz is installed for the Tools, Dependancy Graph to work 
- sudo apt update 
+# make sure Graphviz is installed for the Tools, Dependancy Graph to work
+ sudo apt update
  sudo apt install graphviz ### to install
  which dot ### graphviz = dot, so this will verify the install
 ### in FreeCAD you must set the path for the tool to work
 -&gt Tools, -&gt Edit Parameters, -&gt BaseApp, -&gt Preferences, -&gt Paths
-###Note: if Paths is missing right click on Preferences and add it as a subgroup  
+###Note: if Paths is missing right click on Preferences and add it as a subgroup
  Then Right click mouse on the right Panel and select "New String Item"
  Enter the name: Graphviz    ### note must be a capitial "G"
  Enter the text: /usr/bin    ### which is the path returned from the above "which dot" command
@@ -1131,6 +1022,7 @@ sudo apt install system-config-printer
 </h4></pre><h3 align='left' id="STEPusesnaptoinstallthefollowingfortheMakerworld">STEP: use snap to install the following ( for the Maker world )</h3><pre><h4>
 ###################################
  sudo snap install openscad # used by FreeCAD
+
 
 ###################################
 </h4></pre><h3 align='left' id="STEPcompileOrcaSlicerusedfor3DPrinterfortheMakers">STEP: compile Orca Slicer, used for 3D Printer ( for the Makers )</h3><pre><h4>
@@ -1200,6 +1092,7 @@ EOF
 # running OrcaSlicer
 # you can type orcaslicer at a terminal or click on the desktop icon under the Ubuntu circle icon(lower left)
 
+
 ###################################
 </h4></pre><h3 align='left' id="STEPcompileMeshlabusedforstl3DmeshmanipulationfortheMakers">STEP: compile Meshlab, used for *.stl 3D mesh manipulation ( for the Makers )</h3><pre><h4>
 ###################################
@@ -1250,10 +1143,314 @@ EOF
 
 
 
+###################################
+</h4></pre><h2 align='left' id="PROCEDUREProjectBeta3PIOrinOrinAIClusterNetwork=1GBEthernet">PROCEDURE: Project Beta 3 - PI-Orin-Orin AI Cluster Network = 1GB Ethernet</h2><pre><h4>
+###################################
 
+<h4 align='center' id="MEDIA"AI_ClusterBeta_2jpg""1200""800"">AI_Cluster-Beta_2.jpg
+</h4><pre><p style="border:4px; border-style:solid; border-color:black; padding: 2em;"><span style="white-space: nowrap;">
+<img src="./media/AI_Cluster-Beta_2.jpg" alt="pi" style="width:1200px;height:800px;"></pre>
+
+  PI = Left Top, Blue=PI 5, Red=HiFiBerry Audio Hat
+  Orin-1 = Left Middle, Green
+  Orin-2 = Left Bottom, Blue
+
+###################################
+</h4></pre><h3 align='left' id="STEPBasesystemreadiness">STEP: Base system readiness</h3><pre><h4>
+###################################
+
+Min requrements:
+ 1) Raspberry PI 5 16GB RAM is booting off a M.2 1TB NVME running Rasbian Trixe
+      ls_release -C # to check
+# Use the following guide as a reference for setting up the PI (it will be close)
+<a href="https://soroka-repo.github.io/pi/README_linuxCNC_OS_Updates.html"><font color="black">Raspberry PI 5 config guide<font color="blue"> https://soroka-repo.github.io/pi/README_linuxCNC_OS_Updates.html<font color="black"></a>
+
+ 2) Both Orin Nano 8G RAM are booting off a M.2 1TB NVME running Jetpack 7.2 [L4T 39.2.0] in MAXN_SUPER and Jetson clocks running
+    Orin OS = 24.04.4 LTS (Noble Numbat)
+      jtop # to check
+      cat /etc/os-release # to check
+
+ 3) All 3 are connected to the same 1GB Ethernet Switch and have static IP addresses.
+
+ 4) The PI has audio IN/OUT capibilites, currently using a HiFiBerry DAC Pro with an ADC input (or some other USB type audio device)
+
+ 5) All 3 have a 32GB swap space setup on NVME storage
+     free -h # to check
+ 
+ 6) Communication: All 3 get ssh keys swapped around for seamless cluster communications,
+    dsh is running, and we setup NFS dor common storage.
+
+ CLUSTER SETUP:
+
+###################################
+</h4></pre><h3 align='left' id="STEPSetupstaticIPs">STEP: Setup static IPs</h3><pre><h4>
+###################################
+
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPSwapsshkeysClustercommunication">STEP: Swap ssh keys Cluster communication</h3><pre><h4>
+###################################
+
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPInstalldsh">STEP: Install dsh</h3><pre><h4>
+###################################
+
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPInstallNFS">STEP: Install NFS</h3><pre><h4>
+###################################
+
+
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPInstall"OpenwebUI"onthePI">STEP: Install "Open webUI" on the PI</h3><pre><h4>
+###################################
+
+# 1.
+ # update:
+ sudo apt update && sudo apt upgrade -y
+
+ # get docker:
+ sudo mkdir -p /etc/apt/keyrings
+ curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+ # write the file /etc/apt/sources.list.d/docker.sources
+sudo tee /etc/apt/sources.list.d/docker.sources &lt&ltEOF
+Types: deb
+URIs: https://download.docker.com/linux/debian
+Suites: trixie
+Components: stable
+Architectures: arm64
+Signed-By: /etc/apt/keyrings/docker.gpg
+EOF
+
+ # install
+ sudo apt update
+ sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
+ # Add your user to the Docker group:
+ sudo usermod -aG docker $USER
+
+ # Apply the group changes:
+ newgrp docker 
+ 
+ # Verify the installation:
+ docker run hello-world
+
+# 2.
+ # Deploy Open WebUI via Docker:
+ # Since your LLMs are running externally on the Jetson Orins via llama-server RPC, you want to run the 
+ # CPU-only version of Open WebUI on the Pi and tell it to bypass any local bundled engines.Run the following 
+ # command to spin up the Open WebUI container. It creates a persistent data volume so your accounts, chats, 
+ # and prompts are saved if the container restarts.
+
+docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui --restart always openwebui/open-webui:main
+
+# 3.
+ # Access Open WebUI:
+ # Navigate to your Raspberry Pi's IP address on port 3000:
+http://&ltyour-raspberry-pi-ip&gt:3000
+
+# 4. start llama server up on an Orin
+ # login into the Orin and run the following: 
+ llama-server &#92
+  -m /home/soroka/LLM/gemma-4-E4B-it-Q4_K_M.gguf &#92
+  --host 0.0.0.0 &#92
+  --port 8080 &#92
+  -ngl 99
+
+# 5.
+  # In Open WebUI configure a connection to the Orin:
+    # Profile Avatar / Name (bottom left corner)
+    # Admin Panel
+    # Settings (center left)
+    # Connections (leftside dashboard)
+    # Open API - click the + sign
+    # API Base URI =   ( the IP, port and closing with /v1 )
+    http://192.168.0.175:8080/v1
+    # API Key is none I just entered a space
+    # save - and go back to the main dashboard and start your prompt
+
+###################################
+</h4></pre><h3 align='left' id="STEPRAGusingopenwebUI">STEP: RAG using open-webUI</h3><pre><h4>
+###################################
+
+#   RAG is used so the LLM has local built in knowledge in my case the LLM will be used to manage
+# my MakerSpace which includes 3D-printers, CNC machines, Old School Machining... software tools
+# which manage/create in the MakerSpace plus lets add in consumable inventory and we will create a 
+# Shop Forman that can manage a project from start to finish. First step we will just create a basic
+# inventory of what we have so the LLM can be one with our shop, then we will include hardware and
+# software manuals of the tools we have so it can give us WorkFlows of which buttons to push. Next 
+# give it some real mechnical knowledge of how are tools handle feeds and speeds. Finially lets
+# give it project history knowledge so we can return to an old project and do it again.
+
+# 1. the basic inventory, create the dir
+ mkdir -p /home/$USER/SHOP_RAG/01_directories
+
+# create the following markup files 
+ vi compute_datacenter.md  
+ vi consumables_inventory.md 
+ vi hardware_inventory.md  
+ vi software_pipeline.md
+
+#  Stop and remove the existing container (your data is safe in the open-webui volume)
+ docker stop open-webui
+ docker rm open-webui
+
+# Start it again, mounting your new SHOP_RAG directory to /app/backend/data/shop_rags
+
+docker run -d -p 3000:8080 &#92
+ -v open-webui:/app/backend/data &#92
+ -v /home/$USER/SHOP_RAG:/app/backend/data/shop_rags &#92
+ --name open-webui &#92
+ --restart always &#92 
+ ghcr.io/open-webui/open-webui:main
+
+
+
+###################################
+###Procedure: Docker-Compose and Portainer install and usage
+###################################
+ We will use docker compose to startup and test a new container, compose uses a yaml file
+to describe the container. Once it works we will cut and paste the yaml file into the web-gui 
+interface of portainer. This leaves os a document trail from the docker compose yaml file and
+the ease of use with the portainer web interface managing the docker compose stacks.
+Just as a not we will use docker compose to startup the portainer docker container but we never
+want portainer to manage it's own docker compose yaml stack.
+
+###################################
+</h4></pre><h3 align='left' id="STEPInstalldockercompose">STEP: Install docker compose</h3><pre><h4>
+###################################
+# verify your docker install already included compose
+ docker compose version
+
+# create a dir for the compose yaml files and each container should also have a sub-dir so lets 
+# create the dir for Open wubUI 
+ mkdir -p ~/docker-compose/open-webui
+
+# create the yaml for open-webui
+ cd ~/docker-compose/open-webui
+ vi compose.yaml
+
+<h4 align='left' id="EXAMPLEeditthefollowingintothe~dockercomposeopenwebuicomposeyamlfile">EXAMPLE: edit the following into the ~/docker-compose/open-webui/compose.yaml file
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+services:</span>
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: always
+    ports:
+      - "3000:8080"
+    volumes:
+      - open-webui:/app/backend/data
+      - /home/${USER}/SHOP_RAG:/app/backend/data/shop_rags
+
+volumes:
+  open-webui:
+    external: true
+</p><h4>
+
+# Stop the docker container if it's already running 
+ docker stop open-webui
+ docker rm open-webui 
+
+# Start it up with compose
+ docker compose up -d
+
+###################################
+</h4></pre><h3 align='left' id="STEPInstallportainer">STEP: Install portainer</h3><pre><h4>
+###################################
+# First we need to create a storage volume for portainer to store dashbord setting and login data
+ docker volume create portainer_data
+
+# Create the docker compose dir for portainer
+ mkdir -p ~/docker-compose/portainer
+ cd ~/docker-compose/portainer
+
+# Create the compose.yaml
+ vi compose.yaml
+
+<h4 align='left' id="EXAMPLEaddthefollowingto~dockercomposeportainercomposeyamlfile">EXAMPLE: add the following to ~/docker-compose/portainer/compose.yaml file
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+services:</span>
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+  portainer_data:
+    external: true
+</p><h4>
+
+# Start it up with compose
+ docker compose up -d
+
+
+ERRRRRRRRRRRRRRROR
+
+[+] up 11/12
+ ✔ Image portainer/portainer-ce:latest Pulled                                                 4.6s
+ ✔ Network portainer_default           Created                                                0.0s
+ ⠧ Container portainer                 Starting                                               0.6s
+Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint portainer (e1833a30090077f03a3790c5a28e8da42abc65a116375e7cf1bb909540f5809f): failed to bind host port 0.0.0.0:8000/tcp: address already in use
+
+
+
+
+# connect to portlander on port :9443
+
+https://&ltyour IP&gt:9443
+
+
+Step 2: Access the Local Environment DashboardOn the Portainer home screen, click on the Live Connect or local environment option (it usually features a whale icon indicating your local Docker engine).Look at the left-hand sidebar menu. Click directly on Stacks.Step 3: Stop the Existing Container (Crucial)Before making a new stack, ensure your old terminal-created Open WebUI container isn't running, otherwise, the ports will conflict.Click Containers in the left sidebar.If you see a container named open-webui in the list, check the box next to it.Click the Remove button at the top of the list and confirm. (Your data is safe inside your named volume).Step 4: Create and Deploy the Open WebUI StackGo back to the left sidebar and click Stacks.Click the + Add stack button in the top right corner.In the Name field, type: open-webuiUnder the Build method, ensure Web editor is selected.Scroll down to the empty dark text box and paste your exact updated Compose YAML code:yamlservices:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: always
+    ports:
+      - "3000:8080"
+    volumes:
+      - open-webui:/app/backend/data
+      - /home/pi/SHOP_RAG:/app/backend/data/shop_rags
+
+volumes:
+  open-webui:
+    external: true
+Use code with caution.(Note: Replace /home/pi/SHOP_RAG with your absolute user home path if your username is something other than pi, as Portainer handles absolute paths best rather than raw terminal variables like $USER).Scroll down to the very bottom of the page and click the blue Deploy the stack button.Portainer will pull down the latest image blocks, attach your existing database volume, and launch the application under full GUI control. You can now access your Open WebUI dashboard at http://&ltYOUR_PI_IP_ADDRESS&gt:3000.
+
+
+
+
+
+
+
+
+
+&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THE FOLLOWING ARE NOTES AND ARE NOT WORKING YET!!!!!!!!!!!!!!!!
 &gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
 &gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
-&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt THIS IS NOT WORKING YET!!!!!!!!!!!!!!!!
+
+
+
+
+
+
+
+
+
+
 ###################################
 </h4></pre><h3 align='left' id="STEPcompileBlenderCADfor3DfortheMakers">STEP: compile Blender, CAD for 3D ( for the Makers )</h3><pre><h4>
 ###################################
