@@ -2,7 +2,7 @@
 ###PROCEDURE: Jetson Nano Orin Super setup/configuration
 #
 # Peter Soroka   
-###VERSION: PS20260721:2011
+###VERSION: PS20260722:0148
 
  Forward
 ==============================================================================================================
@@ -235,10 +235,11 @@ NVIDIA_JETPACK = {
 export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 ###EXAMPLE_END:
-# resource the .bashrc to update the paths
+# re-source the .bashrc to update the paths
  source ~/.bashrc
 # grab your cuda level from the nvcc -V command (6.2.1 has CUDA 12.6 so there is no cuda_sample-12-6 so use 12-5)
  nvcc -V
+ mkdir -p ~/github
  cd ~/github
  git clone --branch v12.5 https://github.com/NVIDIA/cuda-samples.git # Note: using relese 12.5 since there is no 12.6 release
  cd cuda-samples/1_Utilities/deviceQuery # cd to a sample
@@ -424,10 +425,11 @@ export PATH=$PATH:~/.local/bin
 export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 ###EXAMPLE_END:
-# resource the .bashrc to update the paths
+# re-source the .bashrc to update the paths
  source ~/.bashrc
 # grab your cuda level from the nvcc -V command (Jetpack 7.2 has CUDA 13.2)
  nvcc -V
+ mkdir -p ~/github
  cd ~/github
  git clone --branch v13.2 https://github.com/NVIDIA/cuda-samples.git
  cd cuda-samples
@@ -435,7 +437,7 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
  cmake ..
  make -j$(nproc)
 
- cd buils/Samples/1_Utilities/deviceQuery # cd to a sample
+ cd ~/github/cuda-samples/build/Samples/1_Utilities/deviceQuery # cd to a sample
  ./deviceQuery # run it
 
 # The following samples have been tired and will work for the Orin Nano super:
@@ -446,7 +448,7 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 
  1_Utilities/
     deviceQuery
-    deviceQueryDrv
+    deviceQueryDrlsv
 
  3_CUDA_Features/
     simpleCudaGraphs
@@ -459,17 +461,6 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
     transpose
 
 ###################################
-###STEP: Restore 25W mode
-###################################
-# if you are missing the 25w mode do the following
- sudo unlink /etc/nvpmodel.conf
- sudo cp -p /etc/nvpmodel/nvpmodel_p3767_0003.conf /etc/nvpmodel/nvpmodel_p3767_0003.conf.orig
- sudo cp -p /etc/nvpmodel/nvpmodel_p3767_0003_super.conf /etc/nvpmodel/nvpmodel_p3767_0003.conf
- sudo systemctl restart nvpower
- sudo reboot
- sudo nvpmodel -m 2 # to set it and you will be asked to reboot again
-
-###################################
 ###STEP: verify jtop is working
 ###################################
 
@@ -477,21 +468,25 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 
 # install jetson-stats (jtop)
  sudo pip3 install -U jetson-stats --break-system-packages
+ sudo jtop --install-service
+ reboot
 
-# if jtop fails when oressing "2GPU" reinstall the new patched version
- sudo pip3 uninstall jetson-stats
- sudo pip3 install --break-system-packages git+https://github.com/rbonghi/jetson_stats.git
+# if jtop fails when pressing "2GPU" reinstall the new patched version(not sure when this version will make it to
+# the above normal install...) 
+# NOTE: as of Jul 21 2026 it looks like the patch made it to the mainstream so you can skip the following lines
+# sudo pip3 uninstall jetson-stats
+# sudo pip3 install --break-system-packages git+https://github.com/rbonghi/jetson_stats.git
+## restart then reboot
+# sudo systemctl restart jtop.service
+# sudo reboot
 
-# restart then reboot
- sudo systemctl restart jtop.service
- sudo reboot
 
 # try jtop again
  jtop
 # enter 6 for "6CTRL"
- set the profiles to "[cool]"
- set the Jetson clocks on boot to "e enable"
- set the NVP modes to "[MAXN SUPER]"
+ set the profiles to "[cool]"  ### <<< Did not work, Try the next STEP 
+ set the Jetson clocks on boot to "e enable"  ### <<< This worked
+ set the NVP modes to "[MAXN SUPER]"  ### <<< Did not work, try the next STEP
 # you can also try to use the following to set them
  sudo nvpmodel -m 2
  sudo jetson_clocks
@@ -522,14 +517,27 @@ NVIDIA_JETPACK = {
 
 ###MEDIA: "Jtop.jpg" "1200" "800" 
 
+###################################
+###STEP: Restore 25W mode
+###################################
+# if you are missing the 25w mode do the following
+ sudo unlink /etc/nvpmodel.conf
+ sudo cp -p /etc/nvpmodel/nvpmodel_p3767_0003.conf /etc/nvpmodel/nvpmodel_p3767_0003.conf.orig
+ sudo cp -p /etc/nvpmodel/nvpmodel_p3767_0003_super.conf /etc/nvpmodel/nvpmodel_p3767_0003.conf
+ sudo systemctl restart nvpower
+ reboot
+ sudo nvpmodel -m 2 # to set it and you will be asked to reboot again
+# after reboot Jetson clocks were running and we are in {MAX_SUPER} mode and also hitting + a few times got us into [cool] mode
  
 ###################################
 ###STEP: Increase the paging swap space to allow more then the real 8g of mem to be used
 ###################################
 # This will allow for more then the real 8g of mem to be used lets add 32g of swap space
-# View what we have now
+# View what swap space we have now
  free -h
  swapon --show
+# View if we are booted on an nvme drive ( the / dir will start with nvmm0n1p.... )
+ lsblk
 # Disable the ZRAM (if it is active)
  sudo systemctl disable nvzramconfig
 # create the swapfile
@@ -1076,21 +1084,275 @@ Min requrements:
  CLUSTER SETUP:
 
 ###################################
-###STEP: Setup static IPs
+###STEP: Setup static IPs to keep communications stable
 ###################################
 
+#############################
+# Jetson Orin Nano: running Ubuntu 24.4
+#  UB24 runs netplan which uses a yaml file for network config
 
+# go to the netplan dir
+ cd /etc/netplan
+ ls 
+###EXAMPLE: ls /etc/netplan
+$ ls
+00-installer-config.yaml
+90-NM-016571d3-a223-36af-99ee-dcb9249171ae.yaml
+90-NM-6ddecfb3-3eba-40be-b126-47ffc3e96325.yaml
+###EXAMPLE_END:
+
+
+# the file names are based on your NIC's UUID so lets find it
+ nmcli connection show
+###EXAMPLE: nmcli connection show
+$ nmcli connection show
+NAME                UUID                                  TYPE      DEVICE          
+Wired connection 1  016571d3-a223-36af-99ee-dcb9249171ae  ethernet  enP8p1s0        
+Saturn7g            6ddecfb3-3eba-40be-b126-47ffc3e96325  wifi      wlP1p1s0        
+l4tbr0              a79f4f14-8a61-4566-8747-8495bd848635  bridge    l4tbr0          
+lo                  6c0372f3-89a3-443d-92ab-55a951c1fdc4  loopback  lo              
+br-6d122087ec2f     252194bd-144c-4550-ac2c-601a1fec29ed  bridge    br-6d122087ec2f 
+docker0             798f1883-2f20-4ed9-8d31-075766306bc4  bridge    docker0         
+###EXAMPLE_END:
+# the UUID for the "ethernet enP8p1s0" will be the file name of the *.yaml file you need to edit
+# so we would edit the matching file and make it look like the example NOTE: this is a *.yaml file so 
+# the indentations matter
+
+ vi 90-NM-016571d3-a223-36af-99ee-dcb9249171ae.yaml
+###EXAMPLE: edit the wired NICs yaml file
+network:
+  version: 2
+  ethernets:
+    NM-016571d3-a223-36af-99ee-dcb9249171ae:
+      renderer: NetworkManager
+      match:
+        name: "enP8p1s0"
+      nameservers:
+        addresses:
+        - 1.1.1.1
+        - 8.8.8.8
+      addresses:
+      - "192.168.0.175/24"
+      dhcp6: true
+      wakeonlan: true
+      networkmanager:
+        uuid: "016571d3-a223-36af-99ee-dcb9249171ae"
+        name: "Wired connection 1"
+        passthrough:
+          connection.autoconnect-priority: "-999"
+          connection.timestamp: "1780879134"
+          ethernet._: ""
+          ipv4.address1: "192.168.0.175/24,192.168.0.1"
+          ipv4.method: "manual"
+          ipv6.addr-gen-mode: "default"
+          ipv6.ip6-privacy: "-1"
+          proxy._: ""
+###EXAMPLE_END:
+
+
+# to apply
+ sudo netplan apply
+
+# for status
+ sudo netplan status
+
+
+
+########################
+# Raspberry PI 5 running RasbianOS Trixie uses netplan the set the configuration
+
+# use nmcli
+ nmcli
+
+# enter manual and set it up like the following example
+
+
+###EXAMPLE:
+          ┌───────────────────────────┤ Edit Connection ├───────────────────────────┐
+          │                                                                        ↑│ 
+          │         Profile name Wired connection 1______________________          ▮│ 
+          │               Device eth0 (2C:CF:67:ED:FD:0B)________________          ▒│ 
+          │                                                                        ▒│ 
+          │ ═ ETHERNET                                                    <Show>   ▒│ 
+          │ ═ 802.1X SECURITY                                             <Show>   ▒│ 
+          │                                                                        ▒│ 
+          │ ╤ IPv4 CONFIGURATION <Manual>                                 <Hide>   ▒│ 
+          │ │          Addresses 192.168.0.100/24_________ <Remove>                ▒│ 
+          │ │                    <Add...>                                          ▒│ 
+          │ │            Gateway 192.168.0.1______________                         ▒│ 
+          │ │        DNS servers 1.1.1.1__________________ <Remove>                ▒│ 
+          │ │                    8.8.8.8__________________ <Remove>                ▒│ 
+          │ │                    <Add...>                                          ▒│ 
+          │ │     Search domains <Add...>                                          ▒│ 
+          │ │                                                                      ▒│ 
+          │ │            Routing (No custom routes) <Edit...>                      ▒│ 
+          │ │ [ ] Never use this network for default route                         ▒│ 
+          │ │ [ ] Ignore automatically obtained routes                             ▒│ 
+          │ │ [ ] Ignore automatically obtained DNS parameters                     ▒│ 
+          │ │                                                                      ▒│ 
+          │                                                                        ↓│ 
+          └─────────────────────────────────────────────────────────────────────────┘ 
+###EXAMPLE_END:
+
+# go to the bottom of the screen and hit OK
+# to configure
+ sudo systemctl restart NetworkManager
+
+# to check
+ hostname -I
+#   -or-
+ ip a
 
 ###################################
-###STEP: Swap ssh keys Cluster communication
+###STEP: CREATE the /etc/HOSTS file with all 3 servers
 ###################################
 
+# put all 3 servers PI, Orin, Orin into the /etc/hosts file
+# copy that /etc/hosts file to all 3 servers
 
+ sudo vi /etc/hosts
+
+###EXAMPLE: cat /etc/hosts
+127.0.0.1 localhost
+
+192.168.0.100 pi5
+192.168.0.175 ai1
+192.168.0.176 ai2
+###EXAMPLE_END:
 
 ###################################
-###STEP: Install dsh 
+###STEP: Swap ssh keys Cluster communication without having to use passwords
 ###################################
 
+# on all the servers run the following to create the ssh key
+# hit enter for all questions
+ ssh-keygen -t ed25519
+
+# On your Raspberry Pi 5, copy the public key to your Jetson user account. Replace jetson_user with your 
+# Jetson username and jetson_ip with its IP address ssh-copy-id -i ~/.ssh/id_ed25519.pub jetson_user@jetson_ip
+# so since we created the /etc/hosts file in the previous step we can just use the host name instead of the ip
+
+# on the PI do: enter yes for the fingerprint prompt then the password for the Orin
+ ssh-copy-id -i ~/.ssh/id_ed25519.pub soroka@ai1
+ ssh-copy-id -i ~/.ssh/id_ed25519.pub soroka@ai2
+
+# on the ai1 (orin 1) do: enter yes for the fingerprint prompt then the password for the Orin
+ ssh-copy-id -i ~/.ssh/id_ed25519.pub soroka@pi5
+ ssh-copy-id -i ~/.ssh/id_ed25519.pub soroka@ai2
+
+# on the ai2 (orin 2) do: enter yes for the fingerprint prompt then the password for the Orin
+ ssh-copy-id -i ~/.ssh/id_ed25519.pub soroka@pi5
+ ssh-copy-id -i ~/.ssh/id_ed25519.pub soroka@ai1
+
+# to test from each server send the command hostname;date
+
+# from the PI
+ ssh ai1 hostname;date
+ ssh ai2 hostname;date
+
+# from ai1
+ ssh pi5 hostname;date
+ ssh ai2 hostname;date
+
+# from ai2
+ ssh pi5 hostname;date
+ ssh ai1 hostname;date
+
+# you can now just use ssh to login into each server and scp to copy files
+
+###################################
+###STEP: Install dsh to distribute the same commands to all the worker nodes
+###################################
+
+# on the PI install dsh
+ sudo apt update && sudo apt install -y dsh 
+
+# then from the Orins  install dsh on each
+ ssh ai1
+ sudo apt update && sudo apt install -y dsh
+ ssh ai2
+ sudo apt update && sudo apt install -y dsh
+
+# on the PI change the remoteshell entry in dsh.conf to "ssh"  remoteshell = ssh
+ sudo vi /etc/dsh/dsh.conf
+
+# on the PI create a list of all the Orin hostnames (remove the localhost) 
+
+ sudo vi /etc/dsh/machines.list
+
+###EXAMPLE: cat /etc/dsh/machines.list
+ai1
+ai2
+###EXAMPLE_END;
+
+
+# on the PI lets create a group called cluster and als include the PI
+# first create the dir in our home dir
+ mkdir -p ~/.dsh/group
+# you can have as many groups or filename in this dir, lets just create our group called cluster
+# and put our 3 server in
+ vi ~/.dsh/group/cluster
+
+###EXAMPLE: cat ~/.dsh/group/cluster
+pi5
+ai1
+ai2
+###EXAMPLE_END:
+
+# setup the PI to trust it's own ssh key
+ cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
+
+#####
+ usage: -a for all the servers in our machines.list file
+###EXAMPLE:
+dsh -a 'hostname;date'
+soroka-ai1
+Wed Jul 22 12:42:04 AM CDT 2026
+soroka-ai2
+Wed Jul 22 12:42:04 AM CDT 2026
+###EXAMPLE_END:
+
+
+#####
+ usage: -g cluster for all the servers cluster group
+###EXAMPLE:
+dsh -g cluster 'hostname;date'
+sorokapi5
+Wed 22 Jul 00:44:15 CDT 2026
+soroka-ai1
+Wed Jul 22 12:44:15 AM CDT 2026
+soroka-ai2
+Wed Jul 22 12:44:15 AM CDT 2026
+###EXAMPLE_END:
+
+
+### Lets fix up the PI so it does not report the time in 24 hour mode from an ssh terminal command
+
+# On the PI export your local settings to yout .bashrc file
+ echo 'export LC_ALL=en_US.UTF-8' >> ~/.bashrc
+ source .bashrc
+
+# edit the ssh config file and make sure the line "AcceptEnv LANG LC_*" is in the file and not
+# commented out, uncomment if needed
+ sudo vi /etc/ssh/sshd_config
+
+# if you changed the sshd_config file you will need to restart ssh
+ sudo systemctl restart ssh
+
+# better now all the time formats across the cluster match
+###EXAMPLE: adding a -M argument to show the machine names
+dsh -M -g cluster date
+pi5: Wed Jul 22 01:03:22 AM CDT 2026
+ai1: Wed Jul 22 01:03:22 AM CDT 2026
+ai2: Wed Jul 22 01:03:22 AM CDT 2026
+###EXAMPLE_END:
+
+
+# to run a command with sudo you will have to send the password over dsh ( assuming all the passwords are the same)
+# change enter the password here to the actual password and note the -S argument is where the password is pated into the command.
+ dsh -aM "echo 'enter the password here' | sudo -S apt update && sudo -S apt install"
+
+ dsh -aM "echo 'the password' | sudo -S shutdown now"
 
 
 ###################################
