@@ -2,7 +2,7 @@
 ###PROCEDURE: Jetson Nano Orin Super setup/configuration
 #
 # Peter Soroka   
-###VERSION: PS20260722:0148
+###VERSION: PS20260724:2342
 
  Forward
 ==============================================================================================================
@@ -1220,6 +1220,10 @@ network:
 192.168.0.176 ai2
 ###EXAMPLE_END:
 
+# on the Raspberry PI disable cloud-init by creating the following empty file, this will keep cloud-init 
+# from deleting the /etc/hosts file on boot  
+ sudo touch /etc/cloud/cloud-init.disabled
+
 ###################################
 ###STEP: Swap ssh keys Cluster communication without having to use passwords
 ###################################
@@ -1261,17 +1265,17 @@ network:
 # you can now just use ssh to login into each server and scp to copy files
 
 ###################################
-###STEP: Install dsh to distribute the same commands to all the worker nodes
+###STEP: Install dsh and pdsh to distribute the same commands to all the worker nodes
 ###################################
 
 # on the PI install dsh
- sudo apt update && sudo apt install -y dsh 
+ sudo apt update && sudo apt install -y dsh pdsh 
 
 # then from the Orins  install dsh on each
  ssh ai1
- sudo apt update && sudo apt install -y dsh
+ sudo apt update && sudo apt install -y dsh pdsh
  ssh ai2
- sudo apt update && sudo apt install -y dsh
+ sudo apt update && sudo apt install -y dsh pdsh
 
 # on the PI change the remoteshell entry in dsh.conf to "ssh"  remoteshell = ssh
  sudo vi /etc/dsh/dsh.conf
@@ -1347,12 +1351,102 @@ ai1: Wed Jul 22 01:03:22 AM CDT 2026
 ai2: Wed Jul 22 01:03:22 AM CDT 2026
 ###EXAMPLE_END:
 
+###################################
+###STEP: dsh and pdsh Cluster command examples
+###################################
+
+# lets change the date format to show us seconds and nano seconds
+###EXAMPLE: Format to show seconds and nanoseconds
+dsh -M -g cluster "date +'%Y-%m-%d %H:%M:%S.%N'"
+pi5: 2026-07-24 18:15:17.364500735
+ai1: 2026-07-24 18:15:17.708248018
+ai2: 2026-07-24 18:15:18.033029536
+###EXAMPLE_END:
+
+# lets try pdsh (Parallel Distributed Shell) which will send the command in parallel to all
+# systems. Note: pdsh uses hostnames or a range of hostnames
+###EXAMPLE: using pdsh, you can see the date command to the 2 Orin's is closer in time then with dsh
+pdsh -w ai[1-2],pi5 "date +'%Y-%m-%d %H:%M:%S.%N'"
+pi5: 2026-07-24 18:21:04.530724925
+ai2: 2026-07-24 18:21:04.727653392
+ai1: 2026-07-24 18:21:04.728035451
+###EXAMPLE_END:
+
+# lets check memory across the cluster
+###EXAMPLE: dsh memory cjeck using free -h
+dsh -M -g cluster "free -h"
+pi5:                total        used        free      shared  buff/cache   available
+pi5: Mem:            15Gi       2.7Gi         9Gi       246Mi       3.2Gi        13Gi
+pi5: Swap:           33Gi          0B        33Gi
+ai1:                total        used        free      shared  buff/cache   available
+ai1: Mem:           7.3Gi       2.3Gi       2.4Gi       8.2Mi       2.8Gi       5.0Gi
+ai1: Swap:           31Gi          0B        31Gi
+ai2:                total        used        free      shared  buff/cache   available
+ai2: Mem:           7.3Gi       1.0Gi       5.1Gi       5.1Mi       1.4Gi       6.3Gi
+ai2: Swap:           31Gi          0B        31Gi
+###EXAMPLE_END:
+
+# the same free -h command to check memory but this time pipe the output to dshbak for some additional formatting
+###EXAMPLE: adding a pipe "|" dshbak to get some extra output formating
+dsh -M -g cluster "free -h"|dshbak
+----------------
+ai1
+----------------
+               total        used        free      shared  buff/cache   available
+Mem:           7.3Gi       2.3Gi       2.4Gi       8.2Mi       2.8Gi       5.0Gi
+Swap:           31Gi          0B        31Gi
+----------------
+ai2
+----------------
+               total        used        free      shared  buff/cache   available
+Mem:           7.3Gi       1.0Gi       5.1Gi       5.0Mi       1.4Gi       6.3Gi
+Swap:           31Gi          0B        31Gi
+e---------------
+
+pi5
+
+----------------
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       2.7Gi         9Gi       240Mi       3.2Gi        13Gi
+Swap:           33Gi          0B        33Gi
+###EXAMPLE_END:
 
 # to run a command with sudo you will have to send the password over dsh ( assuming all the passwords are the same)
-# change enter the password here to the actual password and note the -S argument is where the password is pated into the command.
+# change enter the password here to the actual password and Note: the -S argument is where the password is pasted into the command.
  dsh -aM "echo 'enter the password here' | sudo -S apt update && sudo -S apt install"
 
  dsh -aM "echo 'the password' | sudo -S shutdown now"
+
+# lets temporary disable the GUI desktops to the Orins (not the Raspberry PI) so we will use the -a argument to dsh
+# which we defined as just the Jetson Orins. We are turning off the GUIs to gain more RAM for larger LLMs
+
+# all Jetson Orins GUI OFF, instant
+ dsh -aM "echo 'enter the password here' | sudo -S systemctl isolate multi-user.target"
+
+# all Jetson Orins GUI Desktop ON, instant
+ dsh -aM "echo 'enter the password here' | sudo -S systemctl isolate graphical.target"
+
+# all Jetson Orins GUI Desktop OFF, to be Persistent on boot
+ dsh -aM "echo 'enter the password here' | sudo -S systemctl set-default multi-user.target"
+
+# all Jetson Orins GUI Desktop ON, to be Persistent on boot
+ dsh -aM "echo 'enter the password here' | sudo -S systemctl set-default graphical.target"
+
+
+
+
+###################################
+###STEP: Time
+###################################
+# need to get Batteries for all the systems for the RTC
+
+# need to configure chrony on the PI so it can be the NTP server that the Orins will sink to 
+ 
+# PI
+ ML2032 rechargeable battery
+
+# Jetson Orin
+ CR2032 std battery
 
 
 ###################################
