@@ -1,0 +1,46 @@
+
+### Date
+ dsh -aM date
+ dsh -Mg cluster date
+ dsh -Mg cluster "date +'%Y-%m-%d %H:%M:%S.%N'"
+ pdsh -w ai[1-2],pi5 "date +'%Y-%m-%d %H:%M:%S.%N'"
+ # set the date
+ dsh -Mg cluster "echo 'enter the password here' | sudo -S date -s '2026-10-25 14:30:00'"
+
+
+### Resources
+ dsh -M -g cluster "free -h"   ### Memory
+ dsh -M -g cluster "free -h"|dshbak ### gives more output formatting
+ dsh -M -g cluster "free -h; /usr/sbin/swapon"|dshbak
+ dsh -M -g cluster "lsblk -fs"|dshbak  ### Disk
+ dsh -Mg cluster "netstat -in"|dshbak  ### Network
+ dsh -Mg cluster mpstat -P ALL|dshbak  ### CPU
+
+# lets temporary disable the GUI desktops to the Orins (not the Raspberry PI) so we will use the -a argument to dsh
+ dsh -aM "echo 'enter the password here' | sudo -S systemctl isolate multi-user.target"
+ dsh -aM "echo 'enter the password here' | sudo -S systemctl isolate graphical.target"
+# lets on next boot disable the GUI desktops to the Orins (not the Raspberry PI) so we will use the -a argument to dsh
+ dsh -aM "echo 'enter the password here' | sudo -S systemctl set-default multi-user.target"
+ dsh -aM "echo 'enter the password here' | sudo -S systemctl set-default graphical.target"
+# check the status 
+ dsh -aM "echo 'enter the password here' | sudo -S systemctl status|grep -e graphical.target -e multi-user.target"|dshbak
+
+### llama-server
+ ssh ai2
+ llama-server -m ~/LLM/gemma-4-E4B-it-Q4_K_M.gguf --host 0.0.0.0 --port 8080 --n-gpu-layers 99
+ 192.168.0.176:8080
+
+### ComfyUI
+ dsh -w -m ai1 "cd ~/github/ComfyUI && docker compose up -d"
+ dsh -w -m ai1 "docker stats comfyui_jetson --no-stream"
+ dsh -w -m ai1 "cd ~/github/ComfyUI && docker compose down"
+ 192.168.0.175:8188
+ # Output at
+ rsync -av ai1:github/ComfyUI/output/* .
+ 
+### Open webUI
+ 192.168.0.100:3000
+
+
+### Shutdown
+ dsh -aM "echo 'enter the password here' | sudo -S shutdown now"

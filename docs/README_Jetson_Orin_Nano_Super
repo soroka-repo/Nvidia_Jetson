@@ -2,7 +2,7 @@
 ###PROCEDURE: Jetson Nano Orin Super setup/configuration
 #
 # Peter Soroka   
-###VERSION: PS20260724:2342
+###VERSION: PS20260728:2251
 
  Forward
 ==============================================================================================================
@@ -407,7 +407,7 @@ export PATH=$PATH:~/.local/bin
 ###################################
 ###STEP: Install some additional apts
 ###################################
- sudo apt update && sudo apt install -y python3-pip gparted git build-essential cmake libcurl4-openssl-dev apt-utils
+ sudo apt update && sudo apt install -y python3-pip gparted git build-essential cmake libcurl4-openssl-dev apt-utils sysstat
  sudo apt install ksh gedit gedit-plugin-text-size gedit-plugins-common gedit-plugin-character-map gedit-source-code-browser-plugin
 
 ###################################
@@ -499,6 +499,7 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 # fix the message in jtop so the jetpack level is valid (if needed, It's now fixed in the latest jtop)
 # goto the following file "jetson_variables.py usually found at the following
  sudo vi /usr/local/lib/python3.12/dist-packages/jtop/core/jetson_variables.py
+
 # add in the correct firmware and jetpack level
 ###EXAMPLE:
 NVIDIA_JETPACK = {
@@ -827,6 +828,104 @@ Your functional workflow setup should look like this:
 
 
 ###################################
+###STEP: ComfyUI startup with Docker-compose
+###################################
+#   To tie it all together lets create a yaml file for docker compose so we can manage the startup
+# of pytorch, ComfyUI, ComfyUI-Manager and Depth2Mesh all with one docker container. First we need to 
+# create the following yaml file in the ComfyUI dir on the Orin.
+
+ ssh ai1
+ cd ~/github/ComfyUI
+ vi docker-compose.yml
+
+###EXAMPLE: docker-compose.yml
+version: '3.8'
+
+services:
+  comfyui:
+    image: nvcr.io/nvidia/pytorch:25.08-py3
+    container_name: comfyui_jetson
+    ipc: host
+    shm_size: '4gb'
+    environment:
+      - PIP_ROOT_USER_ACTION=ignore
+      - CM_REQS_MANAGE=pip
+      - CM_PIP_CMD=python3 -m pip
+    volumes:
+      - .:/workspace/ComfyUI
+      - ./models:/workspace/ComfyUI/models
+    working_dir: /workspace/ComfyUI
+    # Added direct wheel install syntax (-U) and forced the numpy lock to execute absolute last
+    command: >
+      bash -c "
+      apt-get update && apt-get install -y git libgl1 libglib2.0-0 &&
+      python3 -m pip uninstall -y torchaudio onnxruntime onnxruntime-gpu &&
+      python3 -m pip install --upgrade pip &&
+      ln -sf /usr/local/bin/python3 /usr/bin/python &&
+      echo '#!/bin/bash\npython3 -m pip \"\$$@\"' > /usr/local/bin/pip &&
+      echo '#!/bin/bash\npython3 -m pip \"\$$@\"' > /usr/local/bin/pip3 &&
+      echo '#!/bin/bash\npython3 -m pip \"\$$@\"' > /usr/bin/pip &&
+      echo '#!/bin/bash\npython3 -m pip \"\$$@\"' > /usr/bin/pip3 &&
+      chmod +x /usr/local/bin/pip /usr/local/bin/pip3 /usr/bin/pip /usr/bin/pip3 &&
+      mkdir -p /usr/local/lib/python3.12/dist-packages/torchaudio-999.0.dist-info &&
+      mkdir -p /usr/local/lib/python3.12/dist-packages/torchaudio &&
+      echo 'Metadata-Version: 2.1\nName: torchaudio\nVersion: 999.0' > /usr/local/lib/python3.12/dist-packages/torchaudio-999.0.dist-info/METADATA &&
+      echo 'def load_library(*args, **kwargs): pass' > /usr/local/lib/python3.12/dist-packages/torchaudio/__init__.py &&
+      if [ -f custom_nodes/comfyUI-manager/prestartup_script.py ]; then sed -i 's/\"python\"/\"python3\"/g' custom_nodes/comfyUI-manager/prestartup_script.py; fi &&
+      if [ -f custom_nodes/comfyui-manager/prestartup_script.py ]; then sed -i 's/\"python\"/\"python3\"/g' custom_nodes/comfyui-manager/prestartup_script.py; fi &&
+      python3 -m pip install -r requirements.txt &&
+      python3 -m pip install -r custom_nodes/ComfyUI-Depth2Mesh/requirements.txt &&
+      python3 -m pip install opencv-python-headless trimesh GitPython toml scikit-image &&
+      python3 -m pip install -U https://nvidia.com || python3 -m pip install onnxruntime &&
+      python3 -m pip install 'numpy<2.0.0' 'packaging<=25.0' &&
+      python3 main.py --listen 0.0.0.0
+      "
+    ports:
+      - "8188:8188"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    restart: unless-stopped
+###EXAMPLE_END:
+
+# To start up the docker-compose container while on the Jetson Orin do:
+ cd ~/github/ComfyUI
+ docker compose up -d
+
+# To monitor the container while on the Jetson Orin do:
+ docker compose logs -f
+
+
+# To stop up the docker-compose container while on the Jetson Orin do:
+ docker compose down
+
+
+# if you want to startup the container while on the Raspberry PI the command is slightly 
+# different to avoid hanging up the dsh session.
+# From the PI to start do:
+ dsh -w -m ai1 "cd ~/github/ComfyUI && docker compose up -d"
+
+# From the PI to Monitor do:
+ dsh -w -m ai1 "docker stats comfyui_jetson --no-stream"
+
+# From the PI to stop do:
+ dsh -w -m ai1 "cd ~/github/ComfyUI && docker compose down"
+
+
+
+
+
+
+
+
+###################################
 ###PROCEDURE: Project Beta 2 - Orin MakerSpace Desktop
 ###################################
    Let's use the Jetson Orin nano for more then just an AI worker node. The Orin is a powerful
@@ -946,8 +1045,8 @@ sudo apt install system-config-printer
  git clone --recursive https://github.com/OrcaSlicer/OrcaSlicer
  cd OrcaSlicer
 
-# git checkout v2.4.1 # Replace with desired version tag (no tag will get you the dev build)
- git checkout v2.4.1
+# git checkout v2.4.2 # Replace with desired version tag (no tag will get you the dev build)
+ git checkout v2.4.2
 
 # Edit the build script and comment out the exit as shown below this is needed since the Jetson Orin only has 8G of mem and the
 # build script is asking for 10gB, but we have defined swapspace above so the compile will work fine with 8gB
@@ -1040,8 +1139,78 @@ EOF
 # running MeshLab
 # you can type meshlab at a terminal or click on the desktop icon under the Ubuntu circle icon(lower left)
 
+###################################
+###STEP: VNC Server on Orins and Viewer on PIs
+###################################
 
 
+
+>>> DO NOT USE VNC, although we can get some level of VNC working they will not run some of out Maker apps 
+>>> like Inkscap, GIMP and Orca-Slicer these apps want to run on the real Nvidia GPU perhaps we compiled them
+>>> to run on the GPU... so we will have to do monitor swaps when we need the desktop for these Apps....
+
+
+
+
+
+# Lets setup VNC so you can use it for viewing the Orin's desktop to run the Maker Apps and als be able to shut it 
+# down completly when we need the extra memory required by AI tasks on the Orins. We will take the approach of 
+# installing VNC with dsh so the install can happen to all Orins in the cluster.
+# NOTE: follow the instructions at "###STEP: dsh and pdsh Cluster command examples" for dsh configuration 
+
+# install tigervnc server and xinit on the Orins
+ dsh -aM  "sudo apt update && sudo apt install tigervnc-standalone-server xinit xfce4 xfce4-goodies -y"
+
+sudo apt update
+sudo apt install x11vnc -y
+
+# setup the vnc password and edit the vnc startup file on the Orins
+# ssh into each machine doing the following
+ ssh ai1
+ vncpasswd
+ vi ~/.vnc/xstartup
+###EXAMPLE: vi ~/.vnc/xstartup
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+
+# Start XFCE session wrapper
+exec startxfce4
+###EXAMPLE_END:
+
+# then make the file executable
+ chmod +x ~/.vnc/xstartup
+
+
+x11vnc -storepasswd
+
+
+# to startup vnc server on the orin do
+# NOTE: The -localhost yes flag forces you to connect through a secure SSH tunnel so your VNC port isn't exposed openly to the internet.
+ vncserver :1 -geometry 1920x1080 -localhost yes
+
+x11vnc -auth guess -forever -loop -noxdamage -repeat -rfbauth ~/.vnc/passwd -rfbport 5900 -localhost
+
+# do the same to the remaining of your servers that you will be running VNC on
+ ssh ai2
+ vncpasswd
+ ....
+
+# On the Raspberry PI we will be installing VNC Viewer
+ sudo apt update
+ sudo apt install tigervnc-viewer -y
+
+# to start up the ssh tunnel for VNC Viewer on the PI. 5901 = the :1 port we set when start vncserver. :2 would be 5902
+# username@hostname ai1 = 192.168.0.175. you start this up on the PI in a terminal and leave it running to establish the ssh tunnel
+ ssh -L 5901:127.0.0.1:5901 soroka@ai1
+
+ssh -L 5900:localhost:5900 soroka@ai1
+
+
+
+
+
+ 
 
 
 
@@ -1079,7 +1248,7 @@ Min requrements:
      free -h # to check
  
  6) Communication: All 3 get ssh keys swapped around for seamless cluster communications,
-    dsh is running, and we setup NFS dor common storage.
+    dsh is running, and we setup NFS for common storage.
 
  CLUSTER SETUP:
 
@@ -1413,7 +1582,21 @@ Swap:           33Gi          0B        33Gi
 
 # to run a command with sudo you will have to send the password over dsh ( assuming all the passwords are the same)
 # change enter the password here to the actual password and Note: the -S argument is where the password is pasted into the command.
- dsh -aM "echo 'enter the password here' | sudo -S apt update && sudo -S apt install"
+ dsh -aM "echo 'enter the password here' | sudo -S apt update && sudo -n apt install ________ -y"
+
+# MAKE dsh more secure
+# dsh with the -S for the sudo password does work, BUT it leaves out password in the command line history file. Lets edit the
+# /etc/sudoers file to give our userid sudo premission for the apt commands. We will use "sudo visudo" which will do a vi edit
+# of the file and then checks that you entered the  correct syntax on exit ( <Esc> :wq   the exit command for the vi editor )
+ sudo visudo
+# add the following line to the end of the file replacing "Enter_YOUR_Username" with your actual username
+###EXAMPLE:
+Enter_YOUR_Username ALL=(ALL) NOPASSWD: /usr/bin/apt update, /usr/bin/apt install *, /usr/bin/apt list, /usr/bin/apt upgrade
+###EXAMPLE_END:
+
+ <Esc> :wq  #  the exit command for the vi editor 
+
+
 
  dsh -aM "echo 'the password' | sudo -S shutdown now"
 
@@ -1433,6 +1616,17 @@ Swap:           33Gi          0B        33Gi
  dsh -aM "echo 'enter the password here' | sudo -S systemctl set-default graphical.target"
 
 
+###################################
+### dsh and higher security
+###################################
+# both the methods of using sudo over dsh exposes security risks the echo 0s and hardcodes password and the sudo visudo
+# granting access. We should setup oam.d and use it to allow our ssh key to be used for sudo access
+
+>>>> Setup To Be Added.....
+
+
+
+
 
 
 ###################################
@@ -1447,6 +1641,10 @@ Swap:           33Gi          0B        33Gi
 
 # Jetson Orin
  CR2032 std battery
+
+>>>> Setup to be added.....
+
+
 
 
 ###################################
@@ -1498,7 +1696,7 @@ EOF
  # command to spin up the Open WebUI container. It creates a persistent data volume so your accounts, chats, 
  # and prompts are saved if the container restarts.
 
-docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui --restart always openwebui/open-webui:main
+docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
 
 # 3.
  # Access Open WebUI:
