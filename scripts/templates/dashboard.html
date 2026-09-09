@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jetson Cluster Manager</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; }
+        textarea { width: 100%; min-height: 150px; margin-top: 10px; box-sizing: border-box;}
+        .output-box { background-color: #222; color: #00ff00; padding: 15px; border-radius: 5px; white-space: pre-wrap; font-family: monospace;}
+        .error-box { background-color: #440000; color: #ff7777; }
+        .command-button { padding: 10px 15px; margin: 5px; background-color: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 4px;}
+        .command-button:hover { background-color: #45a049; }
+        .button-group { margin-bottom: 20px; }
+    </style>
+</head>
+<body onload="loadDefaultCommands()">
+    <h1 style="text-align: center;">Jetson Cluster Control Panel</h1>
+    
+    <div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px;">
+        <form action="/execute" method="post">
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px;">Select Target Host(s):</label>
+                <div style="border: 1px solid #eee; padding: 10px;">
+                    {% for host in hosts %}
+                    <input type="checkbox" id="host_{{ host }}" name="target_host" value="{{ host }}">
+                    <label for="host_{{ host }}">{{ host }}</label><br>
+                    {% endfor %}
+                </div>
+            </div>
 
+            <!-- Pre-defined Command Buttons -->
+            <div class="button-group">
+                <strong style="display: block; margin-bottom: 10px;">Quick Commands (Click to load):</strong>
+                
+                {# --- IMPORTANT: STRUCTURE CHANGE HERE --- #}
+                {% set quick_commands = [
+                    {"label": "Date", "command": "date"},
+                    {"label": "Date Precise", "command": "date +'%Y-%m-%d %H:%M:%S.%N'"},
+                    {"label": "Date Sync (PI5)", "command": "pdsh -w ai[1-3],pi5 \"date +'%Y-%m-%d %H:%M:%S.%N'\""}, 
+                    {"label": "Memory Usage", "command": "free -h"},
+                    {"label": "Memory/Swap Usage", "command": "free -h;/usr/sbin/swapon"},
+                    {"label": "Disk Usage", "command": "lsblk -fs"},
+                    {"label": "GUI Disable", "command": "sudo systemctl isolate multi-user.target"},
+                    {"label": "GUI Enable", "command": "sudo systemctl isolate graphical.target"},
+                    {"label": "Gui Status", "command": "sudo -S systemctl status|grep -e graphical.target -e multi-user.target"},
+                    {"label": "Start ComfyUI", "command": "cd ~/github/ComfyUI && docker compose up -d"},
+                    {"label": "Shutdown", "command": "sudo shutdown now"}
+                ] %}
+                
+                {% for cmd_entry in quick_commands %}
+                    {# FIX: Chain two replacements for safety. Escaping single and double quotes for JS compatibility. #}
+                    <button type="button" class="command-button" 
+                            onclick="setCommand('{{ cmd_entry.command | replace("'", "\\\'") | replace('\"', '\\\"') }}')">
+                        {{ cmd_entry.label }}
+                    </button>
+                {% endfor %}
+            </div>
+
+            <label for="command" style="display: block; margin-bottom: 5px;">Custom Command:</label>
+            <textarea id="command" name="command" rows="5" placeholder="Enter your custom command here..."></textarea>
+            <br>
+            <button type="submit" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer;">Execute Command</button>
+        </form>
+    </div >
+
+    {% if output and output.results %}
+    <hr style="margin-top: 40px;">
+    <h2 style="text-align: center;">Execution Results</h2>
+    
+    <div style="margin-top: 20px;">
+        <h3 style="color: #00ff00;">✅ Standard Output (STDOUT):</h3>
+        <div class="output-box">
+            {% for host, result in output.results.items() %}
+            <strong>[ {{ host }} ] STDOUT:</strong><br>
+            {{ result.stdout | safe }}<br><br>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <h3 style="color: #ff7777;">❌ Standard Error (STDERR):</h3>
+        <div class="output-box error-box">
+            {% for host, result in output.results.items() %}
+            <strong>[ {{ host }} ] STDERR:</strong><br>
+            {{ result.stderr | safe }}<br><br>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        function setCommand(cmd) {
+            document.getElementById('command').value = cmd;
+        }
+
+        function loadDefaultCommands() {}
+    </script>
+
+</body >
+</html>
