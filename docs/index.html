@@ -5,7 +5,7 @@
     a { text-decoration: none; }
 </style>
 </ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREJetsonNanoOrinSupersetupconfiguration"><font color="blue"><h3 align='left'>  Jetson Nano Orin Super setup/configuration</h3></font></a><ol>
-<font color="black"><h3 align='center'>VERSION: PS20260728:2251</font></h3>
+<font color="black"><h3 align='center'>VERSION: PS20260912:2112</font></h3>
 </ol><a href="README_Jetson_Orin_Nano_Super.html#PROCEDUREProjectBeta1OrinAIattheEdge"><font color="blue"><h3 align='left'>  Project Beta 1 - Orin AI at the Edge</h3></font></a><ol>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPRequiredhardwareBetaone"> Required hardware, (Beta one)</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPCopytheOStoaSDCard"> Copy the OS to a SD Card</a></li>
@@ -111,6 +111,8 @@
 <a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
 
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPTime"> Time</a></li>
+<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
+
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallNFS"> Install NFS</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstall"OpenwebUI"onthePI"> Install "Open webUI" on the PI</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPRAGusingopenwebUI"> RAG using open-webUI</a></li>
@@ -120,18 +122,16 @@
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallportainer"> Install portainer</a></li>
 <a href="README_Jetson_Orin_Nano_Super.html#EXAMPLEaddthefollowingto~dockercomposeportainercomposeyamlfile"><font color="black">&emsp; Example:  add the following to ~/docker-compose/portainer/compose.yaml file<br></font></a>
 
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPESP32setupenvironmenttocompileandloadcodeontoaESP32"> ESP32 setup environment to compile and load code onto a ESP32</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPcompileBlenderCADfor3DfortheMakers"> compile Blender, CAD for 3D ( for the Makers )</a></li>
+<li><a href="README_Jetson_Orin_Nano_Super.html#STEPcompileBlenderCADfor3DfortheMakers"> compile Blender, CAD for 3D ( for the Makers )</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPcompileBlenderCADfor3DfortheMakers"> compile Blender, CAD for 3D ( for the Makers )</a></li>
 <li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallJetsonContainers"> Install Jetson-Containers</a></li>
-<li><a href="README_Jetson_Orin_Nano_Super.html#STEPInstallollama"> Install ollama</a></li>
-<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
-
-<a href="README_Jetson_Orin_Nano_Super.html#EXAMPLE"><font color="black">&emsp; Example: <br></font></a>
-
 ###################################
 </h4></pre><h2 align='left' id="PROCEDUREJetsonNanoOrinSupersetupconfiguration">PROCEDURE: Jetson Nano Orin Super setup/configuration</h2><pre><h4>
 #
 # Peter Soroka   
-</h4></pre><font size="2"><h1 align='center'>VERSION: PS20260728:2251</h1></font><pre><h4>
+</h4></pre><font size="2"><h1 align='center'>VERSION: PS20260912:2112</h1></font><pre><h4>
 
  Forward
 ==============================================================================================================
@@ -1110,6 +1110,7 @@ sudo apt install system-config-printer
 
 ### MAKER
  sudo flatpak install -y flathub org.gimp.GIMP                 ### GNU Image Manipulation
+ flatpak install flathub com.orcaslicer.OrcaSlicer             ### Orca Slicer
 
 ### PHOTO / GRAPHIC
  sudo flatpak install -y flathub org.inkscape.Inkscape         ### Vector Graphics Editor
@@ -1178,6 +1179,7 @@ sudo apt install system-config-printer
 # pre-reqs
  sudo apt update && sudo apt upgrade -y
 
+
  sudo apt install -y git build-essential cmake extra-cmake-modules &#92
  libwebkit2gtk-4.1-dev libgtk-3-dev libglu1-mesa-dev freeglut3-dev &#92
  libglew-dev libboost-all-dev libcurl4-openssl-dev libdbus-1-dev &#92
@@ -1186,7 +1188,22 @@ sudo apt install system-config-printer
 
 # clone orcaslicer github
  cd ~/github
+
+### The main Orca Slicer 
  git clone --recursive https://github.com/OrcaSlicer/OrcaSlicer
+ cd OrcaSlicer
+
+# OR #
+### The SnapMaker Orca Slicer 
+ git clone --recursive https://github.com/SnapMaker/OrcaSlicer
+ cd OrcaSlicer
+
+
+# OR #
+### The SnapMaker FullSpectrum Orca Slicer
+ mkdir -p ~/github/snapmaker_full_spectrum
+ cd ~/github/snapmaker_full_spectrum
+ git clone --recursive https://github.com/Snapmaker/OrcaSlicer-FullSpectrum-test
  cd OrcaSlicer
 
 # git checkout v2.4.2 # Replace with desired version tag (no tag will get you the dev build)
@@ -1201,7 +1218,8 @@ sudo apt install system-config-printer
 </h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
    if [[ ${FREE_MEM_GB} -le ${MIN_MEM_GB} ]] ; then</span>
         echo -e "&#92nERROR: Orca Slicer Builder requires at least ${MIN_MEM_GB}G of 'available' mem (system has only ${FREE_MEM_GB}G available)"
-        echo && free --human && echo
+        eflatpak run --env=GDK_BACKEND=x11 --env=QT_QPA_PLATFORM=xcb io.github.Snapmaker.Snapmaker_Orca &
+cho && free --human && echo
         echo "Invoke with -r to skip RAM and disk checks."
 #        exit 2
     fi
@@ -1222,6 +1240,10 @@ sudo apt install system-config-printer
  # 1. Copy the official OrcaSlicer icon and executable to your system
  sudo cp -p ~/github/OrcaSlicer/resources/images/OrcaSlicer.png /usr/share/pixmaps/OrcaSlicer.png
 
+#OR# 1. Copy the SnapMaker Orca icon and executable to your system
+ sudo cp -p ~/github/OrcaSlicer/resources/images/Snapmaker_Orca.png /usr/share/pixmaps/Snapmaker_Orca.png
+
+
  # 2. Create the desktop entry file
 cat &lt&lt 'EOF' &gt ~/.local/share/applications/orcaslicer.desktop
 [Desktop Entry]
@@ -1233,8 +1255,24 @@ Terminal=false
 Categories=Graphics;Development;Engineering;
 EOF
 
+
+#OR# 2. For SnapMaker Create the desktop entry file
+cat &lt&lt 'EOF' &gt ~/.local/share/applications/snapmakerorcaslicer.desktop
+[Desktop Entry]
+Name=SnapMaker Orca Slicer
+Type=Application
+Exec=~/github/OrcaSlicer/build/src/Release/snapmaker-orca
+Icon=/usr/share/pixmaps/Snapmaker_Orca.png
+Terminal=false
+Categories=Graphics;Development;Engineering;
+EOF
+
+
  # 3. Make the shortcut executable
  chmod +x ~/.local/share/applications/orcaslicer.desktop
+
+ #OR# 3. For SnapMaker Make the shortcut executable
+ chmod +x ~/.local/share/applications/snapmakerorcaslicer.desktop
 
 # running OrcaSlicer
 # you can type orcaslicer at a terminal or click on the desktop icon under the Ubuntu circle icon(lower left)
@@ -1279,7 +1317,7 @@ StartupNotify=true
 EOF
 
  # 3. Make the shortcut executable
- chmod +x ~/.local/share/applications/meshlab.desktop
+https://github.com/Snapmaker/OrcaSlicer chmod +x ~/.local/share/applications/meshlab.desktop
 
 # running MeshLab
 # you can type meshlab at a terminal or click on the desktop icon under the Ubuntu circle icon(lower left)
@@ -1799,13 +1837,163 @@ Enter_YOUR_Username ALL=(ALL) NOPASSWD: /usr/bin/apt update, /usr/bin/apt instal
 
 # need to configure chrony on the PI so it can be the NTP server that the Orins will sink to 
  
+
+####################
 # PI
+
+####################
  ML2032 rechargeable battery
 
-# Jetson Orin
- CR2032 std battery
+# The Battery:
+#    An ML2032 (3V Manganese Lithium Rechargeable) battery. Do not use a standard CR2032, as the Pi will attempt to charge it, 
+#    which can cause chemical leakage or failure. 
 
-&gt&gt&gt&gt Setup to be added.....
+# The Connector: The battery must use a 2-pin JST-SH (1.0mm pitch) connector to fit the dedicated "BAT" header on the board. 
+#    You can easily purchase pre-wired ML2032 batteries with this connector attached.
+#
+# The Location:
+#  The battery header is labeled "BAT" and sits on the top edge of the board, nestled right between the USB-C power port and the primary Micro-HDMI port.
+#
+# Software Configuration (Enabling the Charger)
+#  By default, the Raspberry Pi 5 disables battery charging out of the box to prevent users from accidentally charging non-rechargeable batteries.
+#  You must explicitly turn it on.
+#  Edit the Raspberry Pi boot configuration file:
+
+ sudo vi /boot/firmware/config.txt
+
+# Scroll to the bottom of the file and add the following line to set the trickle charge target to 3.0V (the exact specification for an ML2032):
+
+ inidtparam=rtc_bbat_vchg=3000000
+
+# save the file and reboot the PI
+
+# Verification Commands
+#   Once the Pi has booted back up, verify that the configuration applied successfully and check the active battery state using these terminal commands:
+#   Confirm charging voltage target:
+
+ cat /sys/devices/platform/soc/soc:rpi_rtc/rtc/rtc0/charging_voltage
+
+# The output must read 3000000 (representing 3.0V).
+#
+# Read the live battery voltage:
+
+ vcgencmd pmic_read_adc BATT_V
+
+# This queries the PMIC directly. A healthy, fully charged ML2032 will return a value hovering around BATT_V volt(25)=2.99V.
+
+
+################################################
+# NTP- Chrony configuration for the PI NTP server
+################################################
+
+# 1. Install Chrony on the Raspberry Pi 5Update your package list and install the chrony daemon:
+
+ sudo apt update
+ sudo apt install chrony -y
+
+# 2. Configure Chrony as a ServerYou need to tell Chrony to allow your Jetson (and other cluster nodes) to connect, 
+#    and ensure it serves time even if the Pi itself temporarily loses internet access.Open the configuration file:
+
+ sudo vi /etc/chrony/chrony.conf
+
+# Add or modify the following configurations:
+#  Allow Cluster TrafficAdd an explicit access rule for your local subnet  so the Pi accepts incoming requests on UDP port 123:
+
+ allow 192.168.0.0/24
+
+# Enable Local Stratum (Crucial)
+#  If your Raspberry Pi 5 loses its upstream connection to the internet, it still needs to serve time to your Jetson. 
+#  Add this rule to force the Pi to trust its own clock as an authoritative source when offline:
+
+ local stratum 10
+
+
+# 3. Restart and Enable the Service
+#  Apply the configurations by restarting the daemon:
+
+ sudo systemctl restart chrony
+ sudo systemctl enable chrony
+
+
+# 4. Adjust the Raspberry Pi Firewall
+#   If you are running a firewall like ufw on your master node, you must open UDP port 123 to prevent your Orin from being blocked:
+ sudo ufw allow from 192.168.0.0/24 to any port 123 proto udp
+
+# 5. Verify the Server Status
+#   To make sure your Pi 5 is successfully serving time, run:
+
+ chronyc clients
+
+
+####################
+### Jetson Orin
+####################
+# CR2032 std battery
+#
+# The Connector: You will need to source and solder a 2-pin, 1.25 mm pitch connector. The official part is a Wieson Technologies AC2651-0011-003-HH,
+#    but it can easily be replaced with a more common Molex PicoBlade 53398-0271 (vertical mount).
+# The Battery: A standard non-rechargeable 3V CR1220 or CR1225 lithium coin cell battery with a matching 1.25mm 2-pin pigtail wire.
+#   (Alternatively, a larger CR2032 with a pigtail fits if you secure it safely off-board).
+# The Polarity: The positive pin (PMIC_BBAT) is marked on the PCB by a small white triangle/arrow. The other pin is Ground (GND).
+#
+# The Resistor Requirement (Crucial)Simply plugging in the battery often fails on this specific carrier board. 
+#    You must inspect the R560 resistor pads located right next to the J3 header footprint. 
+#    Because the R560 pad is open from the factory, the battery power is disconnected from the PMIC.
+#    You must bridge the R560 pads with a 0-ohm resistor or a tiny solder bridge blob to complete the circuit.
+# Note: Do not attempt to charge a standard coin battery; the circuit is input-only (PMIC_BBAT) and will not feed power back into a non-rechargeable cell.
+#
+# Software Configuration (Linux)Once the hardware is connected and the Jetson is booted up, Ubuntu needs to be instructed to prioritize 
+#    the battery-backed hardware clock (rtc0) over any system assumptions.
+
+ sudo vi /lib/udev/rules.d/50-udev-default.rules
+
+# Manually Set and Sync Time (First Time Only):Connect the board to the internet just once (or use a manual string) to establish the correct initial time:
+
+# Set the system clock manually if internet is missing:
+
+ sudo date -s "2026-09-08 20:20:00"
+
+# Write the system time into the hardware clock (RTC):
+
+ sudo hwclock -w
+
+# Verify the Setup:Unplug your network cable, shut down the device, remove the main power cable for a few minutes, and boot back up.
+# Check the system time using:
+
+ timedatectl
+
+
+### Setup NTP on the Orins to use PI5 as the NTP server
+
+# Point Ubuntu to Pi5 you Cluster Manager You need to overwrite the default public NTP addresses with your local master address.
+# Open the time synchronization config file:
+
+ sudo vi /etc/systemd/timesyncd.conf
+
+# Uncomment the NTP= line (or add it if it's missing) and assign it your master manager's IP address: 
+
+<h4 align='left' id="EXAMPLE">EXAMPLE:
+</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
+[Time]</span>
+NTP=192.168.0.100
+FallbackNTP=ntp.ubuntu.com
+</p><h4>
+
+</h4></pre><h3 align='left' id="#NOTEKeepingaFallbackNTPisoptionalbutitgivestheunitabackupstrategyifyoueverhooktheJetsonuptoanormal"># NOTE: Keeping a FallbackNTP is optional, but it gives the unit a backup strategy if you ever hook the Jetson up to a normal</h3><pre><h4>
+#        internet connection outside the cluster context.) 
+
+# Enable and Apply the Changes
+# Restart the time synchronization daemon and force the system to toggle network time synchronization on:
+
+# Restart the service to read the new IP
+ sudo systemctl restart systemd-timesyncd.service
+
+# Force the OS to utilize NTP
+ sudo timedatectl set-ntp true
+
+# Verify the LinkOnce your cluster manager's NTP service is broadcasting, you can verify everything is tracking properly on the Jetson by running:
+ timedatectl status
+
 
 
 
@@ -2054,12 +2242,101 @@ Use code with caution.(Note: Replace /home/pi/SHOP_RAG with your absolute user h
 
 
 
+################################### 
+</h4></pre><h3 align='left' id="STEPESP32setupenvironmenttocompileandloadcodeontoaESP32">STEP: ESP32 setup environment to compile and load code onto a ESP32</h3><pre><h4>
+###################################
+
+
+# Install Microsoft's VS code
+
+ 
+
+
+# pythone env
+ python3 -m venv esp32_env
+ source esp32_env/bin/activate
+
+# install PlatformIO IDE
+ pip install -U platformio
 
 
 
 
 
 
+
+###################################
+</h4></pre><h3 align='left' id="STEPcompileBlenderCADfor3DfortheMakers">STEP: compile Blender, CAD for 3D ( for the Makers )</h3><pre><h4>
+###################################
+
+# pre-reqs
+ sudo add-apt-repository universe
+ sudo apt update
+ sudo apt install -y cmake-curses-gui
+ sudo apt install -y git git-lfs cmake build-essential python3 python3-pip subversion stow libx11-dev libxxf86vm-dev libxi-dev libxcursor-dev libxrandr-dev libxinerama-dev libegl1-mesa-dev libgl1-mesa-dev
+
+# install gcc-14 which is needed to compile blender
+ sudo apt install -y gcc-14 g++-14
+# setup both paths for gcc 13 and 14
+ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 10
+
+
+# 3) plug the ESP32_bat and verify the PI detects it
+
+ lsusb 
+# should show: Bus 001 Device 005: ID 1a86:55d4 QinHeng Electronics USB Single Serial
+# CH9102F USB-to-serial chip (1a86:55d4 is the exact hardware ID for the QinHeng CH9102)
+
+
+ /dev/tty*
+# will show the new tty device: /dev/ttyACM0
+
+
+
+$ 4) Here are the exact step-by-step instructions to compile your hifiberry_remote.cpp file using VS Code and PlatformIO.Step 1: Open the PlatformIO Home ScreenLook at the very far-left edge of VS Code. You will see a vertical bar of icons (Activity Bar).Click the PlatformIO Icon (it looks like a small Ant or Alien Head).Under the QUICK ACCESS menu that slides open, click PIO Home and then click Open.This will open a large tab in the center of your screen called "Welcome to PlatformIO".Step 2: Create a New ProjectOn that Welcome screen, click the big + New Project button on the right side.A Project Wizard window will pop up. Fill it out exactly like this:Name: hifiberry_remoteBoard: Click the box, type esp32dev, and select Espressif ESP32 Dev Module from the dropdown menu.Framework: Leave this set to Arduino (this is standard for .cpp files of this nature).Click Finish.Note: Because this is your first project, PlatformIO will take 1 to 2 minutes to download the underlying compiler tools for the ESP32 chip in the background. Be patient while it says "Please wait..." [1].Step 3: Swap in Your Custom CodeOnce the project is successfully generated, VS Code will refresh, and you will see your project folder layout on the left side of the screen under EXPLORER.Expand your new hifiberry_remote folder, then expand the src folder inside it.Inside src, you will see a placeholder file named main.cpp. Right-click main.cpp and select Delete (move to trash).Now, we need to copy your actual file into that folder. In your Raspberry Pi terminal, run this simple command to copy and rename your file into the project:bashcp ~/ESP32/hifiberry_remote.cpp ~/Documents/PlatformIO/Projects/hifiberry_remote/src/main.cpp
+Use code with caution.Look back at VS Code. You should now see main.cpp inside your src folder again. Double-click it to verify your HiFiBerry remote code is visible on the screen.Step 4: Configure the USB PortBefore compiling, you need to point PlatformIO to your specific hardware chip over your newly discovered working USB port (/dev/ttyACM0).In the left-hand folder tree, look at the very bottom of your project directory and click on the file named platformio.ini.Delete everything inside that file and paste the following clean block of text:ini[env:esp32dev]
+platform = espressif32
+board = esp32dev
+framework = arduino
+monitor_speed = 115200
+upload_port = /dev/ttyACM0
+monitor_port = /dev/ttyACM0
+Use code with caution.Save the changes by pressing Ctrl + S.Step 5: Compile and Upload Your ProgramLook at the very bottom status bar of your VS Code window (the thin colored strip running along the bottom edge of the application). You will see a cluster of small icons provided by PlatformIO:To Compile (Build Check): Click the Checkmark icon (&#92(&#92checkmark &#92)). PlatformIO will begin compiling your code. If it finishes successfully, you will see a green line in the bottom terminal panel that reads [SUCCESS].To Upload to the ESP32: Ensure your ESP32 is plugged in with your working cable, then click the Right Arrow icon (→). This compiles the code and transfers it over /dev/ttyACM0 to your board.To Watch the Serial Output: Click the Plug icon (Serial Monitor). This opens a live terminal view so you can see whatever debugging text your remote control program sends back over the USB connection.If you click the Checkmark icon to compile and encounter any red error messages in the terminal window, copy and paste the error here, and I can tell you exactly what library or syntax issue needs to be adjusted!
+
+
+
+
+
+[env:esp32dev]
+platform = espressif32
+board = esp32dev
+framework = arduino
+monitor_speed = 115200
+upload_port = /dev/ttyACM0
+monitor_port = /dev/ttyACM0
+lib_deps =
+    madhephaestus/ESP32Encoder @ ^0.11
+    h2zero/NimBLE-Arduino @ ^1.4.1
+    https://github.com
+    
+ build_flags = 
+    -D USE_NIMBLE
+
+
+###################################
+</h4></pre><h3 align='left' id="STEPcompileBlenderCADfor3DfortheMakers">STEP: compile Blender, CAD for 3D ( for the Makers )</h3><pre><h4>
+###################################
+
+# pre-reqs
+ sudo add-apt-repository universe
+ sudo apt update
+ sudo apt install -y cmake-curses-gui
+ sudo apt install -y git git-lfs cmake build-essential python3 python3-pip subversion stow libx11-dev libxxf86vm-dev libxi-dev libxcursor-dev libxrandr-dev libxinerama-dev libegl1-mesa-dev libgl1-mesa-dev
+
+# install gcc-14 which is needed to compile blender
+ sudo apt install -y gcc-14 g++-14
+# setup both paths for gcc 13 and 14
+ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 10
 
 ###################################
 </h4></pre><h3 align='left' id="STEPcompileBlenderCADfor3DfortheMakers">STEP: compile Blender, CAD for 3D ( for the Makers )</h3><pre><h4>
@@ -2221,81 +2498,6 @@ jetson-containers run daivdl487/stable-diffusion-webui:r36.4.3
 # Restart the Docker daemon to pick up the updated non-graphical device tree:
  sudo systemctl restart docker
 # Use code with caution.Re-run your build:
- jetson-containers build comfyui
-
-
-###################################
-</h4></pre><h3 align='left' id="STEPInstallollama">STEP: Install ollama</h3><pre><h4>
-###################################
-# This is the command to install ollma native to your machine when using it with a LLM you will be using a cli interface
-
- curl -fsSL https://ollama.com/install.sh | sh
- ollama ### at the command line to run
- ollama pull ### 
-<a href="https://ollama.com/search"><font color="black">Search for all LLM on ollama<font color="blue"> https://ollama.com/search<font color="black"></a>
-
-
-
-# Install Jetson-Containers
- cd ~/github
- git clone https://github.com/dusty-nv/jetson-containers
- cd jetson-containers
- bash install.sh
-
-# Run Jetson-Containers
- cd ~/github/jetson-containers
- jetson-containers run $(autotag stable-diffusion-webui)  ### first time run will take longer as the models are downloaded
-# ERROR it failed as follows
-#ERROR: Could not find a version that satisfies the requirement numpy==1.26.2 (from versions: none)
-#ERROR: No matching distribution found for numpy==1.26.2
-
-# So lets install numpy 1.26.2
- python3 -m pip install --upgrade pip
- python3 -m pip install numpy==1.26.2
-
-# build it
- ./jetson-containers build stable-diffusion-webui
-
-jetson-containers run daivdl487/stable-diffusion-webui:r36.4.3
-
-# and rerun jetson-containers
- jetson-containers run $(autotag stable-diffusion-webui) 
-
- http://127.0.0.1:7860
-
-
-
-
-###############################################################################################################3
-    The remainder of this file are just untested Notes
-
-
-<h4 align='left' id="EXAMPLE">EXAMPLE:
-</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
-Recommended Models for Orin Nano Super</span>
-(8GB)
-Model 	Size	Performance Note
-Llama 3.2 1B/3B
-	Small/Medium	Best for real-time responsiveness.
-Qwen 2.5 3B/7B
-	Med/Large	7B requires high quantization (Q4_K_M) and swap.
-Gemma 2 2B
-	Small	Very efficient for edge use cases.
-</p><h4>
-
-
-###################################
-### Speech to Text to speech
-###################################
-
-<h4 align='left' id="EXAMPLE">EXAMPLE:
-</h4><pre><p style="border:3px; border-style:solid; border-color:green; padding: 0em;"><span style="white-space: nowrap;">
-Setting up an LLM dialogue system with speech on a Jetson Orin Nano Super involves combining three key components: Speech-to-Text (STT) to hear you, a Local LLM to think, and Text-to-Speech (TTS) to talk back. Given the Orin Nano's 8GB memory, the most efficient approach is using containerized, on-device models. </span>
-
-
-Prerequisites
-
-    JetsoESP32_Batn Orin Nano Super (8GB) with JetPack 5.1.2 or later.
     USB Microphone and Speaker (or a USB headset).
     Swap Space: Set up at least 8GB of swap to handle loading models. 
 
